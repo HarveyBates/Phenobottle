@@ -10,3 +10,5 @@ In this repository users can find:
   2. Electronic schematics for the custom Phenobottle circuit board
   3. Scripts for running the Phenobottles
   4. Additional information such as a bill of materials etc. 
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br />The hardware in this work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.
