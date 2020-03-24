@@ -13,6 +13,8 @@ In this repository users can find:
 3.	Scripts for running the Phenobottles
 4.	Additional information such as a bill of materials etc.
 
+[![DOI](https://zenodo.org/badge/248412211.svg)](https://zenodo.org/badge/latestdoi/248412211)
+
 # Open-Source Licensing
 
 The software in this work is licensed under GNU AFFERO GENERAL PUBLIC LICENSE
@@ -34,5 +36,3 @@ The software in this work is licensed under GNU AFFERO GENERAL PUBLIC LICENSE
   For more information contact: harvey.bates@student.uts.edu.au
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br />The hardware (3D Models, Electronic Schematics) in this work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.
-
-[![DOI](https://zenodo.org/badge/248412211.svg)](https://zenodo.org/badge/latestdoi/248412211)
