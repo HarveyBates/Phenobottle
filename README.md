@@ -14,7 +14,7 @@ In this repository users can find:
 # Licenses
 
 The software in this work is licensed under GNU AFFERO GENERAL PUBLIC LICENSE
-  Copyright (C) <2020>  <Harvey Bates>
+  Copyright (C) (2020)  (Harvey Bates)
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
