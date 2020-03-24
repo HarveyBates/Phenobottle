@@ -11,7 +11,7 @@ In this repository users can find:
   3. Scripts for running the Phenobottles
   4. Additional information such as a bill of materials etc. 
 
-# Licenses
+# Open-Source Licensing
 
 The software in this work is licensed under GNU AFFERO GENERAL PUBLIC LICENSE
   Copyright (C) (2020)  (Harvey Bates)
