@@ -124,15 +124,26 @@ class MotorsAndLights:
     def mixing_motor_off():
         MIXING_MOTOR.run(Adafruit_MotorHAT.RELEASE)
 
-    @staticmethod
-    def light_on():
+    def light_on(color):
         LIGHT_CONTROL.run(Adafruit_MotorHAT.BACKWARD)
         LIGHT_CONTROL.setSpeed(LIGHT_INTENSITY)
+        ser.flush()
+        time.sleep(1)
+        if color == "red":
+            ser.write(b'RedON')            
+        elif color == "green":
+            ser.write(b'GreenON')
+        elif color == "blue":
+            ser.write(b'BlueON')
+        else:
+            pass
 
     @staticmethod
     def light_off():
         LIGHT_CONTROL.run(Adafruit_MotorHAT.RELEASE)
-
+        ser.flush()
+        time.sleep(1)
+        ser.write(b'RGBOFF')
 
 class Sensors:
     @staticmethod
@@ -507,17 +518,23 @@ while experiment_datetime > NOW:
 # ---------------------------------------- Starts Experiment ------------------------------------------- #
 
 if __name__ == "__main__":
-    Experiment.day_routine()
     while True:
         if datetime.datetime.now().minute % 10 == 0:
-            if Experiment.experiment_schedule(datetime.time(7, 00), datetime.time(23, 00)):
+            if Experiment.experiment_schedule(datetime.time(8, 00), datetime.time(20, 00)):
                 NOW = datetime.datetime.now()
-                print("Daytime routine initiated at: ", NOW)
+                # --- Slow Rise of Light Intensity --- #
+                if Experiment.experiment_schedule(datetime.time(8, 00), datetime.time(10, 00)):
+                    LIGHT_INTENSITY += 20
+                # --- Slow Fall of Light Intensity --- #
+                if Experiment.experiment_schedule(datetime.time(18, 00), datetime.time(20, 00)):
+                    LIGHT_INTENSITY -= 20
+                # --- Constant Daytime Light Intensity --- #
+                else:
+                    LIGHT_INTENSITY = 220 
                 Experiment.day_routine()
-                time.sleep(1)
+ 
             else:
                 NOW = datetime.datetime.now()
-                print("Nighttime routine initiated at: ", NOW)
                 Experiment.night_routine()
-                time.sleep(1)
+                LIGHT_INTENSITY = 0
         time.sleep(1)
