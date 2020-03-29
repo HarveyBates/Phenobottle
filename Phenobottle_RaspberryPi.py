@@ -16,6 +16,9 @@
     
     # For more information contact: harvey.bates@student.uts.edu.au
 
+from Adafruit_MotorHAT import Adafruit_MotorHAT
+from twilio.rest import Client
+from time import strftime
 import pymysql.cursors
 import datetime
 import atexit
@@ -23,24 +26,21 @@ import serial
 import time
 import csv
 import math
-from Adafruit_MotorHAT import Adafruit_MotorHAT
-from twilio.rest import Client
-from time import strftime
 
 # -------------------------------------------- Setup Required Below -------------------------------------------- #
 
-PHENOBOTTLE_NUMBER = 3
+PHENOBOTTLE_NUMBER = 1
 
 INITIAL_LIGHT_INTENSITY = 500
 INITIAL_OPTICAL_DENSITY = 888
 
-ARDUINO_FLUORESCENCE_REFERENCE = 3.3
+FLUORESCENCE_REFERENCE = 3.3
 
 MIXING_SPEED = 32
 BUBBLING_INTENSITY = 60
 LIGHT_INTENSITY = 220
 PERISTALTIC_SPEED = 160
-EXPERIMENT_START_TIME = "07:00:00"
+EXPERIMENT_START_TIME = "08:00:00"
 
 ser = serial.Serial('/dev/ttyACM0', 115200)
 
@@ -63,23 +63,23 @@ experiment_datetime = NOW.replace(hour=experiment_datetime.time().hour, minute=e
 
 # ------------------------------------------------- Database Setup ------------------------------------------------- #
 
-connection = pymysql.connect(host='IP_ADDRESS',
-                             port=port_number,
-                             user='Username',
-                             password='Password',
+connection = pymysql.connect(host='138.25.85.169',
+                             port=3306,
+                             user='exampleuser',
+                             password='Phenobottle1234',
                              db='Phenobottle No.%s' %PHENOBOTTLE_NUMBER,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
 # --------- SMS Messaging Setup --------- #
 
-acc_sid = "Account SSID"
-auth_token = "Account Token"
+acc_sid = "ACdac205575b8ee76ccb75c54d2e43a849"
+auth_token = "d8908d1eb42d45459dc3543af65fa4f8"
 
 client = Client(acc_sid, auth_token)
 
-from_number = "Twilio Phone Number"
-to_number = "Mobile Phone Number"
+from_number = "+12013895981"
+to_number = "+61478515336"
 
 message_sent = False
 
@@ -92,14 +92,14 @@ fo, f_300us, fj, fi, fm, variable_fluorescence, quantum_yield = 0, 0, 0, 0, 0, 0
 vj, fm_qa, mo, performance_index = 0, 0, 0, 0
 fj_fo, fi_fo, fi_fj, fm_fi = 0, 0, 0, 0
 fo_od, fj_od, fi_od, fm_od = 0, 0, 0, 0
-variable_fluorescence_od, fm_qa_od = 0, 0
+variable_fluorescence_od = 0
 time_ojip, value_ojip, norm_ojip = 0, 0, 0
 
 
 class MotorsAndLights:
     @staticmethod
     def peristaltic_motor_on():
-        PERISTALTIC_MOTOR.run(Adafruit_MotorHAT.FORWARD)
+        PERISTALTIC_MOTOR.run(Adafruit_MotorHAT.BACKWARD)
         PERISTALTIC_MOTOR.setSpeed(PERISTALTIC_SPEED)
 
     @staticmethod
@@ -124,6 +124,7 @@ class MotorsAndLights:
     def mixing_motor_off():
         MIXING_MOTOR.run(Adafruit_MotorHAT.RELEASE)
 
+
     def light_on(color):
         LIGHT_CONTROL.run(Adafruit_MotorHAT.BACKWARD)
         LIGHT_CONTROL.setSpeed(LIGHT_INTENSITY)
@@ -144,6 +145,7 @@ class MotorsAndLights:
         ser.flush()
         time.sleep(1)
         ser.write(b'RGBOFF')
+        
 
 class Sensors:
     @staticmethod
@@ -223,8 +225,7 @@ class Sensors:
 
     @staticmethod
     def measure_fluorescence():
-        global fo, f_300us, fj, fi, fm, variable_fluorescence, quantum_yield, vj, fm_qa, mo, performance_index, fj_fo,
-        fi_fo, fi_fj, fm_fi, fo_od, fj_od, fi_od, fm_od, variable_fluorescence_od, fm_qa_od, time_ojip, value_ojip, norm_ojip
+        global fo, f_300us, fj, fi, fm, variable_fluorescence, quantum_yield, vj, fm_qa, mo, performance_index, fj_fo, fi_fo, fi_fj, fm_fi, fo_od, fj_od, fi_od, fm_od, variable_fluorescence_od, time_ojip, value_ojip, norm_ojip
         ser.flush()
         time.sleep(1)
         ser.write(b'MeasureFluorescence')
@@ -237,7 +238,7 @@ class Sensors:
             data_split = [float(s) for s in decoded_fluorescence_bytes.split("\t")]
             x_data = data_split[0]
             y_data = float(data_split[1])
-            y_data = ((y_data * ARDUINO_FLUORESCENCE_REFERENCE) / 4096)
+            y_data = ((y_data * FLUORESCENCE_REFERENCE) / 4096)
             time_ojip.append(x_data)
             value_ojip.append(round(y_data, 3))
 
@@ -277,10 +278,10 @@ class Sensors:
 
 # -------- Calculate Perfomance Index -------- #
         try:
-            performace_index = ((1 - (fo / fm)) / (mo / vj)) * (variable_fluorescence / fo) * ((1 - vj) / vj)
-            performace_index = round(performace_index, 3)
+            performance_index = ((1 - (fo / fm)) / (mo / vj)) * ((fm - fo) / fo) * ((1 - vj) / vj)
+            performance_index = round(performance_index, 3)
         except ZeroDivisionError:
-            performace_index = 0
+            performance_index = 0
 
 # -------- Calculate FmQa -------- #
         try:
@@ -323,11 +324,6 @@ class Sensors:
         except:
             variable_fluorescence_od = 0
 
-        try:
-            fm_qa_od = round((fm_qa / optical_density), 3)
-        except ZeroDivisionError:
-            fm_qa_od = 0
-
 # -------- Test if fluorometer is saturating -------- #
         Readings.test_saturation()
 
@@ -353,7 +349,7 @@ class Test:
         Sensors.measure_light_intensity()
 
     @staticmethod
-    def dilute_to_od():
+    def calibrate_od():
         MotorsAndLights.light_on()
         MotorsAndLights.mixing_motor_on()
         MotorsAndLights.peristaltic_motor_on()
@@ -370,17 +366,16 @@ class Database:
     @staticmethod
     def upload():
         global time_ojip, value_ojip, norm_ojip
+        time_ojip = ", ".join(str(x) for x in time_ojip)
+        value_ojip = ", ".join(str(x) for x in value_ojip)
+        norm_ojip = ", ".join(str(x) for x in norm_ojip)
         try:
-            time_ojip = ", ".join(str(x) for x in time_ojip)
-            value_ojip = ", ".join(str(x) for x in value_ojip)
-            norm_ojip = ", ".join(str(x) for x in norm_ojip)
             with connection.cursor() as cursor:
                 sql_time = str(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
-                sql = "INSERT INTO `Advanced Parameters` (`Time Now`, `Day Night`, `Optical Density RAW`, `Transmittance`, `Optical Density`, `Temperature`, `Light Intensity`, `Fo`, `Fj`, `Fi`, `Fm`, `Fv`, `Vj`, `FmQa`, `Mo`, `PIabs`, `Fj - Fo`, `Fi - Fo`, `Fi - Fj`, `Fm - Fi`, `Fo / OD`, `Fj / OD`, `Fi / OD`, `Fm / OD`, `Fv / OD`, `FmQa / OD`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                cursor.execute(sql, (sql_time, day_night, od_raw, transmittance, optical_density,  temperature,
-                LIGHT_INTENSITY, fo, f_300us, fj, fi, fm, variable_fluorescence, quantum_yield, vj, fm_qa, mo,
+                sql = "INSERT INTO `Advanced Parameters` (`Time Now`, `Day Night`, `Optical Density RAW`, `Transmittance`, `Optical Density`, `Temperature`, `Light Intensity`, `Fo`, `F_300us`, `Fj`, `Fi`, `Fm`, `Fv`, `Fv/Fm`, `Vj`, `FmQa`, `Mo`, `PIabs`, `Fj - Fo`, `Fi - Fo`, `Fi - Fj`, `Fm - Fi`, `Fo / OD`, `Fj / OD`, `Fi / OD`, `Fm / OD`, `Fv / OD`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                cursor.execute(sql, (sql_time, day_night, od_raw, transmittance, optical_density,  temperature, LIGHT_INTENSITY, fo, f_300us, fj, fi, fm, variable_fluorescence, quantum_yield, vj, fm_qa, mo,
                 performance_index, fj_fo, fi_fo, fi_fj, fm_fi, fo_od, fj_od, fi_od, fm_od, variable_fluorescence_od,
-                fm_qa_od))
+                ))
                 sql = "INSERT INTO `OJIP Curves` (`Time Now`, `Day Night`, `Time OJIP`, `Raw OJIP`, `Normalised OJIP`) VALUES (%s, %s, %s, %s, %s)"
                 cursor.execute(sql, (sql_time, day_night, time_ojip, value_ojip, norm_ojip))
                 
@@ -392,8 +387,6 @@ class Database:
 
     def close_database(self):
         connection.close()
-
-atexit.register(Database.close_database)
 
 
 class Excel:
@@ -408,7 +401,7 @@ class Excel:
                 writer.writerow([spreadsheet_time, day_night, od_raw, transmittance, optical_density,  temperature,
                 LIGHT_INTENSITY, fo, f_300us, fj, fi, fm, variable_fluorescence, quantum_yield, vj, fm_qa, mo,
                 performance_index, fj_fo, fi_fo, fi_fj, fm_fi, fo_od, fj_od, fi_od, fm_od, variable_fluorescence_od,
-                fm_qa_od, time_ojip, value_ojip, norm_ojip])
+                time_ojip, value_ojip, norm_ojip])
                 print("Written to local csv")
 
             except:
@@ -433,10 +426,11 @@ class Readings:
 
     @staticmethod
     def test_saturation():
-        if fm >= (ARDUINO_FLUORESCENCE_REFERENCE * 0.9):
+        if fm >= (FLUORESCENCE_REFERENCE * 0.9):
             Readings.send_message()
         else:
             pass
+
 
 class Experiment:
     @staticmethod
@@ -501,6 +495,12 @@ class Experiment:
         else:
             return current_time >= morning_time or current_time <= night_time
 
+atexit.register(Database.close_database) #Closes database if python quits
+
+# -------------------------------- Dilute Culture to Starting OD --------------------------------------- #
+
+# while True:
+#     Test.calibrate_od()
 
 # -------------------------------- Waits for Experiment Start Time ------------------------------------- #
 
@@ -510,12 +510,9 @@ while experiment_datetime > NOW:
     print("Experiment starting at: ", EXPERIMENT_START_TIME)
     time.sleep(1)
 
-# -------------------------------- Dilute Culture to Starting OD --------------------------------------- #
-
-# while True:
-#     Test.dilute_to_od()
-
 # ---------------------------------------- Starts Experiment ------------------------------------------- #
+MotorsAndLights.light_on()
+Experiment.day_routine()
 
 if __name__ == "__main__":
     while True:
@@ -524,10 +521,10 @@ if __name__ == "__main__":
                 NOW = datetime.datetime.now()
                 # --- Slow Rise of Light Intensity --- #
                 if Experiment.experiment_schedule(datetime.time(8, 00), datetime.time(10, 00)):
-                    LIGHT_INTENSITY += 20
+                    LIGHT_INTENSITY += (LIGHT_INTENSITY / 12)
                 # --- Slow Fall of Light Intensity --- #
                 if Experiment.experiment_schedule(datetime.time(18, 00), datetime.time(20, 00)):
-                    LIGHT_INTENSITY -= 20
+                    LIGHT_INTENSITY -= (LIGHT_INTENSITY / 12)
                 # --- Constant Daytime Light Intensity --- #
                 else:
                     LIGHT_INTENSITY = 220 
