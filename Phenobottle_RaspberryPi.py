@@ -16,9 +16,6 @@
     
     # For more information contact: harvey.bates@student.uts.edu.au
 
-from Adafruit_MotorHAT import Adafruit_MotorHAT
-from twilio.rest import Client
-from time import strftime
 import pymysql.cursors
 import datetime
 import atexit
@@ -26,21 +23,24 @@ import serial
 import time
 import csv
 import math
+from Adafruit_MotorHAT import Adafruit_MotorHAT
+from twilio.rest import Client
+from time import strftime
 
 # -------------------------------------------- Setup Required Below -------------------------------------------- #
 
-PHENOBOTTLE_NUMBER = 1
+PHENOBOTTLE_NUMBER = 3
 
 INITIAL_LIGHT_INTENSITY = 500
 INITIAL_OPTICAL_DENSITY = 888
 
-FLUORESCENCE_REFERENCE = 3.3
+ARDUINO_FLUORESCENCE_REFERENCE = 3.3
 
 MIXING_SPEED = 32
 BUBBLING_INTENSITY = 60
 LIGHT_INTENSITY = 220
 PERISTALTIC_SPEED = 160
-EXPERIMENT_START_TIME = "08:00:00"
+EXPERIMENT_START_TIME = "07:00:00"
 
 ser = serial.Serial('/dev/ttyACM0', 115200)
 
@@ -63,23 +63,23 @@ experiment_datetime = NOW.replace(hour=experiment_datetime.time().hour, minute=e
 
 # ------------------------------------------------- Database Setup ------------------------------------------------- #
 
-connection = pymysql.connect(host='138.25.85.169',
-                             port=3306,
-                             user='exampleuser',
-                             password='Phenobottle1234',
+connection = pymysql.connect(host='IP_ADDRESS',
+                             port=port_number,
+                             user='Username',
+                             password='Password',
                              db='Phenobottle No.%s' %PHENOBOTTLE_NUMBER,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
 
 # --------- SMS Messaging Setup --------- #
 
-acc_sid = "ACdac205575b8ee76ccb75c54d2e43a849"
-auth_token = "d8908d1eb42d45459dc3543af65fa4f8"
+acc_sid = "Account SSID"
+auth_token = "Account Token"
 
 client = Client(acc_sid, auth_token)
 
-from_number = "+12013895981"
-to_number = "+61478515336"
+from_number = "Twilio Phone Number"
+to_number = "Mobile Phone Number"
 
 message_sent = False
 
