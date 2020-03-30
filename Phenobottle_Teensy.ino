@@ -32,18 +32,23 @@
 #define ODdetectPower 22
 #define tempPower 20
 
-int baseRead[5]; //baseline pin readings
-int microRead [1000]; //microsecond pin readings
-int milliRead[1000]; //millisecond pin readings
+//RGB Control 
+#define Red 36
+#define Green 37
+#define Blue 38
 
-int baseCycles = 5; //amount of baseline data points
-int microCycles = 1000; //amount of microsecond data points
-int milliCycles = 1000; //amount of millisecond data points
+int baseRead[5];
+int microRead [1000];
+int milliRead[1000];
 
-float h[5]; //array size for baseline data points
-float t[1000]; //array size for microsecond data points 
-float p[1000]; //array size for millisecond data points
-String command; //used to read the serial teminal input
+int baseCycles = 5;
+int microCycles = 1000;
+int milliCycles = 1000;
+
+float h[5];
+float t[1000]; 
+float p[1000];
+String command;
 
 int microMax = 0;
 int milliMax = 0;
@@ -69,15 +74,39 @@ void setup() {
   pinMode(ODemitPower, OUTPUT);
   pinMode(ODdetectPower, OUTPUT);
   pinMode(actinicPin, OUTPUT);
-
+  pinMode(Red, OUTPUT);
+  pinMode(Green, OUTPUT);
+  pinMode(Blue, OUTPUT);
+ 
   digitalWrite(actinicPin, LOW);
   digitalWrite(ODemitPower, LOW);
   digitalWrite(ODdetectPower, HIGH);
+  digitalWrite(Red, LOW);
+  digitalWrite(Green, LOW);
+  digitalWrite(Blue, LOW);
+}
+
+void redON(){
+	digitalWrite(Red, HIGH);
+}
+
+void blueON(){
+	digitalWrite(Blue, HIGH);
+}
+
+void rgblightsOFF(){
+	digitalWrite(Red, LOW);
+	digitalWrite(Green, LOW);
+	digitalWrite(Blue, LOW);
+}
+
+void greenON(){
+	digitalWrite(Green, HIGH);
 }
 
 void measureOpticalDensity(){
   digitalWrite(ODemitPower, HIGH);
-  analogReference(INTERNAL1V1);
+  analogReference(DEFAULT);
   delay(1000);
   analogRead(odRead);
   delay(100);
@@ -95,44 +124,44 @@ void measureFluoro() {
   analogRead(readPin);
   delay (1000);
   
-  digitalWrite(actinicPin, HIGH); //turns on actinic light
+  digitalWrite(actinicPin, HIGH); 
 
   long timer = micros();
 
-  for (int i = 0; i < microCycles; i++) //second array loop for microsecond values
+  for (int i = 0; i < microCycles; i++) 
   {
     microRead[i] = analogRead(readPin);
     t[i] = micros() - timer;
   }
   
-  for (int o = 0; o < milliCycles; o++) //third array loop for millisecond values
+  for (int o = 0; o < milliCycles; o++) 
   {
     milliRead[o] = analogRead(readPin);
     p[o] = micros() - timer;
     delay(1);
   }
   
-  digitalWrite(actinicPin, LOW); //switches OFF the light
+  digitalWrite(actinicPin, LOW); 
   delay(10);
   
-  int microMax = microRead[1]; //finds the maximum of the microsecond array values
+  int microMax = microRead[1]; 
     for (int u = 1; u < microCycles; u++){
       if(microRead[u] > microMax){
         microMax = microRead[u];
       }
     }
     
-  int milliMax = milliRead[0]; //finds the maximum of the millisecond array values
+  int milliMax = milliRead[0];
     for (int i = 0; i < milliCycles; i++){
       if(milliRead[i] > milliMax){
         milliMax = milliRead[i];
       }
     }
   
-  for (int q = 0; q < microCycles; q++) //prints the values of the ojip curve for microsecond array values
+  for (int q = 0; q < microCycles; q++)
   {
-   float millCounts = t[q]; //converts timeseries into a float (this allows math to be used)
-   float millicountsConverted = millCounts/1000; //converts microseconds into milliseconds
+   float millCounts = t[q];
+   float millicountsConverted = millCounts/1000; 
    float milliReal = millicountsConverted;
    Serial.print(milliReal, 3); 
    Serial.print("\t");
@@ -140,7 +169,7 @@ void measureFluoro() {
    delay(1);
   }
   
-  for (int l = 0; l < milliCycles; l++) //prints the values of the ojip curve for millisecond array values
+  for (int l = 0; l < milliCycles; l++) 
   {
    float milliTime = p[l];
    float millitimeConverted = milliTime/1000;
@@ -197,7 +226,7 @@ void measureLight(){
 }
 
 void loop(){
-  if(Serial.available()){                     //the next section waits until a command is entered in the serial monitor before measuring OJIP
+  if(Serial.available()){   
     command = Serial.readStringUntil('\n');
     if(command.equals("MeasureOpticalDensity")){
       measureOpticalDensity();
@@ -222,6 +251,18 @@ void loop(){
     }
     else if(command.equals("t")){
       testADC();
+    }
+	  else if(command.equals("RedON")){
+      redON();
+    }
+	  else if(command.equals("GreenON")){
+      greenON();
+    }
+	  else if(command.equals("BlueON")){
+      blueON();
+    }
+	  else if(command.equals("RGBOFF")){
+      rgblightsOFF();
     }
     else{
       delay(100);
