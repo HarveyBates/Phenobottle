@@ -1,0 +1,33 @@
+﻿Item,Quantity,Supplier,Notes
+Mainframe,1,3D Print,
+Lid,1,3D Print,
+Magnetic Motor Attachment,1,3D Print,
+Culture Flask Cap,1,3D Print,
+Circuit Board,1,JLCPCB or Other,"Upload ""Phenobottle_Circuit_Gerber"" to JLCPCB"
+Mixing Motor,1,"YM2716, Jaycar, Rydalmere, AUS",
+Bubbling Motor,1,"Vacuum Pump 12V, Core-Electronics, Kotara, AUS",
+Peristaltic Motor,1,"50220, Makeblock, Shenzhen, China",
+Light Strips ,~50 cm,"RGB LED Bare, Core-Electronics, Kotara, AUS",
+Raspberry Pi 3B+,1,,
+Raspberry Pi Motor HAT,1,Adafruit,
+Teensy 3.6,1,,
+Stacking Headers (8 Pin),12,Dfrobot,To connect teensy to circuit board
+USB to Micro-USB cable,1,,To connect teensy to rpi. Shorter the better.
+875 nm LED,2,"SIR333-A, Everlight, New Taipei City, Taiwan",
+10 W LED (COB SMD Chip),1,Ebay,"466 nm, 532 nm, 592 nm, 626 nm"
+Heat Sink for LED (Optional),1,,20 mm x 20 mm
+Wire (Red and Black),25 m,0.12 mm guage,For connecting motors to Motor HAT
+Silicone Tubing,5 m,"310-0305, Gecko Optical, Joondalup, AUS5 ",5mm OD x 3 ID mm. Use this to connect all tubing and inside of peristaltic pump. Use Irrigation Joiners (see below)
+Polystrene Spectrometer Cuvette,1,"C5291, Sigma Aldrich, NSW, AUS",Cut the bottom off
+Poly Irrigation Barbed 4mm Joiner T/off Pk10,1,Pope,Stick these to bottom and top of poly cuvette
+Selleys aquafix glue (Epoxy),1,Selleys,Use this to glue the above (or a waterproof alternative
+Selleys 5 minute (Epoxy) ultraclear,1,Selleys,"Use this to glue other parts (LEDs, motor attachments etc.)"
+12 V 2 A power supply,1,"15DYS624, Ideal Power, Texas, AUS",To power motors through motor hat
+DC barrel jack adaptor (Female),1,Dfrobot,Use this to attach the 12v 2a power supply to the motor hat
+15 V 1.2 A power supply,1,DYS618,Plug this into the phenobottle circuit board dc plug
+5 V 2.5 A power supply,1,Raspberry Pi,Use this to power the raspberry pi
+695 nm longpass filter,1,"Thorlabs, New Jersey, USA",For fluorometer (position infront of photodiode)
+IR cut-off filter,1,"IR Filter, Lilly Electronics, Q-BAIHE, Hubei Province, ROC",For fluorometer (position infront of emitting LED)
+Falcon Flask (Culture Flask),1,"Falcon Flask, Corning, NY, USA",
+"Nylon 5/32"" OD ",30,Any,Glued inside cap to attach silicone tubing to
+Neudynium Magnets,2,Any,5 mm OD x 2 mm W
