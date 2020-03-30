@@ -93,13 +93,13 @@ vj, fm_qa, mo, performance_index = 0, 0, 0, 0
 fj_fo, fi_fo, fi_fj, fm_fi = 0, 0, 0, 0
 fo_od, fj_od, fi_od, fm_od = 0, 0, 0, 0
 variable_fluorescence_od = 0
-time_ojip, value_ojip, norm_ojip = 0, 0, 0
+time_ojip, value_ojip, norm_ojip = [0, 0, 0], [0, 0, 0], [0, 0, 0]
 
 
 class MotorsAndLights:
     @staticmethod
     def peristaltic_motor_on():
-        PERISTALTIC_MOTOR.run(Adafruit_MotorHAT.BACKWARD)
+        PERISTALTIC_MOTOR.run(Adafruit_MotorHAT.FORWARD)
         PERISTALTIC_MOTOR.setSpeed(PERISTALTIC_SPEED)
 
     @staticmethod
@@ -124,7 +124,6 @@ class MotorsAndLights:
     def mixing_motor_off():
         MIXING_MOTOR.run(Adafruit_MotorHAT.RELEASE)
 
-
     def light_on(color):
         LIGHT_CONTROL.run(Adafruit_MotorHAT.BACKWARD)
         LIGHT_CONTROL.setSpeed(LIGHT_INTENSITY)
@@ -136,7 +135,7 @@ class MotorsAndLights:
             ser.write(b'GreenON')
         elif color == "blue":
             ser.write(b'BlueON')
-        else:
+        elif color == None:
             pass
 
     @staticmethod
@@ -200,7 +199,10 @@ class Sensors:
             initial_transmittance = od_raw / INITIAL_OPTICAL_DENSITY
             transmittance = initial_transmittance * 100
             transmittance = round(transmittance, 2)
-            calc_optical_density = (-math.log10(initial_transmittance))
+            try:
+                calc_optical_density = (-math.log10(initial_transmittance))
+            except:
+                calc_optical_density = 0
             optical_density = round(calc_optical_density, 3)
         except ZeroDivisionError: 
             od_raw = 0
@@ -350,7 +352,7 @@ class Test:
 
     @staticmethod
     def calibrate_od():
-        MotorsAndLights.light_on()
+        MotorsAndLights.light_on(None)
         MotorsAndLights.mixing_motor_on()
         MotorsAndLights.peristaltic_motor_on()
         time.sleep(10)
@@ -360,6 +362,23 @@ class Test:
         time.sleep(2)
         Sensors.measure_optical_density()
         time.sleep(1)
+
+    @staticmethod
+    def prelim_od():
+        bottle_in_slot = input("Is a culture flask with media in Phenobottle slot? (y or n)")
+        if bottle_in_slot == "y":
+            print("Measuring Intial Transmittance (3 Times) Please Wait...")
+            print(1)
+            Sensors.measure_optical_density()
+            time.sleep(1)
+            print(2)
+            Sensors.measure_optical_density()
+            time.sleep(1)
+            print(3)
+            Sensors.measure_optical_density()
+            time.sleep(1)
+        else:
+            print("Exiting...")
 
 
 class Database:
@@ -373,9 +392,9 @@ class Database:
             with connection.cursor() as cursor:
                 sql_time = str(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
                 sql = "INSERT INTO `Advanced Parameters` (`Time Now`, `Day Night`, `Optical Density RAW`, `Transmittance`, `Optical Density`, `Temperature`, `Light Intensity`, `Fo`, `F_300us`, `Fj`, `Fi`, `Fm`, `Fv`, `Fv/Fm`, `Vj`, `FmQa`, `Mo`, `PIabs`, `Fj - Fo`, `Fi - Fo`, `Fi - Fj`, `Fm - Fi`, `Fo / OD`, `Fj / OD`, `Fi / OD`, `Fm / OD`, `Fv / OD`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                cursor.execute(sql, (sql_time, day_night, od_raw, transmittance, optical_density,  temperature, LIGHT_INTENSITY, fo, f_300us, fj, fi, fm, variable_fluorescence, quantum_yield, vj, fm_qa, mo,
-                performance_index, fj_fo, fi_fo, fi_fj, fm_fi, fo_od, fj_od, fi_od, fm_od, variable_fluorescence_od,
-                ))
+                cursor.execute(sql, (sql_time, day_night, od_raw, transmittance, optical_density,  temperature, LIGHT_INTENSITY, fo, f_300us, fj, fi, fm, 
+                    variable_fluorescence, quantum_yield, vj, fm_qa, mo, performance_index, fj_fo, fi_fo, fi_fj, fm_fi, fo_od, fj_od, fi_od, fm_od, 
+                    variable_fluorescence_od))
                 sql = "INSERT INTO `OJIP Curves` (`Time Now`, `Day Night`, `Time OJIP`, `Raw OJIP`, `Normalised OJIP`) VALUES (%s, %s, %s, %s, %s)"
                 cursor.execute(sql, (sql_time, day_night, time_ojip, value_ojip, norm_ojip))
                 
@@ -437,7 +456,9 @@ class Experiment:
     def day_routine():
         global day_night
         day_night = "Day"
-        MotorsAndLights.light_on()
+        MotorsAndLights.light_on(None)
+        ##MotorsAndLights.light_on('red')
+        ##MotorsAndLights.light_on('blue')
         MotorsAndLights.mixing_motor_on()
         time.sleep(30)
 
@@ -446,7 +467,9 @@ class Experiment:
         Sensors.measure_optical_density()
         Sensors.measure_fluorescence()
 
-        MotorsAndLights.light_on()
+        MotorsAndLights.light_on(None)
+        ##MotorsAndLights.light_on('red')
+        ##MotorsAndLights.light_on('blue')
         MotorsAndLights.peristaltic_motor_on()
         Database.upload()
         Excel.upload()
@@ -490,7 +513,6 @@ class Experiment:
         global current_time
         current_time = datetime.datetime.now().time()
         if morning_time < night_time:
-            print(current_time)
             return morning_time <= current_time <= night_time
         else:
             return current_time >= morning_time or current_time <= night_time
@@ -498,6 +520,8 @@ class Experiment:
 atexit.register(Database.close_database) #Closes database if python quits
 
 # -------------------------------- Dilute Culture to Starting OD --------------------------------------- #
+
+# Test.prelim_od()
 
 # while True:
 #     Test.calibrate_od()
@@ -511,23 +535,31 @@ while experiment_datetime > NOW:
     time.sleep(1)
 
 # ---------------------------------------- Starts Experiment ------------------------------------------- #
-MotorsAndLights.light_on()
-Experiment.day_routine()
+#For RGB Lights
+MotorsAndLights.light_on('blue')
+MotorsAndLights.light_on('red')
 
+#For Normal Lights
+MotorsAndLights.light_on(None)
+
+##LIGHT_INTENSITY = 0
 if __name__ == "__main__":
     while True:
         if datetime.datetime.now().minute % 10 == 0:
             if Experiment.experiment_schedule(datetime.time(8, 00), datetime.time(20, 00)):
                 NOW = datetime.datetime.now()
                 # --- Slow Rise of Light Intensity --- #
-                if Experiment.experiment_schedule(datetime.time(8, 00), datetime.time(10, 00)):
-                    LIGHT_INTENSITY += (LIGHT_INTENSITY / 12)
+                if Experiment.experiment_schedule(datetime.time(8, 00), datetime.time(10, 00)) and LIGHT_INTENSITY < 220: #Change for RGB
+                    LIGHT_INTENSITY += 20 #Change for RGB
+                    print(LIGHT_INTENSITY)
                 # --- Slow Fall of Light Intensity --- #
                 if Experiment.experiment_schedule(datetime.time(18, 00), datetime.time(20, 00)):
-                    LIGHT_INTENSITY -= (LIGHT_INTENSITY / 12)
+                    LIGHT_INTENSITY -= 20 #Change for RGB
+                    print(LIGHT_INTENSITY)
                 # --- Constant Daytime Light Intensity --- #
                 else:
-                    LIGHT_INTENSITY = 220 
+                    pass
+                time.sleep(2)
                 Experiment.day_routine()
  
             else:
