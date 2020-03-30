@@ -28,7 +28,7 @@
 
 // Digital Pins
 #define actinicPin 21
-#define ODemitPower 25
+#define ODemitPower 23
 #define ODdetectPower 22
 #define tempPower 20
 
