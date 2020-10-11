@@ -1,9 +1,13 @@
 # Phenobottle
-The Phenobottle is an open-source Raspberry Pi based tissue culture flask photobioreactor used for assessing growth and photophysiology in microalgae.
+The Phenobottle is an open-source Raspberry Pi based tissue culture flask photobioreactor used for assessing growth and photophysiology in microalgae. 
 
 ![Phenobottle](https://github.com/Phenobottle/Phenobottle/blob/master/Phenobottle%20Image.png)
 
-Each Phenobottle has integrated physiological sensors such as optical density (which provides a proxy for the growth rate of the microalgal culture) and chlorophyll a fluorescence (which provides information regarding the light reactions of photosynthesis).
+The first version of the Phenobottle (v0.1) was developed as a way of conducting high-time series physiological experiments with microalgae. Version 0.1 of the device features a range of environmental controls (light (quality/quantity), air(CO2) and mixing) and phyiological sensors (optical density (growth), chlorophyll fluorescence (photosynthesis)).
+
+# See The Phenobottle in Action
+
+[<img src="https://img.youtube.com/vi/<7FyAfFrLizw>/maxresdefault.jpg" width="50%">](https://youtu.be/7FyAfFrLizw)
 
 The architecture of the Phenobottle from both a software and hardware perspective can be adjusted to accommodate new sensors, novel operational routines, graphing procedures etc.
 
@@ -15,6 +19,9 @@ In this repository users can find:
 
 [![DOI](https://zenodo.org/badge/248412211.svg)](https://zenodo.org/badge/latestdoi/248412211)
 
+# Future of The Phenobottle
+The Phenobottle is currently being updated to version 0.2. This will feature several environmental controls that were not featured the original version (v0.1) of the device. Additonal environmental sensors will also feature in version 0.2 along with a graphical user interface. If you would like to learn more about the progress of this version please email:  
+ 
 # Open-Source Licensing
 
 The software in this work is licensed under GNU AFFERO GENERAL PUBLIC LICENSE
