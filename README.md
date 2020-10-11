@@ -7,7 +7,7 @@ The first version of the Phenobottle (v0.1) was developed as a way of conducting
 
 # See The Phenobottle in Action
 
-[<img src="https://img.youtube.com/vi/<7FyAfFrLizw>/maxresdefault.jpg" width="50%">](https://youtu.be/7FyAfFrLizw)
+[![PhenobottleGIF](https://j.gifs.com/mO31ZE.gif)](https://youtu.be/7FyAfFrLizw)
 
 The architecture of the Phenobottle from both a software and hardware perspective can be adjusted to accommodate new sensors, novel operational routines, graphing procedures etc.
 
@@ -20,7 +20,9 @@ In this repository users can find:
 [![DOI](https://zenodo.org/badge/248412211.svg)](https://zenodo.org/badge/latestdoi/248412211)
 
 # Future of The Phenobottle
-The Phenobottle is currently being updated to version 0.2. This will feature several environmental controls that were not featured the original version (v0.1) of the device. Additonal environmental sensors will also feature in version 0.2 along with a graphical user interface. If you would like to learn more about the progress of this version please email:  
+The Phenobottle is currently being updated to version 0.2. This will feature several environmental controls that were not featured the original version (v0.1) of the device. Additonal environmental sensors will also feature in version 0.2 along with a graphical user interface. 
+
+If you would like to learn more about the progress of this version please email: [email](harvey_bates@hotmail.com)
  
 # Open-Source Licensing
 
