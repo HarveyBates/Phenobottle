@@ -24,7 +24,7 @@ The Phenobottle is currently being updated to version 0.2. This will feature sev
 
 If you would like to learn more about the progress of this version please email: [harvey_bates@hotmail.com](harvey_bates@hotmail.com)
  
-# Open-Source Licensing
+## Open-Source Licensing
 
 The software in this work is licensed under GNU AFFERO GENERAL PUBLIC LICENSE
   Copyright (C) (2020)  (Harvey Bates)
