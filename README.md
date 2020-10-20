@@ -22,8 +22,13 @@ In this repository users can find:
 # Future of The Phenobottle
 The Phenobottle is currently being updated to version 0.2. This will feature several environmental controls that were not featured the original version (v0.1) of the device. Additonal environmental sensors will also feature in version 0.2 along with a graphical user interface. 
 
-If you would like to learn more about the progress of this version please email: [harvey_bates@hotmail.com](harvey_bates@hotmail.com)
- 
+If you would like to learn more about the progress of this version please email: [harvey_bates@hotmail.com](harvey_bates@hotmail.com) or [harvey.bates@student.uts.edu.au](harvey.bates@student.uts.edu.au)
+
+## Downloading files from this repository
+As the Phenobottle is being updated constantly, please download the released versions of the device from the releases tab (located on the right hand side of the screen). This contains all the files needed to 3D-print and control Phenobottles as well as some information about the required equipment. 
+
+If you wish to clone the main repository you may; however, as there are new versions of the Phenobottle in the works, the files may not work as planned.
+
 ## Open-Source Licensing
 
 The software in this work is licensed under GNU AFFERO GENERAL PUBLIC LICENSE
