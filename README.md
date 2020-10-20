@@ -159,6 +159,105 @@ The day and the night routine are idential except for the fact that during the n
 ```
 This procedure is completely customisable, i.e. methods can be swapped around and the length of certain processes such as the bubbling time can be increased easily. 
 
+# [Teensy 3.6](https://www.pjrc.com/store/teensy36.html) Microcontroller 
+Analog functions are carried out by a Teensy 3.6 microcontroller which is connected to the Rasberry Pi via a serial (USB) connection. These analog functions include the measurement of optical density (growth), temperture and chlorophyll fluorescence (photosynthesis). 
+
+The Teensy microcontroller can be programed with the [Arduino IDE](https://www.arduino.cc/en/Main/Software) on the Raspberry Pi if the additional software provided by [PJRC](https://www.pjrc.com/) called [Teensyduino](https://www.pjrc.com/teensy/teensyduino.html) is installed. 
+
+The Teensy [code](Phenobottle_Teensy.ino) is flashed to the Teensy board and doesn't need modifying as it acts as a slave to the Raspberry Pi. 
+
+## Teensy Setup
+```c
+void setup() {
+  Serial.begin(115200); // Baud rate must match the baud rate in the .py script
+  analogReadResolution(12); // Set the resolution of the analog measurments (can be up-to 16-bit but this sacrifices speed)
+  analogReference(DEFAULT); // Default (3.3) or 1.1 V reference voltage for the analog measurements
+  ...
+}
+```
+## Teensy Slave Setup
+The Teensy is constantly checking if there is requests in its serial port from the Raspberry Pi. It does this by the main loop:
+```c
+void loop(){
+  if(Serial.available()){ // Check serial port
+    command = Serial.readStringUntil('\n'); // Read request
+    if(command.equals("MeasureOpticalDensity")){ // Request to measure optical density
+      measureOpticalDensity(); // Measure
+    }
+    else if(command.equals("MeasureFluorescence")){ // Request to measure fluorescence
+      measureFluoro(); // Measure
+    }
+    ...
+}
+```
+This simple design makes it easy to add new requests from the Raspberry Pi [.py](Phenobottle_RaspberryPi.py) file and the Teensy [.ino](Phenobottle_Teensy.ino) file by adding a new `else if` statement to this loop. 
+
+## Fluorescence Measurment
+### Setup
+The Teensy in its current configuration takes a one second measurement of chlorophyll fluorescence, this however, can be adjusted as described below. The first part is to create arrays of different sizes corresponding to the time between measurements of fluorescence. The one second measurement is comprised of over 2000 data points which are comprised of baseline, fast (microsecond timescales) and slow (millisecond timescales) measurments:
+1. Baseline - Reads fluorescence intensity while the actinic LED is switched off (mostly used for debugging purposes)
+2. Micro - Comprised of microsecond measurments (~8 us between measurments) of a set amount
+3. Milli - Comprised of millisecond measurements (~1 ms between measurements) of a set amount
+```c
+int baseRead[5]; // Create a baseline array with 5 values
+int microRead [1000]; // Create a microread array with 1000 values
+int milliRead[1000]; // Create a milliread array with 1000 values
+
+int baseCycles = 5; // Set the size of the array (can just use sizeof(baseRead))
+int microCycles = 1000; // Set the size of the array (can just use sizeof(microRead))
+int milliCycles = 1000; // Set the size of the array (can just use sizeof(milliRead))
+
+float h[5]; // Create an identially sized array of baseRead for the timepoints
+float t[1000]; // Create an identially sized array of microRead for the timepoints
+float p[1000]; // Create an identially sized array of milliRead for the timepoints
+```
+### Read
+The measurment procedure is as follows:
+```c
+void measureFluoro() {
+  analogReference(DEFAULT); // Set the required analog reference voltage 
+  delay(10); // Pause
+  analogRead(readPin); // Single read to initiate the reference voltage
+  delay (1000); // Pause
+  digitalWrite(actinicPin, HIGH); // Turn on actinic LED
+  long timer = micros(); // Start the timer
+  ...
+```
+The measurment is carried out in two seperate parts (1) `microRead` and (2) `milliRead` (`baseRead` is not used for measuring). The `analogRead` values are stored in their respective arrays with corresponding timestamps in their own array.
+```c
+for (int i = 0; i < microCycles; i++) // Micro reads for desired length
+  {
+    microRead[i] = analogRead(readPin); // Store analog values
+    t[i] = micros() - timer; // Stores timestamps
+    // No delay needed here as we want to measure FAST
+  }
+for (int o = 0; o < milliCycles; o++) // Milli reads for desired length
+  {
+    milliRead[o] = analogRead(readPin); // Store analog values
+    p[o] = micros() - timer; // Stores timestamps
+    delay(1); // Millisecond delay between measurments
+  }
+  ...
+```
+Any processing (converting timestamps from `micros` to milliseconds) of the arrays after this measurment is carried out after the actinic LED is switched off. This speeds up the `analogRead` function as we only need to store array values while measuring. 
+
+## Optical Density
+Measurment of optical density is really simple. 
+```c
+void measureOpticalDensity(){
+  digitalWrite(ODemitPower, HIGH); // Set the emitting IR-LED ON
+  analogReference(DEFAULT); // Set the analog reference voltage
+  delay(1000);
+  analogRead(odRead); // Read to initalise the reference voltage
+  delay(100);
+  ODMeasure = analogRead(odRead); // Read optical density
+  Serial.println(ODMeasure); // Print out OD for the Raspberry Pi to read
+  delay(10); 
+  digitalWrite(ODemitPower, LOW); // Turn off the IR-LED
+  delay(100);
+}
+```
+
 # Future of The Phenobottle
 The Phenobottle is currently being updated to version 0.2. This will feature several environmental controls that were not featured the original version (v0.1) of the device. Additonal environmental sensors will also feature in version 0.2 along with a graphical user interface. 
 
