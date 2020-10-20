@@ -20,6 +20,7 @@
 #include <SPI.h>
 #include <math.h>
 #include <Wire.h>
+#include <stdlib.h>
 
 // Analog Pins
 #define readPin 33
@@ -86,12 +87,23 @@ void setup() {
   digitalWrite(Blue, LOW);
 }
 
-void redON(){
-	digitalWrite(Red, HIGH);
+void LED_light_on(int redColor, int redFreq, int greenColor, int greenFreq, int blueColor, int blueFreq){
+  analogWrite(redColor, redFreq);
+  analogWrite(greenColor, greenFreq);
+  analogWrite(blueColor, blueFreq);
+  if (redFreq == 0){
+    digitalWrite(redColor, LOW);
+  }
+  if (greenFreq == 0){
+    digitalWrite(greenColor, LOW);
+  }
+  if (blueFreq == 0){
+    digitalWrite(blueColor, LOW);
+  }
 }
 
-void blueON(){
-	digitalWrite(Blue, HIGH);
+void LED_light_off(int color){
+  digitalWrite(color, LOW);
 }
 
 void rgblightsOFF(){
@@ -100,8 +112,20 @@ void rgblightsOFF(){
 	digitalWrite(Blue, LOW);
 }
 
-void greenON(){
-	digitalWrite(Green, HIGH);
+String getValue(String data, char separator, int index)
+{
+    int found = 0;
+    int strIndex[] = { 0, -1 };
+    int maxIndex = data.length() - 1;
+
+    for (int i = 0; i <= maxIndex && found <= index; i++) {
+        if (data.charAt(i) == separator || i == maxIndex) {
+            found++;
+            strIndex[0] = strIndex[1] + 1;
+            strIndex[1] = (i == maxIndex) ? i+1 : i;
+        }
+    }
+    return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
 
 void measureOpticalDensity(){
@@ -252,18 +276,26 @@ void loop(){
     else if(command.equals("t")){
       testADC();
     }
-	  else if(command.equals("RedON")){
-      redON();
-    }
-	  else if(command.equals("GreenON")){
-      greenON();
-    }
-	  else if(command.equals("BlueON")){
-      blueON();
-    }
 	  else if(command.equals("RGBOFF")){
       rgblightsOFF();
+	  }
+   
+    else if(command.startsWith("LED_light_ON")){
+      String red_col = getValue(command, ';', 1);
+      String red_freq = getValue(command, ';', 2); 
+      String green_col = getValue(command, ';', 3);
+      String green_freq = getValue(command, ';', 4); 
+      String blue_col = getValue(command, ';', 5);
+      String blue_freq = getValue(command, ';', 6);      
+      LED_light_on(red_col.toInt(), red_freq.toInt(), green_col.toInt(), 
+      green_freq.toInt(), blue_col.toInt(), blue_freq.toInt());
     }
+    
+    else if(command.startsWith("LED_light_OFF")){
+      String col = getValue(command, ';', 1);
+      LED_light_off(col.toInt());
+    }
+    
     else{
       delay(100);
     }
