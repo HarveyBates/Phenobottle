@@ -124,27 +124,30 @@ class MotorsAndLights:
     def mixing_motor_off():
         MIXING_MOTOR.run(Adafruit_MotorHAT.RELEASE)
 
-    def light_on(color):
+    @staticmethod
+    def light_on():
         LIGHT_CONTROL.run(Adafruit_MotorHAT.BACKWARD)
-        LIGHT_CONTROL.setSpeed(LIGHT_INTENSITY)
+        LIGHT_CONTROL.setSpeed(int(LIGHT_INTENSITY))
         ser.flush()
-        time.sleep(1)
-        if color == "red":
-            ser.write(b'RedON')            
-        elif color == "green":
-            ser.write(b'GreenON')
-        elif color == "blue":
-            ser.write(b'BlueON')
-        elif color == None:
-            pass
+        str_red = bytes(str(LIGHT_RED), "utf-8")
+        str_green = bytes(str(LIGHT_GREEN), "utf-8")
+        str_blue = bytes(str(LIGHT_BLUE), "utf-8")
+        ser.write(b'LED_light_ON;%s;%s;%s;%s;%s;%s' %("36".encode("utf-8"), 
+        	str_red, "37".encode("utf-8"), str_green, "38".encode("utf-8"), str_blue))
 
     @staticmethod
-    def light_off():
+    def light_off(color=None):
         LIGHT_CONTROL.run(Adafruit_MotorHAT.RELEASE)
         ser.flush()
-        time.sleep(1)
-        ser.write(b'RGBOFF')
-        
+        if color == "Red":
+            ser.write(b'LED_light_OFF;%s' %"36".encode("utf-8"))
+        if color == "Green":
+            ser.write(b'LED_light_OFF;%s' %"37".encode("utf-8"))
+        if color == "Blue":
+            ser.write(b'LED_light_OFF;%s' %"38".encode("utf-8"))
+        if color is None:
+            pass
+
 
 class Sensors:
     @staticmethod
