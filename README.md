@@ -134,28 +134,28 @@ if datetime.datetime.now().minute % 10 == 0:
 ### Routines
 The day and the night routine are idential except for the fact that during the night the LED grow lights are constantly switched OFF. 
 ```python
-        MotorsAndLights.light_on(None) # Turn on lights (daytime only) with desired color
-        MotorsAndLights.mixing_motor_on() # Mixing on at set speed
-        time.sleep(30) # Wait 30 seconds for mixing 
+MotorsAndLights.light_on(None) # Turn on lights (daytime only) with desired color
+MotorsAndLights.mixing_motor_on() # Mixing on at set speed
+time.sleep(30) # Wait 30 seconds for mixing 
 
-        MotorsAndLights.mixing_motor_off() # Mixing off
-        MotorsAndLights.light_off() # Lights off to ensure no noise from PWM interferes with measurments
-        Sensors.measure_optical_density() # Measures optical density
-        Sensors.measure_fluorescence() # Measures fluorescence
+MotorsAndLights.mixing_motor_off() # Mixing off
+MotorsAndLights.light_off() # Lights off to ensure no noise from PWM interferes with measurments
+Sensors.measure_optical_density() # Measures optical density
+Sensors.measure_fluorescence() # Measures fluorescence
 
-        MotorsAndLights.light_on(None) # Turn on lights (daytime only) with desired color
-        MotorsAndLights.peristaltic_motor_on() # Pump on to clear cuvette
-        Database.upload() # Upload to SQL server
-        Excel.upload() # Upload to local .csv file
-        time.sleep(20) # Wait for pump to clear cuvette 
+MotorsAndLights.light_on(None) # Turn on lights (daytime only) with desired color
+MotorsAndLights.peristaltic_motor_on() # Pump on to clear cuvette
+Database.upload() # Upload to SQL server
+Excel.upload() # Upload to local .csv file
+time.sleep(20) # Wait for pump to clear cuvette 
 
-        MotorsAndLights.peristaltic_motor_off() # Stop pump
-        MotorsAndLights.bubbling_motor_on() # Bubble main culture flask on
-        MotorsAndLights.mixing_motor_on() # Mixing on to homogenate culture
-        time.sleep(30) # Wait 30 seconds for bubbling and mixing 
+MotorsAndLights.peristaltic_motor_off() # Stop pump
+MotorsAndLights.bubbling_motor_on() # Bubble main culture flask on
+MotorsAndLights.mixing_motor_on() # Mixing on to homogenate culture
+time.sleep(30) # Wait 30 seconds for bubbling and mixing 
 
-        MotorsAndLights.bubbling_motor_off() # Bubbling off
-        MotorsAndLights.mixing_motor_off() # Mixing off
+MotorsAndLights.bubbling_motor_off() # Bubbling off
+MotorsAndLights.mixing_motor_off() # Mixing off
 ```
 This procedure is completely customisable, i.e. methods can be swapped around and the length of certain processes such as the bubbling time can be increased easily. 
 
