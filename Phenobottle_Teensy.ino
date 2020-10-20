@@ -276,10 +276,9 @@ void loop(){
     else if(command.equals("t")){
       testADC();
     }
-	  else if(command.equals("RGBOFF")){
+    else if(command.equals("RGBOFF")){
       rgblightsOFF();
-	  }
-   
+    }
     else if(command.startsWith("LED_light_ON")){
       String red_col = getValue(command, ';', 1);
       String red_freq = getValue(command, ';', 2); 
@@ -290,12 +289,10 @@ void loop(){
       LED_light_on(red_col.toInt(), red_freq.toInt(), green_col.toInt(), 
       green_freq.toInt(), blue_col.toInt(), blue_freq.toInt());
     }
-    
     else if(command.startsWith("LED_light_OFF")){
       String col = getValue(command, ';', 1);
       LED_light_off(col.toInt());
     }
-    
     else{
       delay(100);
     }
