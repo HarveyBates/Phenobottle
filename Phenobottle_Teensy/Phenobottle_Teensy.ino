@@ -1,104 +1,86 @@
-// <Phenobottle Teensy 3.6 Script. Controls "The Phenobottles" sensors>
-     // Copyright (C) <2020>  <Harvey Bates>
+/* <Phenobottle Teensy Script. Controls "The Phenobottles" sensors>
+     Copyright (C) <2020>  <Harvey Bates>
 
-     // This program is free software: you can redistribute it and/or modify
-     // it under the terms of the GNU General Public License as published by
-     // the Free Software Foundation, either version 3 of the License, or
-     // (at your option) any later version.
-
-     // This program is distributed in the hope that it will be useful,
-     // but WITHOUT ANY WARRANTY; without even the implied warranty of
-     // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-     // GNU General Public License for more details.
-
-     // You should have received a copy of the GNU General Public License
-     // along with this program.  If not, see <https://www.gnu.org/licenses/>
-    
-     // For more information contact: harvey.bates@student.uts.edu.au
-
-// Required Imports
-#include <SPI.h>
-#include <math.h>
-#include <Wire.h>
-#include <stdlib.h>
+     This program is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+     
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU General Public License for more details.
+     
+     You should have received a copy of the GNU General Public License
+     along with this program.  If not, see <https://www.gnu.org/licenses/>
+     
+     For more information contact: harvey.bates@student.uts.edu.au or see
+     https://github.com/HarveyBates/Open-JIP 
+*/ 
 
 // Analog Pins
-#define readPin 33
-#define odRead 34
-#define tempPin 35
+#define fluorescenceReadPin 33
+#define odReadPin 34
+#define temperatureReadPin 35
 
 // Digital Pins
 #define actinicPin 21
-#define ODemitPower 23
-#define ODdetectPower 22
-#define tempPower 20
+#define odEmitPin 23
+#define odDetectPin 22
+#define temperaturePower 20
 
 //RGB Control 
-#define Red 36
-#define Green 37
-#define Blue 38
+#define redPin 36
+#define greenPin 37
+#define bluePin 38
 
-int baseRead[5];
+// Setup arrays that hold fluorescence data
 int microRead [1000];
 int milliRead[1000];
 
-int baseCycles = 5;
-int microCycles = 1000;
-int milliCycles = 1000;
-
-float h[5];
-float t[1000]; 
-float p[1000];
+// Setup arrays that hold timestamps that correspond to fluorescence values
+float microTime[1000]; 
+float milliTime[1000];
 String command;
 
-int microMax = 0;
-int milliMax = 0;
-float foread = 0;
+int microLength = 1000, milliLength = 1000; // Change these to match the size of the above arrays
 
-int ODMeasure;
-float Fo;
-float Fm;
-float VarFluoro;
-float transmittance;
-float FvoverFm;
-double od_real;
-
-float initalOD = 800;
+float refVoltage = 3.3; // Set the reference voltage (only applicable with Teensy 3.6)
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(115200); // Initalise serial communications at specific baud rate
   
-  analogReadResolution(12);
-  analogReference(DEFAULT);
+  analogReadResolution(12); // Set the resolution of the microcontroller in bits
+  set_reference_voltage(refVoltage); // Only applicable with a Teensy 3.6 (disable if using other microcontroller)
   
-  pinMode(tempPower, OUTPUT);
-  pinMode(ODemitPower, OUTPUT);
-  pinMode(ODdetectPower, OUTPUT);
+  pinMode(temperaturePower, OUTPUT);
+  pinMode(odEmitPin, OUTPUT);
+  pinMode(odDetectPin, OUTPUT);
   pinMode(actinicPin, OUTPUT);
-  pinMode(Red, OUTPUT);
-  pinMode(Green, OUTPUT);
-  pinMode(Blue, OUTPUT);
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
  
   digitalWrite(actinicPin, LOW);
-  digitalWrite(ODemitPower, LOW);
-  digitalWrite(ODdetectPower, HIGH);
-  digitalWrite(Red, LOW);
-  digitalWrite(Green, LOW);
-  digitalWrite(Blue, LOW);
+  digitalWrite(odEmitPin, LOW);
+  digitalWrite(odDetectPin, HIGH);
+  digitalWrite(redPin, LOW);
+  digitalWrite(greenPin, LOW);
+  digitalWrite(bluePin, LOW);
 }
 
-void LED_light_on(int redColor, int redFreq, int greenColor, int greenFreq, int blueColor, int blueFreq){
-  analogWrite(redColor, redFreq);
-  analogWrite(greenColor, greenFreq);
-  analogWrite(blueColor, blueFreq);
+void LED_light_on(int red, int redFreq, int green, int greenFreq, int blue, int blueFreq){
+  analogWrite(red, redFreq);
+  analogWrite(green, greenFreq);
+  analogWrite(blue, blueFreq);
   if (redFreq == 0){
-    digitalWrite(redColor, LOW);
+    digitalWrite(red, LOW);
   }
   if (greenFreq == 0){
-    digitalWrite(greenColor, LOW);
+    digitalWrite(green, LOW);
   }
   if (blueFreq == 0){
-    digitalWrite(blueColor, LOW);
+    digitalWrite(blue, LOW);
   }
 }
 
@@ -106,14 +88,13 @@ void LED_light_off(int color){
   digitalWrite(color, LOW);
 }
 
-void rgblightsOFF(){
-  digitalWrite(Red, LOW);
-  digitalWrite(Green, LOW);
-  digitalWrite(Blue, LOW);
+void rgb_lights_off(){
+  digitalWrite(redPin, LOW);
+  digitalWrite(greenPin, LOW);
+  digitalWrite(bluePin, LOW);
 }
 
-String getValue(String data, char separator, int index)
-{
+String getValue(String data, char separator, int index){
     int found = 0;
     int strIndex[] = { 0, -1 };
     int maxIndex = data.length() - 1;
@@ -128,121 +109,80 @@ String getValue(String data, char separator, int index)
     return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
 
-void measureOpticalDensity(){
-  digitalWrite(ODemitPower, HIGH);
-  analogReference(DEFAULT);
+void measure_optical_density(){
+  digitalWrite(odEmitPin, HIGH);
+  set_reference_voltage(refVoltage);
   delay(1000);
-  analogRead(odRead);
+  analogRead(odReadPin);
   delay(100);
-  ODMeasure = analogRead(odRead);
-  Serial.println(ODMeasure);
+  int odMeasure = analogRead(odReadPin);
+  Serial.println(odMeasure);
   delay(10);
-  digitalWrite(ODemitPower, LOW);
+  digitalWrite(odEmitPin, LOW);
   delay(100);
 }
 
-void measureFluoro() {
-  analogReference(DEFAULT);
-  delay(10);
-  
-  analogRead(readPin);
-  delay (1000);
-  
-  digitalWrite(actinicPin, HIGH); 
-
-  long timer = micros();
-
-  for (int i = 0; i < microCycles; i++) 
-  {
-    microRead[i] = analogRead(readPin);
-    t[i] = micros() - timer;
+void set_reference_voltage(float voltage){
+  // Sets and initalises the required reference voltage for measurments
+  if(voltage == 3.3){
+    analogReference(DEFAULT); // Set to 3.3 V
   }
+  else if(voltage == 1.1){
+    analogReference(INTERNAL1V1); // Set to 1.1 V
+  }
+  else{
+    analogReference(DEFAULT); // Set to default (3.3 V) if unknown value is found
+  }
+  analogRead(fluorescenceReadPin); // Initalise reference voltage
+}
+
+void measure_fluorescence() {
+  set_reference_voltage(refVoltage); 
   
-  for (int o = 0; o < milliCycles; o++) 
+  digitalWrite(actinicPin, HIGH); // Turn on actinic LED
+
+  long timer = micros(); // Start timer 
+
+  // Read microsecond fluorescence values and corresponding timestamps
+  for (unsigned int i = 0; i < sizeof(microRead) / sizeof(int); i++) 
   {
-    milliRead[o] = analogRead(readPin);
-    p[o] = micros() - timer;
+    microRead[i] = analogRead(fluorescenceReadPin);
+    microTime[i] = micros() - timer;
+  }
+
+  // Read millisecond fluorescence values and corresponding timestamps
+  for (unsigned int i = 0; i < sizeof(milliRead) / sizeof(int); i++) 
+  {
+    milliRead[i] = analogRead(fluorescenceReadPin);
+    milliTime[i] = micros() - timer;
     delay(1);
   }
   
-  digitalWrite(actinicPin, LOW); 
+  digitalWrite(actinicPin, LOW); // Turn off actinic LED
   delay(10);
-  
-  int microMax = microRead[1]; 
-    for (int u = 1; u < microCycles; u++){
-      if(microRead[u] > microMax){
-        microMax = microRead[u];
-      }
-    }
-    
-  int milliMax = milliRead[0];
-    for (int i = 0; i < milliCycles; i++){
-      if(milliRead[i] > milliMax){
-        milliMax = milliRead[i];
-      }
-    }
-  
-  for (int q = 0; q < microCycles; q++)
+
+  // Convert micros() to milliseconds (ms) for microsecond values and convert bits to voltage
+  for (unsigned int i = 0; i < sizeof(microRead) / sizeof(int); i++)
   {
-   float millCounts = t[q];
-   float millicountsConverted = millCounts/1000; 
-   float milliReal = millicountsConverted;
+   float milliReal = microTime[i]/1000; // Convert micros() to ms
    Serial.print(milliReal, 3); 
    Serial.print("\t");
-   Serial.println(microRead[q]);
-   delay(1);
-  }
-  
-  for (int l = 0; l < milliCycles; l++) 
-  {
-   float milliTime = p[l];
-   float millitimeConverted = milliTime/1000;
-   float milliReal = millitimeConverted;
-   Serial.print(milliReal, 3); 
-   Serial.print("\t");
-   Serial.println(milliRead[l]);
+   Serial.println(microRead[i]);
    delay(1);
   }
 
-}
-
-void testADC(){
-  for (int i = 0; i < 2000; i++){
-    int value = analogRead(14);
-    Serial.println(value);
-    delay(100);
+  // Convert micros() to milliseconds for millsecond values and convert bits to voltage
+  for (unsigned int i = 0; i < sizeof(milliRead) / sizeof(int); i++) 
+  {
+   float milliReal = milliTime[i]/1000; // Convert micros() to ms
+   Serial.print(milliReal, 3); 
+   Serial.print("\t");
+   Serial.println(milliRead[i]);
+   delay(1);
   }
 }
 
-void calibrateFo(){
-  analogReference(DEFAULT);
-  delay(10);
-  analogRead(readPin);
-  delay(10);
-  for (int k = 0; k < 5; k++){
-    digitalWrite(actinicPin, HIGH);
-    delayMicroseconds(20);
-    for (int i = 0; i <= 2; i++){
-      foread = analogRead(readPin);
-      Serial.println((foread/4096) * 3.3);
-    }
-    digitalWrite(actinicPin, LOW);
-    Serial.print("Final Fo = ");
-    Serial.println((foread/4096) * 3.3);
-    delay(2000);
-    }
-}
-
-void calibrateRise(){
-  for (int i = 0; i < 200; i++){
-    digitalWrite(actinicPin, HIGH);
-    delayMicroseconds(100);
-    digitalWrite(actinicPin, LOW);
-    delay(200);
-  }
-}
-
-void measureLight(){
+void measure_light(){
   digitalWrite(actinicPin, HIGH);
   delay(3000);
   digitalWrite(actinicPin, LOW);
@@ -252,32 +192,17 @@ void measureLight(){
 void loop(){
   if(Serial.available()){   
     command = Serial.readStringUntil('\n');
-    if(command.equals("MeasureOpticalDensity")){
-      measureOpticalDensity();
+    if(command.equals("MeasureOpticalDensity") || command.equals("MOD")){
+      measure_optical_density();
     }
-    else if(command.equals("MeasureFluorescence")){
-      measureFluoro();
+    else if(command.equals("MeasureFluorescence") || command.equals("MF")){
+      measure_fluorescence();
     }
-    else if(command.equals("MF")){
-      measureFluoro();
-    }
-    else if(command.equals("CFo")){
-      calibrateFo();
-    }
-    else if(command.equals("Measure Light")){
-      measureFluoro();
-    }
-    else if(command.equals("ML")){
-      measureLight();
-    }
-    else if(command.equals("c")){
-      calibrateRise();
-    }
-    else if(command.equals("t")){
-      testADC();
+    else if(command.equals("MeasureLight") || command.equals("ML")){
+      measure_light();
     }
     else if(command.equals("RGBOFF")){
-      rgblightsOFF();
+      rgb_lights_off();
     }
     else if(command.startsWith("LED_light_ON")){
       String red_col = getValue(command, ';', 1);
