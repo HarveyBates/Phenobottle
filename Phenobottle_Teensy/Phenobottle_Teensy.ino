@@ -49,7 +49,6 @@ float refVoltage = 3.3; // Set the reference voltage (only applicable with Teens
 
 void setup() {
   Serial.begin(115200); // Initalise serial communications at specific baud rate
-  
   analogReadResolution(12); // Set the resolution of the microcontroller in bits
   set_reference_voltage(refVoltage); // Only applicable with a Teensy 3.6 (disable if using other microcontroller)
   
@@ -110,16 +109,12 @@ String getValue(String data, char separator, int index){
 }
 
 void measure_optical_density(){
-  digitalWrite(odEmitPin, HIGH);
   set_reference_voltage(refVoltage);
-  delay(1000);
-  analogRead(odReadPin);
-  delay(100);
-  int odMeasure = analogRead(odReadPin);
+  digitalWrite(odEmitPin, HIGH); // Turn on emitting LED
+  delay(500); // Slight delay to ensure emitting LED is stable
+  int odMeasure = analogRead(odReadPin); // Read optical density
   Serial.println(odMeasure);
-  delay(10);
-  digitalWrite(odEmitPin, LOW);
-  delay(100);
+  digitalWrite(odEmitPin, LOW); // Turn off emitting LED
 }
 
 void set_reference_voltage(float voltage){

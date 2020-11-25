@@ -17,6 +17,22 @@ In this repository users can find:
 3.	Scripts for running the Phenobottles
 4.	Additional information such as a bill of materials etc.
 
+## Specficications
+
+| Feature                                                      | Value / Description                                          |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Growth light quality                                         | Red, green and blue (Adjustable). 8-bit individual adjustment for each channel. |
+| Growth light intensity                                       | Up to 200 &mu;E (can be increased if needed).                |
+| Mixing                                                       | Vertical mixing using magnetic stirrer (adjustable intensity) |
+| Bubbling                                                     | Included bubbling motor (adjustable) or solenoid control for external supply of CO<sub>2</sub> |
+| Main board                                                   | Raspberry Pi 3B+ (can accomidate the new 4 - 4B)             |
+| Microcontroller                                              | Teensy 3.5/3.6 or Teensy 4.1 (3.6 Recommended)               |
+| Actinic LED colors                                           | **Blue** 455 – 485 nm (466 nm), **Green** 517 – 555 nm (532 nm), **Orange** 583 – 600 nm (593 nm), **Red** 617 – 635 nm (626 nm). |
+| Resolution of **optical density** and **chlorophyll fluorescence** measurments | 10 to 16-bit (adjustable)                                    |
+| Sampling rate of fluorometer                                 | 8 &mu;s at 12-bits (can be overclocked)                      |
+| Operating voltage                                            | 15 V 1.2 A (Barrel plug), 12 V 2 A (Barrel Plug) and a 5 V 2 A (MicroUSB) power supply |
+| Data collection                                              | SQL Server and local .csv                                    |
+
 ## Downloading files from this repository
 As the Phenobottle is being updated constantly, please download the released versions of the device from the releases tab (located on the right hand side of the screen). This contains all the files needed to 3D-print and control Phenobottles as well as some information about the required equipment. 
 
@@ -77,12 +93,8 @@ Required for communication with the Teensy 3.6 microcontroller. Documentation on
 ### Basic Setup
 ```python
 PHENOBOTTLE_NUMBER = 3 # Arbitary number to differentiate between Phenobottles
-
-
 INITIAL_OPTICAL_DENSITY = 888 # 12-bit value obtained by calibrating the optical density sensor
-
 ARDUINO_FLUORESCENCE_REFERENCE = 3.3 # Teensy microntrollers have 2 analog reference values 1.1 and 3.3 
-
 MIXING_SPEED = 32 # Mixing speed of the mixing motor (0 - 255)
 BUBBLING_INTENSITY = 60 # Bubbling intensity of the bubbling motor (0 - 255)
 LIGHT_INTENSITY = 220 # Overall light intensity of the grow lights (0 - 255) 
@@ -109,9 +121,7 @@ For a SQL server connection this command must be compiled. See [here](https://py
 ```python
 acc_sid = "Account SSID" # Accound SSID from Twilio
 auth_token = "Account Token" # Accound token from Twilio
-
 client = Client(acc_sid, auth_token)
-
 from_number = "Twilio Phone Number" # Designated twilio phone number
 to_number = "Mobile Phone Number" # Your phone number
 ```
@@ -167,75 +177,72 @@ The Teensy microcontroller can be programed with the [Arduino IDE](https://www.a
 The Teensy [code](Phenobottle_Teensy.ino) is flashed to the Teensy board and doesn't need modifying as it acts as a slave to the Raspberry Pi. 
 
 ## Teensy Setup
-```c
+```c++
 void setup() {
-  Serial.begin(115200); // Baud rate must match the baud rate in the .py script
-  analogReadResolution(12); // Set the resolution of the analog measurments (can be up-to 16-bit but this sacrifices speed)
-  analogReference(DEFAULT); // Default (3.3) or 1.1 V reference voltage for the analog measurements
+  Serial.begin(115200); // Initalise serial communications at specific baud rate
+  analogReadResolution(12); // Set the resolution of the microcontroller in bits
+  set_reference_voltage(refVoltage); // Only applicable with a Teensy 3.6 (disable if using other microcontroller)
   ...
 }
 ```
 ## Teensy Slave Setup
-The Teensy is constantly checking if there is requests in its serial port from the Raspberry Pi. It does this by the main loop:
-```c
+The Teensy is constantly checking if there is requests in its serial port from the Raspberry Pi. It does this via the main loop:
+```c++
 void loop(){
-  if(Serial.available()){ // Check serial port
-    command = Serial.readStringUntil('\n'); // Read request
-    if(command.equals("MeasureOpticalDensity")){ // Request to measure optical density
-      measureOpticalDensity(); // Measure
+  if(Serial.available()){   
+    command = Serial.readStringUntil('\n');
+    if(command.equals("MeasureOpticalDensity") || command.equals("MOD")){
+      measure_optical_density();
     }
-    else if(command.equals("MeasureFluorescence")){ // Request to measure fluorescence
-      measureFluoro(); // Measure
+    else if(command.equals("MeasureFluorescence") || command.equals("MF")){
+      measure_fluorescence();
     }
     ...
 }
 ```
-This simple design makes it easy to add new requests from the Raspberry Pi [.py](Phenobottle_RaspberryPi.py) file and the Teensy [.ino](Phenobottle_Teensy.ino) file by adding a new `else if` statement to this loop. 
+For example, when a string containing ```"MeasureOpticalDensity"``` into the Teensy's serial port, the resulting function ```measure_optical_density()``` is carried out. This simple design makes it easy to add new requests from the Raspberry Pi [.py](Phenobottle_RaspberryPi.py) file and the Teensy [.ino](Phenobottle_Teensy.ino) file by adding a new `else if` statement to this loop. 
 
 ## Fluorescence Measurment
 ### Setup
-The Teensy in its current configuration takes a one second measurement of chlorophyll fluorescence, this however, can be adjusted as described below. The first part is to create arrays of different sizes corresponding to the time between measurements of fluorescence. The one second measurement is comprised of over 2000 data points which are comprised of baseline, fast (microsecond timescales) and slow (millisecond timescales) measurments:
-1. Baseline - Reads fluorescence intensity while the actinic LED is switched off (mostly used for debugging purposes)
-2. Micro - Comprised of microsecond measurments (~8 us between measurments) of a set amount
+The Teensy in its current configuration takes a one second measurement of chlorophyll fluorescence, this however, can be adjusted as described below. The first part is to create arrays of different sizes corresponding to the time between measurements of fluorescence. The one second measurement is comprised of over 2000 data points which are comprised of fast (microsecond timescales) and slow (millisecond timescales) measurments:
+2. Micro - Comprised of microsecond measurments (~8 &mu;s between measurments) of a set amount
 3. Milli - Comprised of millisecond measurements (~1 ms between measurements) of a set amount
-```c
-int baseRead[5]; // Create a baseline array with 5 values
-int microRead [1000]; // Create a microread array with 1000 values
-int milliRead[1000]; // Create a milliread array with 1000 values
+```c++
+// Setup arrays that hold fluorescence data
+int microRead [1000];
+int milliRead[1000];
 
-int baseCycles = 5; // Set the size of the array (can just use sizeof(baseRead))
-int microCycles = 1000; // Set the size of the array (can just use sizeof(microRead))
-int milliCycles = 1000; // Set the size of the array (can just use sizeof(milliRead))
+// Setup arrays that hold timestamps that correspond to fluorescence values
+float microTime[1000]; 
+float milliTime[1000];
+String command;
 
-float h[5]; // Create an identially sized array of baseRead for the timepoints
-float t[1000]; // Create an identially sized array of microRead for the timepoints
-float p[1000]; // Create an identially sized array of milliRead for the timepoints
+int microLength = 1000, milliLength = 1000; // Change these to match the size of the above arrays
 ```
 ### Read
 The measurment procedure is as follows:
-```c
-void measureFluoro() {
-  analogReference(DEFAULT); // Set the required analog reference voltage 
-  delay(10); // Pause
-  analogRead(readPin); // Single read to initiate the reference voltage
-  delay (1000); // Pause
+```c++
+void measure_fluorescence() {
+  set_reference_voltage(refVoltage); 
   digitalWrite(actinicPin, HIGH); // Turn on actinic LED
-  long timer = micros(); // Start the timer
+  long timer = micros(); // Start timer 
   ...
 ```
-The measurment is carried out in two seperate parts (1) `microRead` and (2) `milliRead` (`baseRead` is not used for measuring). The `analogRead` values are stored in their respective arrays with corresponding timestamps in their own array.
-```c
-for (int i = 0; i < microCycles; i++) // Micro reads for desired length
+The measurment is carried out in two seperate parts (1) `microRead` and (2) `milliRead`. The `analogRead` values are stored in their respective arrays with corresponding timestamps in their own array.
+```c++
+  // Read microsecond fluorescence values and corresponding timestamps
+  for (unsigned int i = 0; i < sizeof(microRead) / sizeof(int); i++) 
   {
-    microRead[i] = analogRead(readPin); // Store analog values
-    t[i] = micros() - timer; // Stores timestamps
-    // No delay needed here as we want to measure FAST
+    microRead[i] = analogRead(fluorescenceReadPin);
+    microTime[i] = micros() - timer;
   }
-for (int o = 0; o < milliCycles; o++) // Milli reads for desired length
+
+  // Read millisecond fluorescence values and corresponding timestamps
+  for (unsigned int i = 0; i < sizeof(milliRead) / sizeof(int); i++) 
   {
-    milliRead[o] = analogRead(readPin); // Store analog values
-    p[o] = micros() - timer; // Stores timestamps
-    delay(1); // Millisecond delay between measurments
+    milliRead[i] = analogRead(fluorescenceReadPin);
+    milliTime[i] = micros() - timer;
+    delay(1); // Delay ~ 1ms between aqusisitions
   }
   ...
 ```
@@ -243,25 +250,22 @@ Any processing (converting timestamps from `micros` to milliseconds) of the arra
 
 ## Optical Density
 Measurment of optical density is really simple. 
-```c
-void measureOpticalDensity(){
-  digitalWrite(ODemitPower, HIGH); // Set the emitting IR-LED ON
-  analogReference(DEFAULT); // Set the analog reference voltage
-  delay(1000);
-  analogRead(odRead); // Read to initalise the reference voltage
-  delay(100);
-  ODMeasure = analogRead(odRead); // Read optical density
-  Serial.println(ODMeasure); // Print out OD for the Raspberry Pi to read
-  delay(10); 
-  digitalWrite(ODemitPower, LOW); // Turn off the IR-LED
-  delay(100);
+```c++
+void measure_optical_density(){
+  set_reference_voltage(refVoltage);
+  digitalWrite(odEmitPin, HIGH); // Turn on emitting LED
+  delay(500); // Slight delay to ensure emitting LED is stable
+  int odMeasure = analogRead(odReadPin); // Read optical density
+  Serial.println(odMeasure);
+  digitalWrite(odEmitPin, LOW); // Turn off emitting LED
 }
 ```
 
 # Future of The Phenobottle
+
 The Phenobottle is currently being updated to version 0.2. This will feature several environmental controls that were not featured the original version (v0.1) of the device. Additonal environmental sensors will also feature in version 0.2 along with a graphical user interface. 
 
-If you would like to learn more about the progress of this version please email: [harvey_bates@hotmail.com](harvey_bates@hotmail.com) or [harvey.bates@student.uts.edu.au](harvey.bates@student.uts.edu.au)
+If you would like to learn more about the progress of this version please email: [harvey_bates@hotmail.com](harvey_bates@hotmail.com)
 
 # Open-Source Licensing
 
@@ -283,4 +287,6 @@ The software in this work is licensed under GNU AFFERO GENERAL PUBLIC LICENSE
 
   For more information contact: harvey.bates@student.uts.edu.au
 
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br />The hardware (3D Models, Electronic Schematics) in this work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+
+Hardware (3D Models, Electronic Schematics) in this work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.
