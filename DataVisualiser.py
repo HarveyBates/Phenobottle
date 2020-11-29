@@ -5,7 +5,7 @@ import tkinter as tk
 import numpy as np
 
 parameters = ['Optical Density', 'Temperature', 'pH', 'Chl Fluorescence']
-colors = ['blue', 'pink', 'orange', 'yellow', 'red', 'purple', 'grey']
+colors = ['pink', 'yellow', 'red', 'purple', 'grey', 'orange', 'blue']
 
 class MainWindow(tk.Frame):
 	def __init__(self, master=None):
@@ -17,18 +17,24 @@ class MainWindow(tk.Frame):
 
 		for row, parameter in enumerate(parameters):
 			self.create_plot()
-			self.add_data(parameter, x_values, y_values, 0, row, colors[row], False)
+			self.add_data('fill', parameter, x_values, y_values, 0, row, colors[row], False)
 			x_values, y_values = self.get_data(100)
-			self.add_data(parameter, x_values, y_values, 0, row, colors[row-1], False)
+			self.add_data('fill', parameter, x_values, y_values, 0, row, colors[row-1], False)
 
 		x_values, y_values = self.get_data(100)
+		
 		self.create_plot()
-		self.add_data(parameter, x_values, y_values, 1, 0, colors[5], True)
-
-		x_values, y_values = self.get_data(100)
+		for i in range(4):
+			x_values, y_values = self.get_data(100)
+			self.add_data('fill', parameter, x_values, y_values, 1, 0, colors[i+2], True)
+		
 		self.create_plot()
-		self.add_data(parameter, x_values, y_values, 1, 2, colors[4], True)
-
+		offset = 0
+		for i in range(2):
+			x_values, y_values = self.get_data(100)
+			y_values =np.sin(2 * np.pi * 5 * 100 * (x_values + offset) / 8000)
+			self.add_data('Line', parameter, x_values, y_values, 1, 2, colors[i], True)
+			offset += 500
 
 	def set_plot_font(self):
 		plt.rc('font', family='sans-serif') 
@@ -42,7 +48,7 @@ class MainWindow(tk.Frame):
 		self.ax = self.fig.add_subplot(1, 1, 1)
 		self.canvas = FigureCanvasTkAgg(self.fig, root)
 
-	def add_data(self, title, x_values, y_values, column, row, color, expand):
+	def add_data(self, type, title, x_values, y_values, column, row, color, expand):
 
 		self.ax.grid(True, which="major", axis='both', color='w', alpha=0.2)
 		sides = ['top', 'bottom', 'left', 'right']
@@ -62,7 +68,11 @@ class MainWindow(tk.Frame):
 		else:
 			self.canvas.get_tk_widget().grid(column=column, row=row, rowspan=2, sticky="nsew")
 	
-		self.ax.fill_between(x_values, y_values.flatten(), color=color, alpha=0.3)
+		if(type == 'fill'):	
+			self.ax.fill_between(x_values, y_values.flatten(), color=color, alpha=0.3)
+		else:
+			self.ax.plot(x_values, y_values.flatten(), color=color, alpha=0.3, linewidth=3)
+
 		self.fig.tight_layout()
 
 	def get_data(self, size):
