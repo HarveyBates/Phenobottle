@@ -267,6 +267,12 @@ The Phenobottle is currently being updated to version 0.2. This will feature sev
 
 If you would like to learn more about the progress of this version please email: [harvey_bates@hotmail.com](harvey_bates@hotmail.com)
 
+## Data Visualizer
+
+I am currently working on a SQL based data visualizer. Hopefully this should be a convenient method of assessing data which is streaming from Phenobottles in real-time.
+
+![DataVisualizer](/Users/harveybates/Documents/Phenobottle/Phenobottle/Imgs/DataVisualiser.png)
+
 # Open-Source Licensing
 
 The software in this work is licensed under GNU AFFERO GENERAL PUBLIC LICENSE
