@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeLite_Workspace Name="PhenobottleUI" Database="" Version="10.0.0">
+  <Project Name="PhenobottleUI" Path="PhenobottleUI/src/PhenobottleUI.project" Active="Yes"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Debug" Selected="yes">
+      <Environment/>
+      <Project Name="Phenobottle_UI" ConfigName="Debug"/>
+      <Project Name="PhenobottleUI" ConfigName="Debug"/>
+      <Project Name="PhenobottleUI" ConfigName="Debug"/>
+    </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Environment/>
+      <Project Name="Phenobottle_UI" ConfigName="Release"/>
+      <Project Name="PhenobottleUI" ConfigName="Release"/>
+      <Project Name="PhenobottleUI" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+</CodeLite_Workspace>
