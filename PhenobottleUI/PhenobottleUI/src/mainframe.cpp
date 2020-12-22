@@ -29,7 +29,7 @@ EVT_BUTTON(ID_GREENFREQ, MainFrame::setGreenLEDFrequency)
 EVT_BUTTON(ID_BLUEFREQ, MainFrame::setBlueLEDFrequency)
 
 EVT_MENU(ID_SEARCH_PORTS, MainFrame::list_serial_ports)
-//EVT_COMBOBOX(ID_SERIAL, MainFrame::set_port)
+EVT_COMBOBOX(ID_SERIAL, MainFrame::set_port)
 
 END_EVENT_TABLE()
 
@@ -46,9 +46,6 @@ MainFrame::MainFrame(const  wxString& title, const wxPoint& pos, const wxSize& s
 	std::iota(values.begin(), values.end(), 0);
 	write_csv(dataDirectory, "Output", "Test Column", values);
 	read_csv(dataDirectory, "Output", "Test Column");
-	
-	// Intialise serial connection *change later to select COM port*
-	serialComs.setSerialAttributes("/dev/ttyACM0");
 	
 	noteBook = new wxNotebook(this, -1, wxDefaultPosition, wxDefaultSize, wxNB_TOP);
 	
@@ -80,8 +77,8 @@ void MainFrame::OnExit(wxCommandEvent& event){
 void MainFrame::RedLED(wxCommandEvent& event){
 	if(redCheckBox->GetValue()){
 		int pos = redSlider->GetValue();
-		if(pos  == 0){
-		growLights.lightOff("R");
+		if(pos == 0){
+			growLights.lightOff("R");
 		}
 		else{
 			growLights.lightOn("R", pos);
@@ -165,28 +162,58 @@ void MainFrame::setBlueLEDFrequency(wxCommandEvent& event){
 }
 
 void MainFrame::ConstructGraphPage(){
-	wxFlexGridSizer* graphBox = new wxFlexGridSizer(2, 3, 10, 10);
+	wxFlexGridSizer* graphBox = new wxFlexGridSizer(1, 3, 10, 10);
 	
-	// Parameter CheckBox Functions
-	wxStaticBoxSizer* paraBox = new wxStaticBoxSizer(wxVERTICAL, homePanel, "Parameters");
+	wxBoxSizer* leftBox = new wxBoxSizer(wxVERTICAL);
 	
-	std::vector<std::string> parameters = {"Temperature", "pH", "Transmission", "Optical Density"};
+	// Parameter parameters
+	wxStaticBoxSizer* paraBox = new wxStaticBoxSizer(wxVERTICAL, homePanel, "Environmental Parameters");
+	wxBoxSizer* enviroBox = new wxBoxSizer(wxHORIZONTAL);
+	std::vector<std::string> parameters = {"Temperature", "pH"};
 	for (unsigned int i = 0; i < parameters.size(); i++){
-		paraBox->Add(new wxCheckBox(homePanel, wxID_ANY, parameters[i]), 0, wxALIGN_CENTER_VERTICAL, 10);
+		enviroBox->Add(new wxCheckBox(homePanel, wxID_ANY, parameters[i]), 0, wxALIGN_CENTER_VERTICAL, 5);
+		enviroBox->Add(new wxTextCtrl(homePanel, wxID_ANY, "Input"), 0, wxALIGN_CENTER_VERTICAL, 5);
+		paraBox->Add(enviroBox, 0, wxEXPAND);
+	}
+	
+	// Growth parameters
+	wxStaticBoxSizer* growthBox = new wxStaticBoxSizer(wxVERTICAL, homePanel, "Growth Parameters");
+	std::vector<std::string> growthParameters = {"Transmission", "Optical Density"};
+	for (unsigned int i = 0; i < growthParameters.size(); i++){
+		growthBox->Add(new wxCheckBox(homePanel, wxID_ANY, growthParameters[i]), 0, wxALIGN_CENTER_VERTICAL, 10);
 	}
 
-	// Photosynthetic Checkbox Functions
+	// Photosynthetic parameters
 	wxStaticBoxSizer* photoParaBox = new wxStaticBoxSizer(wxVERTICAL, homePanel, "Photosynthetic\nParameters");
 	std::vector<std::string> photoParameters = {"Fo", "Fj", "Fi", "Fm", "Fv", "Fv/Fm", "FmQa", "Vj", "PIabs", "Area"};
 	for(unsigned int i = 0; i < photoParameters.size(); i++){
 		photoParaBox->Add(new wxCheckBox(homePanel, wxID_ANY, photoParameters[i]), 0, wxALIGN_CENTER_VERTICAL, 10);
 	}
 	
-	graphBox->Add(paraBox, 0, wxEXPAND);
+	// Graph toolbar
+	wxBoxSizer* vToolbar = new wxBoxSizer(wxVERTICAL);
+	wxToolBar* graphTools = new wxToolBar(homePanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_VERTICAL, "GraphTools");
+	
+	wxBitmap zoomImg = wxBitmap(wxT("../../graph_imgs/magnifier.png"), wxBITMAP_TYPE_PNG);
+	wxBitmap expandImg = wxBitmap(wxT("../../graph_imgs/expand.png"), wxBITMAP_TYPE_PNG);
+	wxBitmap crosshairImg = wxBitmap(wxT("../../graph_imgs/crosshair.png"), wxBITMAP_TYPE_PNG);
+	
+	graphTools->AddTool(wxID_ANY, wxT("Zoom"), zoomImg, "Zoom In", wxITEM_CHECK);
+	graphTools->AddTool(wxID_ANY, wxT("Expand"), expandImg, "Reset Zoom", wxITEM_CHECK);
+	graphTools->AddTool(wxID_ANY, wxT("CrossHair"), crosshairImg, "Enable CrossHair", wxITEM_CHECK);
+	graphTools->Realize();
+	vToolbar->Add(graphTools, 0, wxEXPAND);
+	
+	leftBox->Add(paraBox, 0, wxEXPAND);
+	leftBox->AddStretchSpacer(1);
+	leftBox->Add(growthBox, 0, wxEXPAND);
+	leftBox->AddStretchSpacer(1);
+	leftBox->Add(photoParaBox, 0, wxEXPAND);
+	
+	graphBox->Add(leftBox, 0, wxEXPAND);
 	graphBox->Add(m_chartViewer, 0, wxCENTER);
-	graphBox->Add(photoParaBox, 0, wxEXPAND);
+	graphBox->Add(vToolbar, 0, wxEXPAND);
 	graphBox->AddGrowableCol(0,0);
-	graphBox->AddGrowableCol(2,0);
 	homePanel->SetSizer(graphBox);
 }
 
@@ -524,19 +551,20 @@ void MainFrame::ConstructToolBar(){
 	toolBar->AddSeparator();
 	toolBar->AddTool(ID_SETTINGS,  "", settingsImg, "Advanced experimental settings", wxITEM_NORMAL);
 	toolBar->AddSeparator();
-	toolBar->AddTool(ID_SEARCH_PORTS,  "", serialImg, "Search serial ports", wxITEM_NORMAL);
-	serialCombo = new wxComboBox(toolBar, ID_SERIAL, "Serial port...");
+	toolBar->AddTool(ID_SEARCH_PORTS,  "Search ports", serialImg, "Search for connected USB devices", wxITEM_NORMAL);
+	serialCombo = new wxComboBox(toolBar, ID_SERIAL, "None");
 	toolBar->AddControl(serialCombo, wxString("Select serial port"));
 	
 	toolBar->Realize();
 }
 
 void MainFrame::list_serial_ports(wxCommandEvent& event){
+	// When the toolbar list ports button has been pressed, list all avalible serial ports and remove duplicates
 	std::cout << "List ports\n";
 	std::vector<std::string> ports;
 	ports = serialComs.list_ports();
 	if(ports.size() == 0){
-		serialCombo->Append("No ports open...");
+		serialCombo->Append("No open ports found...");
 	}
 	else{
 		for(unsigned int i = 0; i < ports.size(); i++){
@@ -551,18 +579,18 @@ void MainFrame::list_serial_ports(wxCommandEvent& event){
 			}
 		}
 	}
-	
-	
 }
 
-//void MainFrame::set_port(wxCommandEvent& event){
-//	wxString port = serialCombo->GetStringSelection();
-//	std::cout << port << std::endl;
-//}
+void MainFrame::set_port(wxCommandEvent& event){
+	// Once the serial port combo box has been selected serial communications are initalised 
+	wxString selectedPort = serialCombo->GetStringSelection();
+	selectedPort = "/dev/" + selectedPort;
+	serialComs.setSerialAttributes(selectedPort.c_str());
+}
 
 void MainFrame::SettingsDialog(wxCommandEvent& event){
 	//Settings dialog box
-	settingsDialog = new wxDialog(this, wxID_ANY, "Settings", wxDefaultPosition, wxSize(550, 500), 
+	settingsDialog = new wxDialog(this, wxID_ANY, "Settings", wxDefaultPosition, wxSize(700, 500), 
 					wxDEFAULT_DIALOG_STYLE, "Settings");
 	settingsNotebook = new wxNotebook(settingsDialog, -1, wxDefaultPosition, wxDefaultSize, wxNB_TOP);
 
@@ -572,6 +600,10 @@ void MainFrame::SettingsDialog(wxCommandEvent& event){
 				wxDefaultPosition, wxDefaultSize), 0, wxEXPAND | wxALL, 5); 
 	fileBox->Add(new wxTextCtrl(fileSettings, wxID_ANY, wxString(dataDirectory), wxDefaultPosition, 
 				wxDefaultSize, wxTE_LEFT), 0, wxEXPAND | wxALL, 5);
+	fileBox->Add(new wxStaticText(fileSettings, wxID_ANY, "Experimental Settings Save Directory:", 
+				wxDefaultPosition, wxDefaultSize), 0, wxEXPAND | wxALL, 5); 
+	fileBox->Add(new wxTextCtrl(fileSettings, wxID_ANY, wxString(settingsDirectory), wxDefaultPosition, 
+				wxDefaultSize, wxTE_LEFT), 0, wxEXPAND | wxALL, 5);
 				
 	fileSettings->SetSizer(fileBox);
 	settingsNotebook->AddPage(fileSettings, "File");
@@ -579,7 +611,7 @@ void MainFrame::SettingsDialog(wxCommandEvent& event){
 	// Motors hard limits
 	wxPanel* limitSettings = new wxPanel(settingsNotebook, wxID_ANY);
 	wxBoxSizer* limitHBox = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticBoxSizer* limitBox = new wxStaticBoxSizer(wxVERTICAL, limitSettings, "Hard Limits");
+	wxStaticBoxSizer* limitBox = new wxStaticBoxSizer(wxVERTICAL, limitSettings, "Motors and Lights Limits");
 	limitBox->Add(new wxStaticText(limitSettings, wxID_ANY, "Limit Mixing Speed (0 - 4096):", 
 				wxDefaultPosition, wxDefaultSize), 0, wxEXPAND | wxALL, 5);
 	limitBox->Add(new wxTextCtrl(limitSettings, ID_MaxMix, std::to_string(maxMixingSpeed), wxDefaultPosition, 
@@ -618,7 +650,5 @@ void MainFrame::pHCalibration(wxCommandEvent& event){
 	pHFrame->SetWindowStyle(pHFrame->GetWindowStyle() | wxFULL_REPAINT_ON_RESIZE);
 	pHFrame->Show(true);
 }
-
-
 
 

@@ -1,63 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Session Name="/home/pi/Documents/Phenobottle/PhenobottleUI/PhenobottleUI.workspace">
-  <int Value="1" Name="m_selectedTab"/>
+  <int Value="0" Name="m_selectedTab"/>
   <wxString Value="/home/pi/Documents/Phenobottle/PhenobottleUI/PhenobottleUI.workspace" Name="m_workspaceName"/>
   <TabInfoArray Name="TabInfoArray">
     <TabInfo>
       <wxString Value="/home/pi/Documents/Phenobottle/PhenobottleUI/PhenobottleUI/src/mainframe.cpp" Name="FileName"/>
-      <int Value="0" Name="FirstVisibleLine"/>
-      <int Value="624" Name="CurrentLine"/>
+      <int Value="104" Name="FirstVisibleLine"/>
+      <int Value="176" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
       <IntVector Name="CollapsedFolds">
-        <IntVectorItem Value="79"/>
-        <IntVectorItem Value="94"/>
-        <IntVectorItem Value="109"/>
-        <IntVectorItem Value="124"/>
-        <IntVectorItem Value="138"/>
-        <IntVectorItem Value="152"/>
-        <IntVectorItem Value="166"/>
-        <IntVectorItem Value="192"/>
-        <IntVectorItem Value="209"/>
-        <IntVectorItem Value="280"/>
-        <IntVectorItem Value="404"/>
-        <IntVectorItem Value="440"/>
-        <IntVectorItem Value="485"/>
-        <IntVectorItem Value="562"/>
-        <IntVectorItem Value="614"/>
+        <IntVectorItem Value="71"/>
+        <IntVectorItem Value="91"/>
+        <IntVectorItem Value="106"/>
+        <IntVectorItem Value="121"/>
+        <IntVectorItem Value="135"/>
+        <IntVectorItem Value="219"/>
+        <IntVectorItem Value="236"/>
+        <IntVectorItem Value="307"/>
+        <IntVectorItem Value="431"/>
+        <IntVectorItem Value="467"/>
+        <IntVectorItem Value="512"/>
       </IntVector>
     </TabInfo>
     <TabInfo>
       <wxString Value="/home/pi/Documents/Phenobottle/PhenobottleUI/PhenobottleUI/src/mainframe.h" Name="FileName"/>
-      <int Value="0" Name="FirstVisibleLine"/>
-      <int Value="14" Name="CurrentLine"/>
-      <wxArrayString Name="Bookmarks"/>
-      <IntVector Name="CollapsedFolds"/>
-    </TabInfo>
-    <TabInfo>
-      <wxString Value="/home/pi/Documents/Phenobottle/PhenobottleUI/PhenobottleUI/src/csvreader.cpp" Name="FileName"/>
-      <int Value="24" Name="FirstVisibleLine"/>
-      <int Value="25" Name="CurrentLine"/>
-      <wxArrayString Name="Bookmarks"/>
-      <IntVector Name="CollapsedFolds"/>
-    </TabInfo>
-    <TabInfo>
-      <wxString Value="/home/pi/Documents/Phenobottle/PhenobottleUI/PhenobottleUI/src/csvreader.h" Name="FileName"/>
-      <int Value="10" Name="FirstVisibleLine"/>
-      <int Value="11" Name="CurrentLine"/>
+      <int Value="85" Name="FirstVisibleLine"/>
+      <int Value="83" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
       <IntVector Name="CollapsedFolds"/>
     </TabInfo>
     <TabInfo>
       <wxString Value="/home/pi/Documents/Phenobottle/PhenobottleUI/PhenobottleUI/src/SerialComs.cpp" Name="FileName"/>
-      <int Value="7" Name="FirstVisibleLine"/>
-      <int Value="8" Name="CurrentLine"/>
+      <int Value="84" Name="FirstVisibleLine"/>
+      <int Value="82" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
       <IntVector Name="CollapsedFolds"/>
     </TabInfo>
     <TabInfo>
       <wxString Value="/home/pi/Documents/Phenobottle/PhenobottleUI/PhenobottleUI/src/SerialComs.h" Name="FileName"/>
-      <int Value="26" Name="FirstVisibleLine"/>
-      <int Value="27" Name="CurrentLine"/>
+      <int Value="0" Name="FirstVisibleLine"/>
+      <int Value="0" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
       <IntVector Name="CollapsedFolds"/>
     </TabInfo>

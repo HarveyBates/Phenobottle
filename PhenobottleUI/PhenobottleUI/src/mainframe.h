@@ -23,7 +23,6 @@
 
 #define ID_SETTINGS 10000
 
-//std::string port; 
 
 class MainFrame : public wxFrame{
 public:
@@ -74,6 +73,7 @@ public:
 	wxNotebook* aboutNotebook;
 	wxImage companyLogo;
 	wxComboBox* serialCombo;
+	const char * port;
 	
 	// ToolBar
 	wxToolBar* toolBar;
@@ -81,6 +81,7 @@ public:
 	
 	// Settings
 	std::string dataDirectory = "/home/pi/Documents/DataOutput/";
+	std::string settingsDirectory = "/home/pi/Documents/DataOutput/";
 	wxNotebook* settingsNotebook;
 	wxDialog* settingsDialog;
 	
@@ -99,7 +100,7 @@ private:
 	void OnContact(wxCommandEvent& event);
 	void OnOpen(wxCommandEvent& event);
 	void list_serial_ports(wxCommandEvent& event);
-//	void set_port(wxCommandEvent& event);
+	void set_port(wxCommandEvent& event);
 	
 	// MotorPumpLight Controls
 	void ConstructEnvironmentalControls();
