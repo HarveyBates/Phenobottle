@@ -483,10 +483,10 @@ void MainFrame::OnAbout(wxCommandEvent& event){
 	wxStaticText* aboutInfo = new wxStaticText(aboutPanel, wxID_ANY, 
 	"The Phenobottle is an open-source photobioreactor\ndesgined for microalgal physiological experiments.");
 	aboutBox->Add(aboutInfo, 0, wxEXPAND | wxALL, 10);
-	wxHyperlinkCtrl* aboutLink = new wxHyperlinkCtrl(aboutPanel, wxID_ANY, "https://github.com/HarveyBates/Phenobottle-v0.2", 
-	"https://github.com/HarveyBates/Phenobottle-v0.2", wxDefaultPosition, wxDefaultSize, 
-		wxHL_DEFAULT_STYLE, "AboutLink");
-	aboutBox->Add(aboutLink, 0, wxEXPAND | wxALL, 10);
+	//wxHyperlinkCtrl* aboutLink = new wxHyperlinkCtrl(aboutPanel, wxID_ANY, "https://github.com/HarveyBates/Phenobottle-v0.2", 
+//	"https://github.com/HarveyBates/Phenobottle-v0.2", wxDefaultPosition, wxDefaultSize, 
+//		wxHL_DEFAULT_STYLE, "AboutLink");
+	//aboutBox->Add(aboutLink, 0, wxEXPAND | wxALL, 10);
 	aboutPanel->SetSizer(aboutBox);
 
 	// Contact Information
@@ -498,10 +498,10 @@ void MainFrame::OnAbout(wxCommandEvent& event){
 	wxBoxSizer* emailBox = new wxBoxSizer(wxHORIZONTAL);
 	wxStaticText* contactInfo = new wxStaticText(contactPanel, wxID_ANY, "Email:");
 	emailBox->Add(contactInfo, 0, wxALIGN_CENTER, 10);
-	wxHyperlinkCtrl* contactEmail = new wxHyperlinkCtrl(contactPanel, wxID_ANY, "harvey_bates@hotmail.com", 
-		"harvey_bates@hotmail.com", 
-	wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE, "EmailLink");
-	emailBox->Add(contactEmail, 0, wxALIGN_CENTER, 10);
+	//wxHyperlinkCtrl* contactEmail = new wxHyperlinkCtrl(contactPanel, wxID_ANY, "harvey_bates@hotmail.com", 
+//		"harvey_bates@hotmail.com", 
+//	wxDefaultPosition, wxDefaultSize, wxHL_DEFAULT_STYLE, "EmailLink");
+	//emailBox->Add(contactEmail, 0, wxALIGN_CENTER, 10);
 	contactBox->Add(emailBox, 0, wxALIGN_CENTER, 10);
 	wxStaticText* contactPhone = new wxStaticText(contactPanel, wxID_ANY, "Phone: +61 478 515 336");
 	contactBox->Add(contactPhone, 0, wxALIGN_CENTER, 10);

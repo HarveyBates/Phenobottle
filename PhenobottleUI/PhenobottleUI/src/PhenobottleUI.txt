@@ -1,1 +1,0 @@
-./Debug/main.cpp.o ./Debug/up_up_up_up_up_up_up_usr_local_include_wx_wxchartviewer.cpp.o ./Debug/SerialComs.cpp.o ./Debug/mainframe.cpp.o ./Debug/growlights.cpp.o ./Debug/csvreader.cpp.o ./Debug/phframe.cpp.o

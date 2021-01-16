@@ -20,8 +20,7 @@ void SerialComs::setSerialAttributes(const char * port){
 
 	// Get tty attributes
 	if(tcgetattr(serial_port, &tty) != 0){
-		std::cout << "Error %i from tcgetattr: %s\n", errno, 
-		strerror(errno);
+		std::cout << "Error" << std::endl;
 	}
 
 	// c_cflag - Hardware control modes
