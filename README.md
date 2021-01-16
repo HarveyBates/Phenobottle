@@ -1,7 +1,7 @@
 # Phenobottle
 The Phenobottle is an open-source Raspberry Pi based tissue culture flask photobioreactor used for assessing growth and photophysiology in microalgae. 
 
-![Phenobottle](https://github.com/Phenobottle/Phenobottle/blob/master/Phenobottle%20Image.png)
+![Phenobottle](https://github.com/Phenobottle/Phenobottle/blob/master/Imgs/Phenobottle%20Image.png)
 
 The first version of the Phenobottle (v0.1) was developed as a way of conducting high-time series physiological experiments with microalgae. Version 0.1 of the device features a range of environmental controls (light (quality/quantity), air(CO2) and mixing) and phyiological sensors (optical density (growth), chlorophyll fluorescence (photosynthesis)).
 
