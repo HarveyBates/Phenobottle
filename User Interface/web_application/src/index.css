@@ -62,6 +62,7 @@ main{
 }
 
 .navbar{
+	z-index: 9;
 	position: fixed;
 	background-color: var(--bg-primary);
 	transition: width var(--transition-speed) ease;
