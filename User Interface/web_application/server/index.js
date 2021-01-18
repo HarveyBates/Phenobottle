@@ -9,10 +9,12 @@ app.use(express.json());
 // Set a parameter value
 app.post("/parameters", async(req, res) => {
 	try{
-		const {description} = req.body;
+		const {identity, condition, opticaldensity, 
+				quantumyield, ph, temperature, time} = req.body;
 		const newParameter = await pool.query(
-			"INSERT INTO parameters (description) VALUES ($1) RETURNING *",
-			[description]);
+			"INSERT INTO parameters (identity, condition, opticaldensity, quantumyield, ph, temperature, time) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+			[identity, condition, opticaldensity, 
+				quantumyield, ph, temperature, time]);
 		res.json(newParameter.rows[0]);
 	} 
 	catch (err){
@@ -33,12 +35,12 @@ app.get("/parameters", async(req, res) => {
 });
 
 // Get a parameter
-app.get("/parameters/:id", async(req, res) => {
+app.get("/parameters/:identity", async(req, res) => {
 	try {
-		const {id} = req.params;
+		const {identity} = req.params;
 		const getParameter = await pool.query(
-			"SELECT * from parameters WHERE phenobottle = $1",
-			[id]);
+			"SELECT * from parameters WHERE identity = $1",
+			[identity]);
 		res.json(getParameter.rows);
 	}
 	catch(err) {
@@ -47,12 +49,15 @@ app.get("/parameters/:id", async(req, res) => {
 });
 
 // Update a parameter
-app.put("parameters/:id", async(req, res) => {
+app.put("parameters/:identity", async(req, res) => {
 	try{
-		const {id} = req.params;
-		const {description} = req.body;
+		const {identity} = req.params;
+		const {condition, opticaldensity,
+				quantumyield, ph, temperature, time} = req.body;
 		const updateParameter = await pool.query(
-			"UPDATE parameters SET description = $1 WHERE phenobottle = $2", [description, id]);
+			"UPDATE parameters SET (identity, condition, opticaldensity, quantumyield, ph, temperature, time) = ($1, $2, $3, $4, $5, $6) WHERE identity = $7", 
+			[condition, opticaldensity,
+				quantumyield, ph, temperature, time, identity]);
 		res.json(updateParameter.rows);
 	}
 	catch(err){
@@ -61,12 +66,12 @@ app.put("parameters/:id", async(req, res) => {
 });
 
 // Delete a parameter
-app.delete("/parameters/:id", async(req, res) => {
+app.delete("/parameters/:identity", async(req, res) => {
 	try{
-		const {id} = req.params;
+		const {identity} = req.params;
 		const delParameter = await pool.query(
-			"DELETE FROM parameters where phenobottle = $1",
-			[id]);
+			"DELETE FROM parameters WHERE identity = $1",
+			[identity]);
 		res.json("Item Deleted");
 	}
 	catch(err){
