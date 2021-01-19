@@ -13,46 +13,43 @@ function Navbar(){
 			<nav className="navbar">
 				<ul className="navbar-nav">
 					<li className="logo">
-						<a href="#" className="nav-link">
+						<NavLink exact to="/" activeClassName="selected" className="nav-link">
 							<span className="link-text">Phenobottle</span>
 							<i className="fas fa-arrow-alt-circle-left"></i>
-						</a> 
+						</NavLink> 
 					</li>
 					<li className="nav-item">
 						<NavLink exact to="/dashboard"
-							activeClassName="selected">
-						<a href="#" className="nav-link">
+							activeClassName="selected" className="nav-link">
 							<i className="fas fa-home"></i>
 							<span className="link-text">Dashboard</span>
-						</a> 
 						</NavLink>
 					</li> 
 					<li className="nav-item">
 						<NavLink exact to ="/setup"
-							activeClassName="selected">
-						<a href="#" className="nav-link">
+							activeClassName="selected" className="nav-link">
 							<i className="fas fa-flask"></i>
 							<span className="link-text">Setup</span>
-						</a>
 						</NavLink>
 					</li>
 					<li className="nav-item">
-						<a href="#" className="nav-link">
+						<NavLink exact to="/sensors" 
+							activeClassName="selected" className="nav-link">
 							<i className="fas fa-sliders-h"></i>
 							<span className="link-text">Sensors</span>
-						</a> 
+						</NavLink>
 					</li>
 					<li className="nav-item">
-						<a href="#" className="nav-link">
+						<NavLink exact to= "/environment" activeClassName="selected" className="nav-link">
 							<i className="fas fa-leaf"></i>
 							<span className="link-text">Environment</span>
-						</a> 
+						</NavLink>
 					</li>
 					<li className="nav-item">
-						<a href="#" className="nav-link">
+						<NavLink exact to="/settings" activeClassName="selected" className="nav-link">
 							<i className="fas fa-cogs"></i>
 							<span className="link-text">Settings</span>
-						</a>
+						</NavLink>
 					</li>
 				</ul>
 			</nav>

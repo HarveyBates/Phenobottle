@@ -1,10 +1,12 @@
-import React, {Component, Fragment, useState} from 'react';
 import Plot from 'react-plotly.js';
 
-class Dashboard extends Component{ 
-	render(){
+var xVals = [1, 2, 3, 4, 5, 6, 7, 8];
+var yVals = [2, 4, 6, 8, 10, 12, 14, 16];
+
+const Dashboard = () => {
 	return (
-		<main>
+		<>
+		<div className="dashboard">
 		<h1>DASHBOARD</h1>
 		<div className="graph-card">
 		<Plot
@@ -12,8 +14,8 @@ class Dashboard extends Component{
 			style={{width: '100%', height: '100%'}}
 			data={[
 				{
-				x: [1, 2, 3, 4, 5, 6],
-				y: [1, 3, 6, 12, 24, 48],
+				x: xVals,
+				y: yVals,
 				type: 'scatter', 
 				fill: 'tozeroy',
 						fillcolor:'rgba(131, 90, 241, 0.25)',
@@ -25,10 +27,11 @@ class Dashboard extends Component{
 				autosize: true,
 			}}
 		/>
+			<button>Update</button>
 		</div>
-		</main>
+		</div>
+		</>
 	)
-	}
 }
 
 export default Dashboard;

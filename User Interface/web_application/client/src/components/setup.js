@@ -1,17 +1,24 @@
-import React, { Component } from 'react';
 
-
-class Setup extends Component{
-	render() {
+const Setup = () => {
 		return (
-			<main>
-			<div className="Setup">
-				<h1>Setup</h1>
+			<>
+			<div className="setup">
+			<h1>SETUP</h1>
+			<div className="graph-card">
+				<div className="update-pb"> 
+					<button className="btn-refresh">Update
+						<i className="fa fa-refresh"></i>
+					</button>
+				</div>
 				<p>This is a page to setup Phenobottles</p>
+				<div className="graph-card">
+					<h2> Phenobottle Num. 1</h2>
+					<p> v0.1 Online. </p>
+				</div>
 			</div>
-			</main>
+			</div>
+			</>
 		)
-	}
 }
 
 export default Setup;
