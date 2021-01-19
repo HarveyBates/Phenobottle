@@ -1,9 +1,11 @@
 # Phenobottle
 The Phenobottle is an open-source Raspberry Pi based tissue culture flask photobioreactor used for assessing growth and photophysiology in microalgae. 
 
-![Phenobottle](https://github.com/Phenobottle/Phenobottle/blob/master/Imgs/Phenobottle%20Image.png)
+The device was published in [Algal Research in 2020](https://www.sciencedirect.com/science/article/abs/pii/S2211926420309735):
 
-The first version of the Phenobottle (v0.1) was developed as a way of conducting high-time series physiological experiments with microalgae. Version 0.1 of the device features a range of environmental controls (light (quality/quantity), air(CO2) and mixing) and phyiological sensors (optical density (growth), chlorophyll fluorescence (photosynthesis)).
+*The Phenobottle, an open-source photobioreactor platform for environmental simulation - Bates et al. 2020*
+
+![Phenobottle](https://github.com/Phenobottle/Phenobottle/blob/master/Imgs/Phenobottle%20Image.png)
 
 ### Click [Here](https://youtu.be/7FyAfFrLizw) The Phenobottle in Action
 
@@ -13,11 +15,11 @@ The architecture of the Phenobottle from both a software and hardware perspectiv
 
 In this repository users can find:
 1.	3D models for 3D printing a Phenobottle
-2.	Electronic schematics for the custom Phenobottle circuit board
+2.	Electronic schematics and printed circuit board (PCB) gerber files
 3.	Scripts for running the Phenobottles
 4.	Additional information such as a bill of materials etc.
 
-## Specficications
+## Specifications
 
 | Feature                                                      | Value / Description                                          |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -34,7 +36,7 @@ In this repository users can find:
 | Data collection                                              | SQL Server and local .csv                                    |
 
 ## Downloading files from this repository
-As the Phenobottle is being updated constantly, please download the released versions of the device from the releases tab (located on the right hand side of the screen). This contains all the files needed to 3D-print and control Phenobottles as well as some information about the required equipment. 
+As the Phenobottle is being updated constantly, please download a released version of the device from the releases tab (located on the right hand side of the screen). This contains all the files needed to 3D-print and control Phenobottles as well as some information about the required materials and tools. 
 
 If you wish to clone the main repository you may; however, as there are new versions of the Phenobottle in the works, the files may not work as planned.
 
@@ -52,7 +54,7 @@ pip3 install PyMySQL
 ```python
 import pymysql.cursors
 ```
-This requires a Raspberry Pi to be configured as a dedicated SQL server. Information on how to do that can be found [here](https://pimylifeup.com/raspberry-pi-mysql/). It is recomended that you use a dedicated Raspberry Pi for the SQL server; however, if you are on a budget one of the Phenobottle's Raspberry Pi's can be used as a server.
+This requires a Raspberry Pi to be configured as a dedicated SQL server. Information on how to do that can be found [here](https://pimylifeup.com/raspberry-pi-mysql/). It is recomended that you use a dedicated Raspberry Pi for the SQL server; however, you can use one of the Phenobottle's Raspberry Pi's as a server.
 
 ### Adafruit_MotorHAT - For I2C communication with the [Adafruit-MotorHAT](https://www.adafruit.com/product/2348)
 #### Terminal
