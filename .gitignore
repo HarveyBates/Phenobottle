@@ -11,6 +11,7 @@
 *.sln.docstates
 *.DS_Store
 CppProperties.json
+_deps
 
 # Prerequisites
 *.d
