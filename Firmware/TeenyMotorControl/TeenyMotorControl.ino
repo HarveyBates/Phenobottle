@@ -48,7 +48,7 @@ void setup() {
   analogWriteFrequency(redIN1, 80000);
   analogWriteFrequency(redIN2, 80000);
   digitalWrite(redIN2, LOW);
-  analogWrite(redIN1, 0);
+  analogWrite(redIN1, 0); // 700
 
 // Heater setup
   analogWriteFrequency(heater1IN1, 200000);
@@ -56,6 +56,7 @@ void setup() {
   digitalWrite(heater1IN2, LOW);
   analogWrite(heater1IN1, 0); //800
   delay(5000);
+  
 //  analogWriteFrequency(heater2IN1, 200000);
 //  analogWriteFrequency(heater2IN2, 200000);
 //  digitalWrite(heater2IN1, LOW);
