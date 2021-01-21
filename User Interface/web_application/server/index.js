@@ -24,6 +24,7 @@ app.post("/parameters", async(req, res) => {
 
 // Get all Parameters
 app.get("/parameters", async(req, res) => {
+	console.log(req.query.identity);
 	try{
 		const allParameters = await pool.query(
 			"SELECT * from parameters");
