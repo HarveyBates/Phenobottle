@@ -5,10 +5,14 @@ project("sockettest")
 find_package(nlohmann_json 3.2.0 REQUIRED)
 
 set(NAME_SRC
-	src/main.cpp)
+	src/main.cpp
+    src/server.cpp
+    src/connection.cpp)
 
 set(NAME_HEADERS
-	include/main.h)
+	include/main.h
+    include/server.h
+    include/connection.h)
 
 set(EXECUTABLE_OUTPUT_PATH
 	${CMAKE_BINARY_DIR}/bin)
