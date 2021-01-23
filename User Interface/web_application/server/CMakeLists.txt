@@ -6,11 +6,13 @@ find_package(nlohmann_json 3.2.0 REQUIRED)
 
 set(NAME_SRC
 	src/main.cpp
+	src/base64.cpp
     src/server.cpp
     src/connection.cpp)
 
 set(NAME_HEADERS
 	include/main.h
+	include/base64.h
     include/server.h
     include/connection.h)
 
