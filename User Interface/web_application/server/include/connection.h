@@ -5,8 +5,9 @@
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
 #include "base64.h"
+#include "crypto.hpp"
 
-const std::size_t max_length = 2048;
+const std::size_t max_length = 4096;
 
 class Connection : public std::enable_shared_from_this<Connection>{
 
@@ -27,7 +28,7 @@ private:
 
 	void do_read();
 
-	void do_write(std::size_t length);
+	void do_write();
 
 	asio::ip::tcp::socket socket_;
 	char _data[max_length];

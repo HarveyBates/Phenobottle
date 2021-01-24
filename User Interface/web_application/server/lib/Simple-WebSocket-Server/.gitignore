@@ -1,0 +1,22 @@
+# https://github.com/github/gitignore/blob/master/CMake.gitignore
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Makefile
+cmake_install.cmake
+install_manifest.txt
+*.cmake
+#Additions to https://github.com/github/gitignore/blob/master/CMake.gitignore
+Testing
+compile_commands.json
+.usages_clang
+
+*.crt
+*.key
+
+# executables
+ws_examples
+wss_examples
+swss_crypto_test
+swss_io_test
+swss_parse_test

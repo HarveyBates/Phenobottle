@@ -19,13 +19,15 @@ set(NAME_HEADERS
 set(EXECUTABLE_OUTPUT_PATH
 	${CMAKE_BINARY_DIR}/bin)
 
+add_subdirectory(lib/Simple-WebSocket-Server)
+
 include_directories(${CMAKE_SOURCE_DIR}/include /usr/local/Cellar/asio/1.18.1/include)
 
 add_executable(${PROJECT_NAME} ${NAME_SRC} ${NAME_HEADERS})
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json simple-websocket-server)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include /usr/local/Cellar/asio/1.18.1/include)
 
