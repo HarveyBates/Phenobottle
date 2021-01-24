@@ -24,48 +24,29 @@ void Connection::handle_write(const asio::error_code& /*error*/,
 		size_t /*bytes_transferred*/){
 }
 
-std::string xor_decrypt(char* _data){
-	char keys[4];
-	std::string toDecrypt = std::string(_data);
-	std::string output = toDecrypt;
-	if(std::string(_data).length() > 125){
-		char key1 = _data[4];
-		char key2 = _data[5];
-		char key3 = _data[6];
-		char key4 = _data[7];
-		char keys[4] = {key1, key2, key3, key4};
+std::string xor_decrypt(unsigned int* decimal){
+	char toDecrypt[10];
+	for(int i = 0; i < 10; i++){
+		std::cout << decimal[i];
+		toDecrypt[i] = static_cast<char>(decimal[i]);
 	}
-	else{
-		char key1 = _data[2];
-		char key2 = _data[3];
-		char key3 = _data[4];
-		char key4 = _data[5];
-		char keys[4] = {key1, key2, key3, key4};
-	}
-	for(int i = 0; i < toDecrypt.size(); i++){
+	std::string strDecrypt = std::string(toDecrypt);
+	std::string output = strDecrypt;
+	
+	char key1 = toDecrypt[2];
+	char key2 = toDecrypt[3];
+	char key3 = toDecrypt[4];
+	char key4 = toDecrypt[5];
+	char keys[4] = {key1, key2, key3, key4};
+	
+	for(int i = 0; i < 10; i++){
 		output[i] = toDecrypt[i] ^ keys[i % (sizeof(keys) / sizeof(char))];
 	}
-	return output;
+	std::cout << "Input: " << std::string(toDecrypt) << std::endl;
+	std::cout << "Keys: " << std::string(keys) << std::endl;
+	std::cout << "Ouput: " << output << std::endl; 
+	return std::string(keys);
 }
-
-int hex_to_decimal(char input){
-	int lenInput = strlen(input);
-	int base = 1, decVal = 0;
-
-	for(int i = lenInput - 1; i >= 0; i++){
-		if(input[i] >= '0' && input[i] <= '9'){
-			decVal += (input[i] - 48) * base;
-			base = base * 16;
-		}
-		else if(input[i] >= 'A' && input[i] <= 'F'){
-			decVal += (input[i] - 55) * base;
-			base = base * 16;
-		}
-	}
-	return decVal;
-}
-
-
 
 void Connection::do_read(){
 	auto self(shared_from_this());
@@ -76,9 +57,20 @@ void Connection::do_read(){
 			std::cout << "Recieved data: " << std::endl;
 
 			char dataLength = _data[1];
+			int len = (unsigned int)*(unsigned char*)&dataLength - 128;
+
+			std::cout << "Data-size: " << len<< std::endl;
 			
-			std::cout << "Data-size: " << hex_to_decimal(dataLength) << std::endl;
-			
+			if(len > 0){
+				unsigned int decimal[len];
+				for(int i = 0; i < len; i++){
+					std::cout << i << ". " << 
+						(unsigned int)*(unsigned char*)&_data[i] << std::endl;	
+					decimal[i] = (unsigned int)*(unsigned char*)&_data[i];
+				}
+				xor_decrypt(decimal);
+			}
+
 			/* 
 			 * Read bits 9-15 (inclusive) and interpret that as an unsigned integer. 
 			 * If it's 125 or less, then that's the length; you're done. 
@@ -103,8 +95,7 @@ void Connection::do_read(){
 			 * the rest: payload
 			 *
 			 */
-
-//			std::cout << "\nDecrypted: " << result << std::endl;
+			
 
 			do_write();
 		}
