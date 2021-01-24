@@ -48,6 +48,25 @@ std::string xor_decrypt(char* _data){
 	return output;
 }
 
+int hex_to_decimal(char input){
+	int lenInput = strlen(input);
+	int base = 1, decVal = 0;
+
+	for(int i = lenInput - 1; i >= 0; i++){
+		if(input[i] >= '0' && input[i] <= '9'){
+			decVal += (input[i] - 48) * base;
+			base = base * 16;
+		}
+		else if(input[i] >= 'A' && input[i] <= 'F'){
+			decVal += (input[i] - 55) * base;
+			base = base * 16;
+		}
+	}
+	return decVal;
+}
+
+
+
 void Connection::do_read(){
 	auto self(shared_from_this());
 	std::memset(_data, 0, max_length);
@@ -55,8 +74,21 @@ void Connection::do_read(){
 			[this, self](std::error_code err, std::size_t length){
 		if(!err){
 			std::cout << "Recieved data: " << std::endl;
-			std::cout << "Data-size: " << std::string(_data).length() << std::endl;
+
+			char dataLength = _data[1];
+			
+			std::cout << "Data-size: " << hex_to_decimal(dataLength) << std::endl;
+			
 			/* 
+			 * Read bits 9-15 (inclusive) and interpret that as an unsigned integer. 
+			 * If it's 125 or less, then that's the length; you're done. 
+			 * If it's 126, go to step 2. If it's 127, go to step 3.
+			 * 
+			 * Read the next 16 bits and interpret those as an unsigned integer. You're done.
+			 *
+			 * Read the next 64 bits and interpret those as an unsigned integer. 
+			 * (The most significant bit must be 0.) You're done.
+			 *
 			 * If byte length < 125:
 			 * byte 0: The 0x81 is just an indicator that a message received
 			 * byte 1: the 0x8a is the length, substract 0x80 from it, 0x0A == 10
@@ -71,11 +103,8 @@ void Connection::do_read(){
 			 * the rest: payload
 			 *
 			 */
-			for(int i = 0; i < std::string(_data).length(); i++){
-				std::cout << std::hex << int(_data[i]);
-			}
 
-			std::cout << "\nDecrypted: " << xor_decrypt(_data) << std::endl;
+//			std::cout << "\nDecrypted: " << result << std::endl;
 
 			do_write();
 		}
