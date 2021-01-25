@@ -5,6 +5,12 @@
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
 #include "crypto.hpp"
+#include <string.h>
+#include <cstdint>
+#include <iomanip>
+#include <sstream>
+#include <stdio.h>
+
 
 const std::size_t max_length = 4096;
 

@@ -1,6 +1,6 @@
 
-
-let socket = new WebSocket("ws://localhost:15001");
+// For local network comms use IP address instead of local host
+let socket = new WebSocket("ws://localhost:443");
 
 socket.onopen = function(evt) {
 	console.log(evt);
