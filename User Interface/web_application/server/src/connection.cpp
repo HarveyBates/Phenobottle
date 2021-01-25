@@ -1,6 +1,9 @@
 #include "connection.h"
 #include <string.h>
 #include <cstdint>
+#include <iomanip>
+#include <sstream>
+#include <stdio.h>
 
 const std::string ws_magic_string = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 
@@ -24,10 +27,9 @@ void Connection::handle_write(const asio::error_code& /*error*/,
 		size_t /*bytes_transferred*/){
 }
 
-std::string xor_decrypt(unsigned int* decimal){
+std::string xor_decrypt(uint16_t* decimal){
 	char toDecrypt[10];
 	for(int i = 0; i < 10; i++){
-		std::cout << decimal[i];
 		toDecrypt[i] = static_cast<char>(decimal[i]);
 	}
 	std::string strDecrypt = std::string(toDecrypt);
@@ -48,6 +50,13 @@ std::string xor_decrypt(unsigned int* decimal){
 	return std::string(keys);
 }
 
+int GetBit(const char * data, unsigned int idx)
+{
+	unsigned int arIdx = idx / 8;
+	unsigned int biIdx = 7 - (idx % 8);
+	return (data[arIdx] >> (7 - biIdx)) & 1;
+}
+
 void Connection::do_read(){
 	auto self(shared_from_this());
 	std::memset(_data, 0, max_length);
@@ -56,20 +65,28 @@ void Connection::do_read(){
 		if(!err){
 			std::cout << "Recieved data: " << std::endl;
 
-			char dataLength = _data[1];
-			int len = (unsigned int)*(unsigned char*)&dataLength - 128;
+			char* inBuffer = _data;
+			char* buffer;
+			unsigned int packet_length = 0;
+			unsigned char mask[4];
 
-			std::cout << "Data-size: " << len<< std::endl;
+		//	assert(inBuffer[0] == '0x81');
+			packet_length = ((unsigned char) inBuffer[1]) & 0x7f;
+			if(packet_length == 6){
+
+				mask[0] = inBuffer[2];
+				mask[1] = inBuffer[3];
+				mask[2] = inBuffer[4];
+				mask[3] = inBuffer[5];
+				std::cout << "Packet Length: " << packet_length << std::endl;
+				std::cout << "Mask: " << mask << std::endl;
 			
-			if(len > 0){
-				unsigned int decimal[len];
-				for(int i = 0; i < len; i++){
-					std::cout << i << ". " << 
-						(unsigned int)*(unsigned char*)&_data[i] << std::endl;	
-					decimal[i] = (unsigned int)*(unsigned char*)&_data[i];
+				for(unsigned int i = 0; i < packet_length; i++){
+					inBuffer[6+i] ^= mask[i % 4];
 				}
-				xor_decrypt(decimal);
+				std::cout << "Message from client: " << inBuffer << std::endl;
 			}
+			//	xor_decrypt(decimal);
 
 			/* 
 			 * Read bits 9-15 (inclusive) and interpret that as an unsigned integer. 
@@ -131,11 +148,9 @@ void Connection::do_write(){
 		response = SimpleWeb::Crypto::Base64::decode(_data);
 	}
 
-	std::cout << "Response: \n" << response << std::endl;
 	asio::async_write(socket_, asio::buffer(response.c_str(), response.size()),
 			[this, self](std::error_code err, std::size_t /*lenght*/){
 		if(!err){
-			std::cout << "Message sent" << std::endl;
 			do_read();
 		}
 	});

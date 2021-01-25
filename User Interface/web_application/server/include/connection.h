@@ -4,7 +4,6 @@
 #include <asio.hpp>
 #include <asio/ts/buffer.hpp>
 #include <asio/ts/internet.hpp>
-#include "base64.h"
 #include "crypto.hpp"
 
 const std::size_t max_length = 4096;

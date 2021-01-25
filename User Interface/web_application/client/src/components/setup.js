@@ -20,7 +20,7 @@ socket.onerror = function(evt){
 };
 
 const send_message = () => {
-	socket.send("a".repeat(10));
+	socket.send("Hello!");
 }
 
 const Setup = () => {
