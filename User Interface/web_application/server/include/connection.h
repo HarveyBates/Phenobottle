@@ -6,13 +6,10 @@
 #include <asio/ts/internet.hpp>
 #include "crypto.hpp"
 #include <string.h>
-#include <cstdint>
-#include <iomanip>
-#include <sstream>
-#include <stdio.h>
 
-
+/* Max payload size in bytes */
 const std::size_t max_length = 4096;
+
 
 class Connection : public std::enable_shared_from_this<Connection>{
 
@@ -35,7 +32,7 @@ private:
 
 	void do_write();
 
-	asio::ip::tcp::socket socket_;
-	char _data[max_length];
+	asio::ip::tcp::socket socket_; // Unique socket for each client
+	char _data[max_length]; // To store incoming message from client
 };
 

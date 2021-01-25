@@ -7,6 +7,10 @@
 
 #include "connection.h"
 
+/* Port number used for server.
+ * Typically port 80 for unsecured comms or 443 for secured.
+ * Other ports can be used, however, problems with firewalls may 
+ * occur. */
 const unsigned short PORT = 443;
 
 class Server{
@@ -19,6 +23,6 @@ private:
 	void handle_accept(Connection::pointer new_connection, 
 			const asio::error_code& error);
 
-	asio::io_context& io_context_;
-	asio::ip::tcp::acceptor acceptor_;
+	asio::io_context& io_context_; // Unique io_context for async functions
+	asio::ip::tcp::acceptor acceptor_; 
 };

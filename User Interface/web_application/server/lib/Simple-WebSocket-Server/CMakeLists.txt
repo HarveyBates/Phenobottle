@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(Simple-WebSocket-Server)
 
-option(USE_STANDALONE_ASIO "set ON to use standalone Asio instead of Boost.Asio" OFF)
+option(USE_STANDALONE_ASIO "set ON to use standalone Asio instead of Boost.Asio" ON)
 if(CMAKE_SOURCE_DIR STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
     option(BUILD_TESTING "set ON to build library tests" ON)
 else()
