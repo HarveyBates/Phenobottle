@@ -1,0 +1,242 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+:root {
+    font-size: 16px;
+    font-family: 'Open Sans';
+    --text-primary: #b6b6b6;
+    --text-secondary: #ececec;
+    --bg-primary: #23232e;
+    --bg-secondary: #141418;
+    --transition-speed: 600ms;
+}
+
+
+body {
+    color: black;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    padding: 0rem;
+    transition: margin-left var(--transition-speed);
+}
+
+.dashboard {
+    padding: 0rem;
+    transition: margin-left var(--transition-speed);
+}
+
+.setup {
+    padding: 1rem;
+    transition: margin-left var(--transition-speed);
+}
+
+.update-pb {
+    display: flex;
+    padding: 1em;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+}
+
+.btn-refresh {
+    font-size: 1rem;
+    padding: 0.5em;
+    background-color: grey;
+    color: white;
+    border-radius: 4px;
+    transition-duration: var(--transition-speed);
+}
+
+    .btn-refresh:hover {
+        cursor: pointer;
+        background-color: white;
+        color: black;
+        border-color: black;
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    }
+
+.graph-card {
+    padding: 0rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: var(--transition-speed);
+    border-radius: 0.5em;
+}
+
+    .graph-card:hover {
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    }
+
+.container {
+    padding: 2px 16px;
+}
+
+.navbar {
+    z-index: 9;
+    position: fixed;
+    background-color: var(--bg-primary);
+    transition: width var(--transition-speed) ease;
+    overflow: scroll;
+}
+
+.navbar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.nav-item {
+    color: var(--text-primary);
+    width: 100%;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    height: 5rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: 100ms;
+}
+
+    .nav-link:hover {
+        color: var( --text-secondary);
+		transform: scale(1.1);
+    }
+
+.link-text {
+    display: none;
+    margin-left: 1rem;
+}
+
+.nav-link i {
+    margin: 3rem;
+    min-width: 2rem;
+    margin: 0 1rem;
+}
+
+
+/* Mobile Screens */
+@media only screen and (max-width: 600px) {
+    main {
+        margin-left: 0rem;
+    }
+
+    .dashboard {
+        margin-left: 0rem;
+    }
+
+    .setup {
+        margin-left: 0rem;
+    }
+
+    .navbar {
+        bottom: 0;
+        width: 100vw;
+        height: 4rem;
+    }
+
+    .logo {
+        display: none;
+    }
+
+    .navbar-nav {
+        flex-direction: row;
+    }
+
+    .nav-link {
+        justify-content: center;
+    }
+}
+
+
+
+/* Desktop Screens */
+@media only screen and (min-width: 600px) {
+    main {
+        margin-left: 5rem;
+    }
+
+    .dashboard {
+        margin-left: 0rem;
+    }
+
+    .setup {
+        margin-left: 5rem;
+    }
+
+    .navbar {
+        top: 0;
+        width: 5rem;
+        height: 100vh;
+    }
+
+        .navbar:hover {
+            width: 16rem;
+        }
+
+            .navbar:hover .link-text {
+                display: inline;
+                transition: scale(1.1);
+            }
+    .nav-item:last-child {
+        margin-top: auto;
+    }
+}
+
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+}

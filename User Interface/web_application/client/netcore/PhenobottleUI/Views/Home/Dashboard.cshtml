@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Test Page";
+}
+
+
+<head>
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+</head>
+<body>
+    <div class="text-center">
+        <h1 class="display-4">Dashboard</h1>
+
+        <div class="dashboard">
+            <div class="graph-card">
+                <div id="myDiv"></div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script type="text/javascript">
+        var trace1 = {
+            type: 'bar',
+            x: [1, 2, 3, 4],
+            y: [5, 10, 2, 8],
+            marker: {
+                color: '#C8A2C8',
+                line: {
+                    width: 2.5
+                }
+            }
+        };
+
+        var data = [trace1];
+
+        var layout = {
+            title: 'Test plot',
+            font: { size: 18 }
+        };
+
+        var config = { responsive: true }
+
+        Plotly.newPlot('myDiv', data, layout, config);
+	</script>
+</body>
+

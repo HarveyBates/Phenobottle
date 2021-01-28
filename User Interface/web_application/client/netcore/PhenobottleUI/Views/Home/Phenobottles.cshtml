@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Test Page";
+}
+
+<div class="text-center">
+    <h2 class="display-4">Websocket Client</h2>
+    <h4 id="URL"></h4>
+	<button id="connect">Connect</button>
+	<button id="message">Send Message</button>
+    <h5 id="state"></h5>
+	
+	<script type="text/javascript">
+
+		var connectionURL = document.getElementById("URL");
+		connectionURL.value = "ws://localhost:443";
+
+		connect.onclick = function () {
+			console.log("Attempting to connect...")
+			socket = new WebSocket(connectionURL.value);
+
+			socket.onopen = function (event) {
+				console.log("Connected")
+			}
+		}
+
+		message.onclick = function () {
+			socket.send("Hello!");
+		}
+
+	</script>
+
+
+
+
+
+
+
+</div>
