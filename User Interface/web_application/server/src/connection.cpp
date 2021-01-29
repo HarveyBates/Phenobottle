@@ -1,9 +1,6 @@
 #include "connection.h"
 
 
-/* Magic string as provided by WebSocket protocol */
-const std::string ws_magic_string = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
-
 /* Shared pointer to keep connection between client and server while
  * async functions are running */
 typedef std::shared_ptr<Connection> pointer;
@@ -32,30 +29,83 @@ void Connection::handle_write(const asio::error_code& /*error*/,
 		size_t /*bytes_transferred*/){
 }
 
-std::string xor_decrypt(uint16_t* decimal){
+void xor_decrypt(char* inBuffer){
 	/* [Reminder] This is where I will decode the incoming requests depending 
 	 * on their package length
 	 */
-	char toDecrypt[10];
-	for(int i = 0; i < 10; i++){
-		toDecrypt[i] = static_cast<char>(decimal[i]);
+	char* buffer;
+	unsigned int packet_length = 0;
+	unsigned char mask[4];
+	unsigned int offset = 0;			
+	std::string output;
+	// Ensures the data received is a message
+	if((unsigned char)inBuffer[0] == 0x81){
+
+		/* Get the length of the incoming data */
+		packet_length = ((unsigned char) inBuffer[1]) & 0x7f;
+		std::cout << "Original packet length: " << packet_length << std::endl;
+
+		if(packet_length <= 125){
+			/*
+			 * byte 0: The 0x81 is just an indicator that a message received
+			 * byte 1: the 0x8a is the length, substract 0x80 from it, 0x0A == 10
+			 * byte 2, 3, 4, 5: the 4 byte xor key to decrypt the payload
+			 * the rest: payload
+			 */
+	 		offset = 6;
+			mask[0] = inBuffer[2];
+			mask[1] = inBuffer[3];
+			mask[2] = inBuffer[4];
+			mask[3] = inBuffer[5];
+			std::cout << "Packet Length: " << packet_length << std::endl;
+			std::cout << "Mask: " << mask << std::endl;
+
+			/* Use mask(key) to decode message from client 
+			 * Offset of 6 as this is the bytes after the mask
+			 * 
+			 * [Reminder] This offset (6) will change if the packet_length changes
+			 */
+			for(unsigned int i = 0; i < packet_length; i++){
+				inBuffer[offset+i] ^= mask[i % 4];
+			}
+
+			/* Take decoded input buffer (inBuffer) and extract only the data 
+	 		* (not the mask)
+			 */
+			output = std::string(inBuffer).substr(offset, std::string(inBuffer).length());
+			std::cout << "Message from client: " << output << std::endl;
+		}
+		else if(packet_length == 126){
+			/*
+			 * byte 0: The 0x81 is just an indicator that a message received
+			 * byte 1: will be 0xfe
+			 * byte 2, 3: the length of the payload as a uint16 number
+			 * byte 4, 5, 6, 7: the 4 byte xor key to decrypt the payload
+			 * the rest: payload
+			 */
+			offset = 8;
+			unsigned int lenByte1 = inBuffer[2];
+			unsigned int lenByte2 = inBuffer[3];
+
+			packet_length = ((lenByte1 << 8) & 0xFF00) + (lenByte2 & 0x00FF);
+			// TODO Getting the right length now, but need to fix the mask 
+			// for these longer messages
+			std::cout << "Oversize packet length: " << packet_length << std::endl;
+
+			mask[0] = inBuffer[4];
+			mask[1] = inBuffer[5];
+			mask[2] = inBuffer[6];
+			mask[3] = inBuffer[7];
+
+			for(unsigned int i = 0; i < packet_length; i++){
+//				std::cout << inBuffer[offset + i] << std::endl;
+				inBuffer[offset + i] ^= mask[i % 4];
+			}
+			output = std::string(inBuffer);
+//			output = std::string(inBuffer).substr(offset, std::string(inBuffer).length());
+			std::cout << "Large message from client: " << output << std::endl;
+		}
 	}
-	std::string strDecrypt = std::string(toDecrypt);
-	std::string output = strDecrypt;
-	
-	char key1 = toDecrypt[2];
-	char key2 = toDecrypt[3];
-	char key3 = toDecrypt[4];
-	char key4 = toDecrypt[5];
-	char keys[4] = {key1, key2, key3, key4};
-	
-	for(int i = 0; i < 10; i++){
-		output[i] = toDecrypt[i] ^ keys[i % (sizeof(keys) / sizeof(char))];
-	}
-	std::cout << "Input: " << std::string(toDecrypt) << std::endl;
-	std::cout << "Keys: " << std::string(keys) << std::endl;
-	std::cout << "Ouput: " << output << std::endl; 
-	return std::string(keys);
 }
 
 
@@ -64,7 +114,7 @@ void Connection::do_read(){
 	auto self(shared_from_this());
 
 	/* Reset _data array with zeros
-	 * [Reminder] There is proberbly a better way to clear the array
+	 * TODO There is proberbly a better way to clear the array
 	 */
 	std::memset(_data, 0, max_length);
 	
@@ -75,63 +125,17 @@ void Connection::do_read(){
 			std::cout << "Recieved data: " << std::endl;
 
 			char* inBuffer = _data;
-			char* buffer;
-			unsigned int packet_length = 0;
-			unsigned char mask[4];
-			
-		//	assert(inBuffer[0] == '0x81');
-			
-			/* Get the length of the incoming data */
-			packet_length = ((unsigned char) inBuffer[1]) & 0x7f;
-			
-			/* [Reminder] Need to have two functions:
-			 * 1. For incoming connection request
-			 * 2. For incoming data
-			 */
-			if(packet_length == 6){
-
-				/* [Reminder] Mask is composed of four bytes.
-				 * The position of these bytes change with the size of the packet.
-				 * Packet size = 126 (length of data is given by the following 2 bytes)
-				 * If byte length < 125:
-				 * byte 0: The 0x81 is just an indicator that a message received
-				 * byte 1: the 0x8a is the length, substract 0x80 from it, 0x0A == 10
-				 * byte 2, 3, 4, 5: the 4 byte xor key to decrypt the payload
-				 * the rest: payload
-				 *
-				 * If the byte length > 125:	
-				 * byte 0: The 0x81 is just an indicator that a message received
-				 * byte 1: will be 0xfe
-				 * byte 2, 3: the length of the payload as a uint16 number
-				 * byte 4, 5, 6, 7: the 4 byte xor key to decrypt the payload
-				 * the rest: payload
-				 *
-				 * If I want to read longer strings (JSON data) I need to implement
-				 * both of these methods.
-				 */
-				mask[0] = inBuffer[2];
-				mask[1] = inBuffer[3];
-				mask[2] = inBuffer[4];
-				mask[3] = inBuffer[5];
-				std::cout << "Packet Length: " << packet_length << std::endl;
-				std::cout << "Mask: " << mask << std::endl;
-			
-				/* Use mask(key) to decode message from client 
-				 * Offset of 6 as this is the bytes after the mask
-				 * 
-				 * [Reminder] This offset (6) will change if the packet_length changes
-				 */
-				for(unsigned int i = 0; i < packet_length; i++){
-					inBuffer[6+i] ^= mask[i % 4];
-				}
-
-				/* Take decoded input buffer (inBuffer) and extract only the data 
-				 * (not the mask)
-				 */
-				std::string output = std::string(inBuffer).substr(6, std::string(inBuffer).length());
-				std::cout << "Message from client: " << output << std::endl;
+			/* TODO Need to have two functions:
+			* 1. For incoming connection request
+			* 2. For incoming data
+			*/
+			if(handshake){
+				xor_decrypt(inBuffer);
 			}
-
+			else{
+				std::cout << _data << std::endl;
+				handshake = true;
+			}
 			/* Begin write funciton to keep connection */
 			do_write();
 		}

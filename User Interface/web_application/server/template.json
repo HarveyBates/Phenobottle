@@ -15,7 +15,7 @@
 	},
 
 	"Sensors": {
-		"pH":
+		"pH": 0.00,
 		"Concentration": {
 			"Raw": 0,
 			"Iniial": 0, 
