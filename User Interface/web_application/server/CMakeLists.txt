@@ -7,13 +7,15 @@ find_package(nlohmann_json 3.2.0 REQUIRED)
 set(NAME_SRC
 	src/main.cpp
     src/server.cpp
-    src/connection.cpp)
+    src/connection.cpp
+	src/serial.cpp)
 
 set(NAME_HEADERS
 	include/main.h
     include/server.h
     include/connection.h
-	include/crypto.hpp)
+	include/crypto.hpp
+	include/serial.h)
 
 set(EXECUTABLE_OUTPUT_PATH
 	${CMAKE_BINARY_DIR}/bin)

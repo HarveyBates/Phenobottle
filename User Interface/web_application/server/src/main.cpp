@@ -10,6 +10,7 @@ int main(){
 	catch(std::exception& e){
 		std::cerr << e.what() << std::endl;
 	}
+	// TODO add main event loop here
 	return 0;
 }
 
