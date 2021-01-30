@@ -13,6 +13,14 @@
 	
 	<script type="text/javascript">
 
+		function addNums(length) {
+			var output = "";
+			for (var i = 0; i < length; i++) {
+				output += i.toString();
+			}
+			return output;
+		}
+
 		var connectionURL = document.getElementById("URL");
 		connectionURL.value = "ws://localhost:443";
 
@@ -35,7 +43,7 @@
 		}
 
 		longMessage.onclick = function () {
-			socket.send("a".repeat(126));
+			socket.send(addNums(1000));
 		}
 
 	</script>
