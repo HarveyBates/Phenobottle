@@ -7,6 +7,7 @@
     <h4 id="URL"></h4>
 	<button id="connect">Connect</button>
 	<button id="message">Send Message</button>
+	<button id="message2">Send Short Msg</button>
 	<button id="longMessage">Send long message</button>
     <h5 id="state"></h5>
 	
@@ -29,8 +30,12 @@
 			socket.send("Hello!");
 		}
 
+		message2.onclick = function () {
+			socket.send("Test String.");
+		}
+
 		longMessage.onclick = function () {
-			socket.send("a".repeat(130));
+			socket.send("a".repeat(126));
 		}
 
 	</script>
