@@ -6,11 +6,10 @@ for details on configuring this project to bundle and minify static web assets. 
     font-family: 'Open Sans';
     --text-primary: #b6b6b6;
     --text-secondary: #ececec;
-    --bg-primary: #23232e;
+    --bg-primary: #264653;
     --bg-secondary: #141418;
     --transition-speed: 600ms;
 }
-
 
 body {
     color: black;
@@ -19,45 +18,10 @@ body {
     padding: 0;
 }
 
-main {
-    padding: 0rem;
-    transition: margin-left var(--transition-speed);
-}
-
 .dashboard {
     padding: 0rem;
     transition: margin-left var(--transition-speed);
 }
-
-.setup {
-    padding: 1rem;
-    transition: margin-left var(--transition-speed);
-}
-
-.update-pb {
-    display: flex;
-    padding: 1em;
-    justify-content: space-between;
-    flex-direction: row;
-    align-items: center;
-}
-
-.btn-refresh {
-    font-size: 1rem;
-    padding: 0.5em;
-    background-color: grey;
-    color: white;
-    border-radius: 4px;
-    transition-duration: var(--transition-speed);
-}
-
-    .btn-refresh:hover {
-        cursor: pointer;
-        background-color: white;
-        color: black;
-        border-color: black;
-        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-    }
 
 .graph-card {
     padding: 0rem;
@@ -69,10 +33,6 @@ main {
     .graph-card:hover {
         box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
     }
-
-.container {
-    padding: 2px 16px;
-}
 
 .navbar {
     z-index: 9;
@@ -101,14 +61,14 @@ main {
     display: flex;
     align-items: center;
     height: 5rem;
-    color: var(--text-primary);
+    color: white;
     text-decoration: none;
     transition: 100ms;
 }
 
     .nav-link:hover {
-        color: var( --text-secondary);
-		transform: scale(1.1);
+        color: #e9c46a;
+        transform: scale(1.1);
     }
 
 .link-text {
@@ -234,7 +194,7 @@ body {
 }
 
 .footer {
-    position: absolute;
+	position: absolute;
     bottom: 0;
     width: 100%;
     white-space: nowrap;

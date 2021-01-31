@@ -1,0 +1,61 @@
+﻿
+/* 
+	Color Scheme:
+    #264653 (turquoise)
+    #2a9d8f (light turqoise)
+    #e9c46a (mustard/yellow)
+    #f4a261 (orange)
+    #e76f51 (orange/red)
+	*/
+
+body{
+    margin-top: 1rem;
+}
+
+.top-bar{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items:center;
+}
+
+.custom-input{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.card{
+    margin: 1rem;
+    padding: 1rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 1rem;
+}
+
+.button1 {
+    font-size: 1rem;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    background-color: #2a9d8f;
+    color: white;
+    border-radius: 4px;
+    transition-duration: var(--transition-speed);
+}
+
+    .button1:hover {
+        color: #fbf5e6;
+    }
+
+.button2 {
+    font-size: 1rem;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    background-color: #2a9d8f;
+    color: white;
+    border-radius: 4px;
+    transition-duration: var(--transition-speed);
+}
+
+    .button2:hover {
+        color: #fbf5e6;
+    }
