@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <vector>
 #include <string>
+#include <filesystem>
 
 class Serial{
 	const char* PORT = "tty/ACM0";

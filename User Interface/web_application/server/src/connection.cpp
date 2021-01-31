@@ -1,5 +1,7 @@
 #include "connection.h"
 
+extern bool wsCommand;
+
 /* Shared pointer to keep connection between client and server while
  * async functions are running */
 typedef std::shared_ptr<Connection> pointer;
@@ -21,7 +23,9 @@ void Connection::start(){
 }
 
 /* Connection constructor with a socket */
-Connection::Connection(asio::io_context& io_context) : socket_(io_context){}
+Connection::Connection(asio::io_context& io_context) : socket_(io_context){
+
+}
 
 /* [Reminder] I'm pretty sure I dont need this funciton */
 void Connection::handle_write(const asio::error_code& /*error*/,
@@ -103,6 +107,7 @@ void xor_decrypt(char* inBuffer){
 			}
 		}
 		std::cout << "Output buffer: " << outBuffer << std::endl;
+		wsCommand = true;
 	}
 }
 
@@ -129,6 +134,7 @@ void Connection::do_read(){
 				std::cout << "\nHandshake: \n" << _data << std::endl;
 				handshake = true; // Handshake has occured
 			}
+			
 			/* Begin write funciton to keep connection */
 			do_write();
 		}

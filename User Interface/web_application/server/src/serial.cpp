@@ -5,7 +5,10 @@ Serial::Serial(){
 	 * If it is the port attributes will be automatically set.
 	 */
 	try{
+		// TODO add error handling here and APPLE & Windows defaults
+#if __linux__
 		set_attributes(PORT);
+#endif
 	}
 	catch(...) {
 		std::cout << "[ERROR] Default serial port not opened.\n"
@@ -110,9 +113,37 @@ void Serial::close_port(){
 	}
 }
 
-std::vector<std::string> Serial::list_ports(){
-	std::vector<std::string> serialPorts;
-	std::string path = "/sys/class/tty";
+
+std::vector<std::string> Serial::list_ports(){	
+	// TODO add Windows auto list serial ports
+
+	std::vector<std::string> ports;
+	std::string path;
+
+#if __APPLE__
+	path = "/dev/";
+	for(const auto & entry : std::filesystem::directory_iterator(path)){
+		std::string tty = "/dev/tty.";
+		std::string cu = "/dev/cu.";
+		if((std::string(entry.path()).std::string::find(tty) != std::string::npos || 
+			std::string(entry.path()).std::string::find(cu) != std::string::npos) && 
+			std::string(entry.path()).std::string::find("Bluetooth") == std::string::npos){
+			
+			std::cout << "[FOUND] Port: " << entry.path() << std::endl;
+			auto prt = open(entry.path().c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+			if(prt){
+				ports.push_back(entry.path());
+				auto retVal = close(prt);
+				if(retVal != 0){																	
+					std::cout << "[ERROR] Failed to close serial port." << std::endl;											}												
+			}
+		}
+	}
+
+#elif __linux__
+	// TODO adjust linux env serial port connection to the method used for APPLE
+	// i.e. using filesystem (c++ 17 required)
+	path = "sys/class/tty";
 	DIR* dir;
 	struct dirent* ent; 
 	if((dir = opendir(path.c_str())) != NULL){
@@ -127,7 +158,7 @@ std::vector<std::string> Serial::list_ports(){
 			else{
 				std::cout << "Device found: " << search_path 
 				<< std::endl;
-				serialPorts.push_back(ent->d_name);
+				ports.push_back(ent->d_name);
 			}
 		}
 		closedir(dir);
@@ -135,7 +166,14 @@ std::vector<std::string> Serial::list_ports(){
 	else{
 		std::cout << "Error" << std::endl;
 	}
-	return serialPorts;
+#endif
+
+	if(ports.size() == 0){
+		ports.push_back("[ERROR] No Serial devices found. Ensure you have a microcontroller "
+				"connected to this device.");
+	}
+
+	return ports;
 }
 
 
