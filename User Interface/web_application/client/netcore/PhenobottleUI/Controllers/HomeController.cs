@@ -30,7 +30,7 @@ namespace PhenobottleUI.Controllers
             return View();
 		}
 
-        public IActionResult Sensors() {
+        public IActionResult Setup() {
             return View();
 		}
 

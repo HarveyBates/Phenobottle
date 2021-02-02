@@ -1,0 +1,79 @@
+﻿@{
+    ViewData["Title"] = "Setup";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/setup.css" />
+    
+</head>
+
+<div class="content">
+    <h1>Setup Sensors</h1>
+    <div class="cards">
+        <div class="main-card">
+            <div class="pH">
+                <h3>pH</h3>
+                <div class="card">
+                    <div class="card-heading">
+                        <h4>Calibrate</h4>
+                        <p>Preform a three-point calibration before starting experiment.</p>
+                    </div>
+                    <div class="calibrate-button">
+                        <button class="button2">Begin Calibration</button>
+                    </div>
+                    <div class="button-output">
+                        <button class="button1">pH 4</button>
+                        <input type="text" value="4.22" class="ph-output" readonly="readonly" />
+                        <button class="button1">pH 7</button>
+                        <input type="text" value="7.22" class="ph-output" readonly="readonly" />
+                        <button class="button1">pH 10</button>
+                        <input type="text" value="10.22" class="ph-output" readonly="readonly" />
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-heading">
+                        <h4>Measure</h4>
+                    </div>
+                    <div class="button-output">
+                        <button class="button1">Measure</button>
+                        <input type="text" value="10.43" class="ph-output" readonly="readonly" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="main-card">
+            <h3>Chl Fluorescence</h3>
+            <div class="card">
+                <div class="card-heading">
+                    <h4>Measure</h4>
+                    <p>Capture OJIP curve.</p>
+                    <div class="button-output">
+                        <button class="button1">Measure</button>
+                        <input type="text" value="10.43" class="ph-output" readonly="readonly" />
+                        <input type="text" value="10.43" class="ph-output" readonly="readonly" />
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="main-card">
+            <h3>Chl Fluorescence</h3>
+            <div class="card">
+                <div class="card-heading">
+                    <h4>Measure</h4>
+                    <p>Capture OJIP curve.</p>
+                    <div class="button-output">
+                        <button class="button1">Measure</button>
+                        <input type="text" value="10.43" class="ph-output" readonly="readonly" />
+                        <input type="text" value="10.43" class="ph-output" readonly="readonly" />
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>

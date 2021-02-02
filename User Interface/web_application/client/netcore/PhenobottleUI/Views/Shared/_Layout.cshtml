@@ -33,9 +33,9 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a asp-area="" asp-controller="Home" asp-action="Sensors" class="nav-link">
+                    <a asp-area="" asp-controller="Home" asp-action="Setup" class="nav-link">
                         <i class="fas fa-sliders-h"></i>
-                        <span class="link-text">Sensors</span>
+                        <span class="link-text">Setup</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -53,13 +53,11 @@
             </ul>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <div class="container-fluid">
+        @RenderBody()
     </div>
 	<footer class="border-top footer text-muted">
-        <div class="container">
+        <div class="container-fluid">
             &copy; 2021 - Phenobottle UI - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
