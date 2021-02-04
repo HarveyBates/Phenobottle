@@ -17,15 +17,6 @@ body {
     flex-wrap: wrap;
 }
 
-.content {
-    width: 100%;
-    margin: 0;
-    margin-left: 5rem;
-    padding: 0;
-    top: 0;
-    left: 0;
-}
-
 .top-bar {
     display: flex;
     flex-direction: row;

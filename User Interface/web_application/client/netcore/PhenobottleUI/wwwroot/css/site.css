@@ -11,6 +11,7 @@ for details on configuring this project to bundle and minify static web assets. 
     --transition-speed: 600ms;
 }
 
+
 .graph-card {
     padding: 0rem;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -74,7 +75,12 @@ for details on configuring this project to bundle and minify static web assets. 
 
 /* Mobile Screens */
 @media only screen and (max-width: 600px) {
-    .navbar {
+    .container-fluid {
+        width: auto;
+        margin-left: 0rem;
+    }
+	
+	.navbar {
         bottom: 0;
         width: 100vw;
         height: 4rem;
@@ -97,13 +103,9 @@ for details on configuring this project to bundle and minify static web assets. 
 
 /* Desktop Screens */
 @media only screen and (min-width: 600px) {
-    main {
+    .container-fluid {
+        width: auto;
         margin-left: 5rem;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-		top: 0;
-        left: 0;
     }
 
     .navbar {
