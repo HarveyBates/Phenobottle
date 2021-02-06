@@ -18,7 +18,15 @@ namespace PhenobottleUI.Controllers
             _logger = logger;
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ProcessButton(Phenobottle obj, EventArgs e) {
+            _logger.LogInformation(obj.ID);
+            return View("Home", obj);
+        }
+
         public IActionResult Home() {
+            
             return View();
 		}
 
@@ -47,5 +55,6 @@ namespace PhenobottleUI.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }

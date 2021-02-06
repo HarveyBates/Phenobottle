@@ -1,0 +1,48 @@
+﻿
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model PhenobottleUI.Models.Phenobottle
+
+
+<div class="text-center">
+    <h1 class="display-4">Phenobottle</h1>
+    <p>
+        The Phenobottle is an open-source Raspberry Pi based tissue
+        culture flask photobioreactor used for assessing growth and
+        photophysiology in microalgae.
+    </p>
+    <form method="post" asp-action="ProcessButton">
+        <label asp-for="ID"></label>
+        <input asp-for="ID" />
+        <input type="submit" class="button1" value="Create" />
+    </form>
+
+    <asp::Panel ID="Panel1" runat="server" Height="150" Width="350"
+                HorizontalAlign="Center"
+                ForeColor="Snow"
+                BackColor="DeepPink"
+                Font-Size="X-Large">
+        <br /><br />
+        Panel
+    </asp::Panel>
+
+    <asp:Button ID="Button1"
+                runat="server"
+                ForeColor="DarkMagenta"
+                Text="Hide Panel"
+                Height="45"
+                OnClick="ButtonClk"
+                Font-Bold="true" />
+    <asp:Button ID="Button2"
+                runat="server"
+                ForeColor="DarkMagenta"
+                Text="Visible Panel"
+                Height="45"
+                OnClick="Button2Clk"
+                Font-Bold="true" />
+
+    <label>@Html.DisplayFor(Phenobottle => Phenobottle.ID)</label>
+</div>
