@@ -17,4 +17,8 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="Views\Phenobottle\" />
+  </ItemGroup>
 </Project>

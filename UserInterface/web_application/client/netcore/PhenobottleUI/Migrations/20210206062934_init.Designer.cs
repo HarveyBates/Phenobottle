@@ -9,8 +9,8 @@ using PhenobottleUI.Models;
 namespace PhenobottleUI.Migrations
 {
     [DbContext(typeof(APIContext))]
-    [Migration("20210206023905_initialmigration")]
-    partial class initialmigration
+    [Migration("20210206062934_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,12 @@ namespace PhenobottleUI.Migrations
             modelBuilder.Entity("PhenobottleUI.Models.Phenobottle", b =>
                 {
                     b.Property<string>("ID")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ReplicateNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Treatment")
                         .HasColumnType("text");
 
                     b.HasKey("ID");

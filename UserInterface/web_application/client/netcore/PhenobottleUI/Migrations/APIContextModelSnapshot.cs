@@ -23,6 +23,12 @@ namespace PhenobottleUI.Migrations
                     b.Property<string>("ID")
                         .HasColumnType("text");
 
+                    b.Property<string>("ReplicateNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Treatment")
+                        .HasColumnType("text");
+
                     b.HasKey("ID");
 
                     b.ToTable("Phenobottles");

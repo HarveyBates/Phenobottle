@@ -26,15 +26,10 @@ namespace PhenobottleUI.Controllers
         }
 
         public IActionResult Home() {
-            
             return View();
 		}
 
         public IActionResult Dashboard() {
-            return View();
-		}
-
-        public IActionResult Phenobottles() {
             return View();
 		}
 

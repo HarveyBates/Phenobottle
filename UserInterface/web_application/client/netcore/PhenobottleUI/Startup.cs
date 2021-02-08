@@ -28,7 +28,7 @@ namespace PhenobottleUI
             // This is where to setup sign in functionality 
             services.AddControllersWithViews();
             services.AddEntityFrameworkNpgsql().AddDbContext<APIContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("APIConnection")));
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,7 +56,13 @@ namespace PhenobottleUI
                 endpoints.MapControllerRoute(
                     name: "Home",
                     pattern: "{controller=Home}/{action=Home}/{id?}");
-            });
+
+                endpoints.MapControllerRoute(
+                    name: "Phenobottle",
+                    pattern: "/{Phenobottle}",
+                    defaults: new { controller = "Phenobottle", 
+						action = "Index" });
+			});
         }
     }
 }

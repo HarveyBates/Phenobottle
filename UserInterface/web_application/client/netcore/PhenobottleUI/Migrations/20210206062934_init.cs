@@ -2,7 +2,7 @@
 
 namespace PhenobottleUI.Migrations
 {
-    public partial class initialmigration : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -10,7 +10,9 @@ namespace PhenobottleUI.Migrations
                 name: "Phenobottles",
                 columns: table => new
                 {
-                    ID = table.Column<string>(type: "text", nullable: false)
+                    ID = table.Column<string>(type: "text", nullable: false),
+                    Treatment = table.Column<string>(type: "text", nullable: true),
+                    ReplicateNumber = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
