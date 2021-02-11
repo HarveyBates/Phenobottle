@@ -9,22 +9,22 @@
     #e76f51 (orange/red)
 	*/
 
-.btn-output{
+.btn-output {
     display: inline-block;
     max-width: 8rem;
     padding: 0;
     margin: 0;
 }
 
-.cards{
+.cards {
     display: flex;
-	align-items: flex-start;
+    align-items: flex-start;
     flex-wrap: wrap;
-	justify-content: space-between;
-	flex-direction: row;	
+    justify-content: space-between;
+    flex-direction: row;
 }
 
-.cali-list{
+.cali-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -75,13 +75,13 @@
     justify-content: flex-start;
 }
 
-.subcard-head-button{
+.subcard-head-button {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.calibrate-button{
+.calibrate-button {
     display: flex;
     justify-content: flex-end;
 }

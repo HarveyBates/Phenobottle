@@ -22,26 +22,10 @@ namespace PhenobottleUI.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ProcessButton(Phenobottle obj, EventArgs e) {
             _logger.LogInformation(obj.ID);
-            return View("Home", obj);
+            return View("Index", obj);
         }
 
-        public IActionResult Home() {
-            return View();
-		}
-
-        public IActionResult Dashboard() {
-            return View();
-		}
-
-        public IActionResult Setup() {
-            return View();
-		}
-
-        public IActionResult Environment() {
-            return View();
-		}
-
-        public IActionResult Settings() {
+        public IActionResult Index() {
             return View();
 		}
 

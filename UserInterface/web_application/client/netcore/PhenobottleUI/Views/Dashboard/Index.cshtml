@@ -1,7 +1,6 @@
 ﻿@{
-    ViewData["Title"] = "Test Page";
+    ViewData["Title"] = "Dashboard";
 }
-
 
 <head>
     <!-- Plotly.js -->
@@ -19,9 +18,8 @@
         </div>
     </div>
 
-    
-    <script type="text/javascript">
-        var trace1 = {
+
+    <script type="text/javascript">var trace1 = {
             type: 'bar',
             x: [1, 2, 3, 4],
             y: [5, 10, 2, 8],
@@ -42,7 +40,6 @@
 
         var config = { responsive: true }
 
-        Plotly.newPlot('myDiv', data, layout, config);
-	</script>
+        Plotly.newPlot('myDiv', data, layout, config);</script>
 </body>
 

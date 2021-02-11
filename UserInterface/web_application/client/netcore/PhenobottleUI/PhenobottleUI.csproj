@@ -19,6 +19,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Views\Phenobottle\" />
+    <Folder Include="Views\ControlPanel\" />
+    <Folder Include="Views\Experiment\" />
+    <Folder Include="Views\Dashboard\" />
+    <Folder Include="Views\Settings\" />
   </ItemGroup>
 </Project>

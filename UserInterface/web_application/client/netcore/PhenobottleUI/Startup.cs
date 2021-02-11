@@ -55,14 +55,41 @@ namespace PhenobottleUI
             {
                 endpoints.MapControllerRoute(
                     name: "Home",
-                    pattern: "{controller=Home}/{action=Home}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
 
                 endpoints.MapControllerRoute(
-                    name: "Phenobottle",
-                    pattern: "/{Phenobottle}",
-                    defaults: new { controller = "Phenobottle", 
+                    name: "Dashboard",
+                    pattern: "/{Dashboard}",
+                    defaults: new
+                    {
+                        controller = "Dashboard",
+                        action = "Index"
+                    });              
+
+                endpoints.MapControllerRoute(
+                    name: "ControlPanel",
+                    pattern: "/{ControlPanel}",
+                    defaults: new { controller = "ControlPanel", 
 						action = "Index" });
-			});
+
+                endpoints.MapControllerRoute(
+					name: "Experiment",
+                    pattern: "/{Experiment}",
+					defaults: new
+					{
+						controller = "Experiment",
+						action = "Index"
+					});
+
+                endpoints.MapControllerRoute(
+                    name: "Settings",
+                    pattern: "/{Settings}",
+                    defaults: new
+                    {
+                        controller = "Settings",
+                        action = "Index"
+                    });
+            });
         }
     }
 }

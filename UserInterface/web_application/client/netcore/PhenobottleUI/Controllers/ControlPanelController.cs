@@ -7,12 +7,12 @@ using PhenobottleUI.Models;
 
 namespace PhenobottleUI.Controllers
 {
-    public class PhenobottleController : Controller
+    public class ControlPanelController : Controller
     {
 
         private readonly APIContext _db;
 
-        public PhenobottleController(APIContext db) {
+        public ControlPanelController(APIContext db) {
             _db = db;
 		}
 
