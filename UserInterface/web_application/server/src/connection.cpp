@@ -2,8 +2,6 @@
 
 extern bool wsCommand;
 
-static const char* PHENOBOTTLEID = "^sD#RqSU6OVzspEzRtj%";
-
 /* Shared pointer to keep connection between client and server while
  * async functions are running */
 typedef std::shared_ptr<Connection> pointer;

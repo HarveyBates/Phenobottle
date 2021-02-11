@@ -2,7 +2,8 @@
 
 bool wsCommand = false;
 
-int main(){
+int main(){ 
+	std::cout << constants::ID << std::endl;
 	try{
 		asio::io_context io_context;
 		Server server(io_context);

@@ -12,6 +12,7 @@ set(NAME_SRC
 
 set(NAME_HEADERS
 	include/main.h
+	include/constants.h
     include/server.h
     include/connection.h
 	include/crypto.hpp
