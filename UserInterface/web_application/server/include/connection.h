@@ -6,7 +6,9 @@
 #include <asio/ts/internet.hpp>
 #include "crypto.hpp"
 #include <string.h>
+
 #include "constants.h"
+#include "serial.h"
 
 /* Max payload size in bytes */
 const std::size_t max_length = 4096;

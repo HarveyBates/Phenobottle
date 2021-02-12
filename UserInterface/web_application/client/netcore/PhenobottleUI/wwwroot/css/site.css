@@ -45,6 +45,10 @@ for details on configuring this project to bundle and minify static web assets. 
 .nav-item {
     color: var(--text-primary);
     width: 100%;
+    clear: both;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .nav-link {
@@ -115,7 +119,7 @@ for details on configuring this project to bundle and minify static web assets. 
     }
 
         .navbar:hover {
-            width: 16rem;
+            width: 14rem;
         }
 
             .navbar:hover .link-text {

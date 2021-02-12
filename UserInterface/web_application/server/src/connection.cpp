@@ -106,6 +106,7 @@ void xor_decrypt(char* inBuffer){
 				outBuffer[i] = inBuffer[arrPos] ^ mask[i % 4];
 			}
 		}
+	// TODO add serial command response here	
 		std::cout << "Output buffer: " << outBuffer << std::endl;
 		wsCommand = true;
 	}
