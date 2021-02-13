@@ -2,23 +2,32 @@
 
 extern bool wsCommand;
 
-/* Shared pointer to keep connection between client and server while
- * async functions are running */
+/** Shared pointer to keep connection between client and server while
+ * async functions are running **/
 typedef std::shared_ptr<Connection> pointer;
 
 pointer Connection::create(asio::io_context& io_context){
-	/* Create new connection using a unique io_context */
+	/** 
+	 * Create new connection using a unique io_context.
+	 *
+	 * @param io_context Context for input output connections.
+	 * @returns A pointer to a new connection with a unique io context.
+	 **/
 	return pointer(new Connection(io_context));
 }
 
 asio::ip::tcp::socket& Connection::socket(){
-	/* Return a socket for a given io_context */
+	/**
+	 * Creates a socket for a given io_context.
+	 * @returns Socket.
+	 **/
 	return socket_;
 }
 	
 void Connection::start(){
-	/* Start async function with a read() command that bounces between write
-	 * function */
+	/**
+	 * Start async function with a read() command that bounces between 
+	 * write function. */
 	do_read();
 }
 
@@ -32,8 +41,19 @@ void Connection::handle_write(const asio::error_code& /*error*/,
 		size_t /*bytes_transferred*/){
 }
 
-void xor_decrypt(char* inBuffer){
-	/* Decode frame from incoming message using xor decryption.
+char* Connection::command(char* input){
+	/**
+	 * Recives command from client and stores it for future use.
+	 * @param input Input from client.
+	 * @returns Command to be carried out by server (Phenobottle).
+	 **/
+	char* command = input;
+	return command;
+}
+
+void Connection::xor_decrypt(char* inBuffer){
+	/**
+	 * Decode frame from incoming message using xor decryption.
 	 * A mask (4 byte) sequence of char's are used to decrypt the incoming data.
 	 * The positon of the mask varies with the size of the incoming data, 
 	 * therefore two functions are provided (<125 & 126).
@@ -106,8 +126,8 @@ void xor_decrypt(char* inBuffer){
 				outBuffer[i] = inBuffer[arrPos] ^ mask[i % 4];
 			}
 		}
-	// TODO add serial command response here	
 		std::cout << "Output buffer: " << outBuffer << std::endl;
+		command(outBuffer);
 		wsCommand = true;
 	}
 }
@@ -145,9 +165,8 @@ void Connection::do_read(){
 void Connection::do_write(){
 	/* Keeps connection alive as long as async process is functioning */
 	auto self(shared_from_this());
-	
-	std::string tmp(_data);
 
+	std::string tmp(_data); // Convert to string to do std functions.
 	std::string response;
 		
 	// Debug: std::cout << SimpleWeb::Crypto::Base64::decode(response) << std::endl;
@@ -174,8 +193,6 @@ void Connection::do_write(){
 			"Connection: Upgrade\r\n"
 			"Sec-WebSocket-Accept: " + sha1Key + "\r\n\r\n";
 	}
-	/* [Reminder] I am not sure if this decode is needed for non-connection request
-	 * messages */
 	else{
 		response = SimpleWeb::Crypto::Base64::decode(_data);
 	}

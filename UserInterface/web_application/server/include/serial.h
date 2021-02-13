@@ -10,18 +10,29 @@
 #include <string>
 #include <filesystem>
 
+
+/**
+ * Serial functions for communicating between microcontroller and machine.
+ **/ 
 class Serial{
 	const char* PORT = "tty/ACM0";
 	int serial_port;
-	int baudRate = 38400;
+	int baudRate = 115200;
 	int vTime = 10;
 	int vMin = 1;
 public:
 	Serial();
-	int open_port(const char* port_ID);
-	void set_attributes(const char * port);
-	void send(const char * port, const char* msg);
+	void configure(const char * port);
+	
+	int open_port(const char* port);
 	void close_port();
+	
+	void send(const char* msg);
+	void send(const char * port, const char* msg);
+	
+	void set_baudrate(int rate);
+	int get_baudrate();
+	const char* get_port();
 	std::vector<std::string> list_ports();
 };
 

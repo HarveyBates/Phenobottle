@@ -13,6 +13,9 @@
  * occur. */
 const unsigned short PORT = 443;
 
+/**
+ * Websocket server functions for sending and recieving messages.
+ **/ 
 class Server{
 public:
 	Server(asio::io_context& io_context);

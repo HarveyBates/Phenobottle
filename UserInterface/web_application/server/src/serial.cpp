@@ -1,13 +1,25 @@
 #include "serial.h"
 
 Serial::Serial(){
-	/* Test default serial port is avalible. 
-	 * If it is the port attributes will be automatically set.
-	 */
+	/**
+	 * Set attributes for serial device if a device is available. 
+	 * 
+	 * @todo Add serial constructor error handling for __WINDOWS__ machines.
+	 **/
 	try{
-		// TODO add error handling here and APPLE & Windows defaults
 #if __linux__
-		set_attributes(PORT);
+		configure(PORT);
+
+#elif __APPLE__
+		std::vector<std::string> ports = list_ports();
+		if(ports.size() == 1){
+			PORT = ports[0].c_str();
+			configure(PORT);
+		}
+		else{
+			std::cout << "[NOTE] More that one serial device found.\n"
+				"User must select a serial device before sending commands." << std::endl;
+		}
 #endif
 	}
 	catch(...) {
@@ -16,8 +28,12 @@ Serial::Serial(){
 	}
 }
 
-void Serial::set_attributes(const char * PORT){
-	// Set serial attributes must be intialised
+void Serial::configure(const char * PORT){
+	/**
+	 * Set attibutes for input ouput communications between serial device and machine.
+	 *
+	 * @param PORT Serial port to configure.
+	 **/
 	open_port(PORT); //Open port first
 	/* 
 	 * The termios structure in the termios.h file contains the 
@@ -84,7 +100,14 @@ void Serial::set_attributes(const char * PORT){
 	close_port();
 }
 
-int Serial::open_port(const char* PORT){
+int Serial::open_port(const char* port){
+	/**
+	 * Open specific serial port.
+	 * 
+	 * @param PORT Serial port to open.
+	 * @returns A const char* to a serial port or 0 if unable to open device.
+	 **/
+	PORT = port;
 	serial_port = open(PORT, O_RDWR);
 	if (serial_port){
 		std::cout << "[OPEN] Port:" << PORT << std::endl;
@@ -96,26 +119,77 @@ int Serial::open_port(const char* PORT){
 	}
 }
 
-void Serial::send(const char * PORT, const char* msg){
+const char* Serial::get_port(){
+	/**
+	 * Get name of current serial port.
+	 *
+	 * @returns PORT Serial port name.
+	 **/ 
+	return PORT;
+}
+
+int Serial::get_baudrate(){
+	/**
+	 * Get the current baudrate of serial communications.
+	 * @returns baudRate Current baudrate
+	 **/
+	return baudRate;
+}
+
+void Serial::set_baudrate(int rate){
+	/**
+	 * Set the baudrate of serial communications.
+	 **/ 
+	baudRate = rate;
+}
+
+void Serial::send(const char* msg){
+	/**
+	 * Send message to microcontroller using preset PORT.
+	 *
+	 * @param msg Message to be sent.
+	 **/ 
 	serial_port = open_port(PORT);
 	write(serial_port, msg, strlen(msg));
-	std::cout << "Sent message: " << msg << std::endl;
+	std::cout << "[SEND]: " << msg << std::endl;
+	close_port();
+}
+
+void Serial::send(const char * port, const char* msg){
+	/**
+	 * Send a message to the microcontroller. 
+	 *
+	 * @param PORT Serial port to send the message to.
+	 * @param msg Message to send to the device. 
+	 **/
+	serial_port = open_port(port);
+	write(serial_port, msg, strlen(msg));
+	std::cout << "[SEND]: " << msg << std::endl;
 	close_port();
 }
 
 void Serial::close_port(){
+	/**
+	 * Close current serial port.
+	 **/ 
 	auto retVal = close(serial_port);
 	if(retVal != 0){
 		std::cout << "[ERROR] Failed to close serial port." << std::endl;
 	}
 	else{
-		std::cout << "[CLOSED] Port: " << serial_port << std::endl;
+		std::cout << "[CLOSED] Serial Port." << std::endl;
 	}
 }
 
 
 std::vector<std::string> Serial::list_ports(){	
-	// TODO add Windows auto list serial ports
+	/**
+	 * List currently connected serial devices.
+	 *
+	 * @todo Add a windows function here.
+	 * @todo Change linux method to match __APPLE__. 
+	 * @returns A list of serial devices that are available.
+	 **/ 
 
 	std::vector<std::string> ports;
 	std::string path;
@@ -125,8 +199,7 @@ std::vector<std::string> Serial::list_ports(){
 	for(const auto & entry : std::filesystem::directory_iterator(path)){
 		std::string tty = "/dev/tty.";
 		std::string cu = "/dev/cu.";
-		if((std::string(entry.path()).std::string::find(tty) != std::string::npos || 
-			std::string(entry.path()).std::string::find(cu) != std::string::npos) && 
+		if(std::string(entry.path()).std::string::find(tty) != std::string::npos && 
 			std::string(entry.path()).std::string::find("Bluetooth") == std::string::npos){
 			
 			std::cout << "[FOUND] Port: " << entry.path() << std::endl;
@@ -134,8 +207,9 @@ std::vector<std::string> Serial::list_ports(){
 			if(prt){
 				ports.push_back(entry.path());
 				auto retVal = close(prt);
-				if(retVal != 0){																	
-					std::cout << "[ERROR] Failed to close serial port." << std::endl;											}												
+				if(retVal != 0){
+					std::cout << "[ERROR] Failed to close serial port." << std::endl;
+				}
 			}
 		}
 	}

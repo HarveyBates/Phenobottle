@@ -1,0 +1,158 @@
+\hypertarget{class_serial}{}\doxysection{Serial Class Reference}
+\label{class_serial}\index{Serial@{Serial}}
+
+
+{\ttfamily \#include $<$serial.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_serial_a3667c3137f2df94716b5193f9fb736ab}{Serial}} ()
+\item 
+void \mbox{\hyperlink{class_serial_ae1b4ff2b94df28ecae595f95f7e75088}{configure}} (const char $\ast$port)
+\item 
+int \mbox{\hyperlink{class_serial_a6309cfac342b0cc912ce708bf19b11b4}{open\+\_\+port}} (const char $\ast$port)
+\item 
+void \mbox{\hyperlink{class_serial_adaa38b83174253a7d7361422598bdfbe}{close\+\_\+port}} ()
+\item 
+void \mbox{\hyperlink{class_serial_ad227b391ca78d0a07014f2d0be36d961}{send}} (const char $\ast$msg)
+\item 
+void \mbox{\hyperlink{class_serial_a96aced295b4cf76031d4f27dd7ee8124}{send}} (const char $\ast$port, const char $\ast$msg)
+\item 
+void \mbox{\hyperlink{class_serial_a9b9af713440f62d8267a8f94638b94ba}{set\+\_\+baudrate}} (int rate)
+\item 
+int \mbox{\hyperlink{class_serial_a82569104433e28a7f41d75a78478d95f}{get\+\_\+baudrate}} ()
+\item 
+const char $\ast$ \mbox{\hyperlink{class_serial_acf936481aba6dbab117ffdaf6468918e}{get\+\_\+port}} ()
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{class_serial_a708b7835e206016b3b83c4991b2ce6f7}{list\+\_\+ports}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{class_serial}{Serial}} functions for communicating between microcontroller and machine. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_serial_a3667c3137f2df94716b5193f9fb736ab}\label{class_serial_a3667c3137f2df94716b5193f9fb736ab}} 
+\index{Serial@{Serial}!Serial@{Serial}}
+\index{Serial@{Serial}!Serial@{Serial}}
+\doxysubsubsection{\texorpdfstring{Serial()}{Serial()}}
+{\footnotesize\ttfamily Serial\+::\+Serial (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Set attributes for serial device if a device is available.
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000001}{Todo}}]Add serial constructor error handling for {\bfseries{WINDOWS}} machines. \end{DoxyRefDesc}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_serial_adaa38b83174253a7d7361422598bdfbe}\label{class_serial_adaa38b83174253a7d7361422598bdfbe}} 
+\index{Serial@{Serial}!close\_port@{close\_port}}
+\index{close\_port@{close\_port}!Serial@{Serial}}
+\doxysubsubsection{\texorpdfstring{close\_port()}{close\_port()}}
+{\footnotesize\ttfamily void Serial\+::close\+\_\+port (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Close current serial port.\mbox{\Hypertarget{class_serial_ae1b4ff2b94df28ecae595f95f7e75088}\label{class_serial_ae1b4ff2b94df28ecae595f95f7e75088}} 
+\index{Serial@{Serial}!configure@{configure}}
+\index{configure@{configure}!Serial@{Serial}}
+\doxysubsubsection{\texorpdfstring{configure()}{configure()}}
+{\footnotesize\ttfamily void Serial\+::configure (\begin{DoxyParamCaption}\item[{const char $\ast$}]{port }\end{DoxyParamCaption})}
+
+Set attibutes for input ouput communications between serial device and machine.
+
+
+\begin{DoxyParams}{Parameters}
+{\em PORT} & \mbox{\hyperlink{class_serial}{Serial}} port to configure.\\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_serial_a82569104433e28a7f41d75a78478d95f}\label{class_serial_a82569104433e28a7f41d75a78478d95f}} 
+\index{Serial@{Serial}!get\_baudrate@{get\_baudrate}}
+\index{get\_baudrate@{get\_baudrate}!Serial@{Serial}}
+\doxysubsubsection{\texorpdfstring{get\_baudrate()}{get\_baudrate()}}
+{\footnotesize\ttfamily int Serial\+::get\+\_\+baudrate (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get the current baudrate of serial communications. \begin{DoxyReturn}{Returns}
+baud\+Rate Current baudrate
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_serial_acf936481aba6dbab117ffdaf6468918e}\label{class_serial_acf936481aba6dbab117ffdaf6468918e}} 
+\index{Serial@{Serial}!get\_port@{get\_port}}
+\index{get\_port@{get\_port}!Serial@{Serial}}
+\doxysubsubsection{\texorpdfstring{get\_port()}{get\_port()}}
+{\footnotesize\ttfamily const char $\ast$ Serial\+::get\+\_\+port (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get name of current serial port.
+
+\begin{DoxyReturn}{Returns}
+PORT \mbox{\hyperlink{class_serial}{Serial}} port name.
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_serial_a708b7835e206016b3b83c4991b2ce6f7}\label{class_serial_a708b7835e206016b3b83c4991b2ce6f7}} 
+\index{Serial@{Serial}!list\_ports@{list\_ports}}
+\index{list\_ports@{list\_ports}!Serial@{Serial}}
+\doxysubsubsection{\texorpdfstring{list\_ports()}{list\_ports()}}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::string $>$ Serial\+::list\+\_\+ports (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+List currently connected serial devices.
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000002}{Todo}}]Add a windows function here. \end{DoxyRefDesc}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000003}{Todo}}]Change linux method to match {\bfseries{APPLE}}. \end{DoxyRefDesc}
+\begin{DoxyReturn}{Returns}
+A list of serial devices that are available.
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_serial_a6309cfac342b0cc912ce708bf19b11b4}\label{class_serial_a6309cfac342b0cc912ce708bf19b11b4}} 
+\index{Serial@{Serial}!open\_port@{open\_port}}
+\index{open\_port@{open\_port}!Serial@{Serial}}
+\doxysubsubsection{\texorpdfstring{open\_port()}{open\_port()}}
+{\footnotesize\ttfamily int Serial\+::open\+\_\+port (\begin{DoxyParamCaption}\item[{const char $\ast$}]{port }\end{DoxyParamCaption})}
+
+Open specific serial port.
+
+
+\begin{DoxyParams}{Parameters}
+{\em PORT} & \mbox{\hyperlink{class_serial}{Serial}} port to open. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A const char$\ast$ to a serial port or 0 if unable to open device.
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_serial_ad227b391ca78d0a07014f2d0be36d961}\label{class_serial_ad227b391ca78d0a07014f2d0be36d961}} 
+\index{Serial@{Serial}!send@{send}}
+\index{send@{send}!Serial@{Serial}}
+\doxysubsubsection{\texorpdfstring{send()}{send()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void Serial\+::send (\begin{DoxyParamCaption}\item[{const char $\ast$}]{msg }\end{DoxyParamCaption})}
+
+Send message to microcontroller using preset PORT.
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & Message to be sent.\\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_serial_a96aced295b4cf76031d4f27dd7ee8124}\label{class_serial_a96aced295b4cf76031d4f27dd7ee8124}} 
+\index{Serial@{Serial}!send@{send}}
+\index{send@{send}!Serial@{Serial}}
+\doxysubsubsection{\texorpdfstring{send()}{send()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void Serial\+::send (\begin{DoxyParamCaption}\item[{const char $\ast$}]{port,  }\item[{const char $\ast$}]{msg }\end{DoxyParamCaption})}
+
+Send a message to the microcontroller.
+
+
+\begin{DoxyParams}{Parameters}
+{\em PORT} & \mbox{\hyperlink{class_serial}{Serial}} port to send the message to. \\
+\hline
+{\em msg} & Message to send to the device.\\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_serial_a9b9af713440f62d8267a8f94638b94ba}\label{class_serial_a9b9af713440f62d8267a8f94638b94ba}} 
+\index{Serial@{Serial}!set\_baudrate@{set\_baudrate}}
+\index{set\_baudrate@{set\_baudrate}!Serial@{Serial}}
+\doxysubsubsection{\texorpdfstring{set\_baudrate()}{set\_baudrate()}}
+{\footnotesize\ttfamily void Serial\+::set\+\_\+baudrate (\begin{DoxyParamCaption}\item[{int}]{rate }\end{DoxyParamCaption})}
+
+Set the baudrate of serial communications.
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/serial.\+h\item 
+src/serial.\+cpp\end{DoxyCompactItemize}

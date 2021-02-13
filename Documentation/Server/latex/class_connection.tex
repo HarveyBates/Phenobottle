@@ -1,0 +1,82 @@
+\hypertarget{class_connection}{}\doxysection{Connection Class Reference}
+\label{class_connection}\index{Connection@{Connection}}
+Inheritance diagram for Connection\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_connection}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_connection_aa06ffe02db06d3496dddd5d61e045145}\label{class_connection_aa06ffe02db06d3496dddd5d61e045145}} 
+typedef std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_connection}{Connection}} $>$ {\bfseries pointer}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+asio\+::ip\+::tcp\+::socket \& \mbox{\hyperlink{class_connection_ad1e07d2a90f7c073c0ff6e4ad77d13d1}{socket}} ()
+\item 
+void \mbox{\hyperlink{class_connection_a47c25a31352a71e2a6902d37fc5fa2ba}{start}} ()
+\item 
+char $\ast$ \mbox{\hyperlink{class_connection_ac5939396ca02aec5528ba781bca70fc5}{command}} (char $\ast$input)
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static pointer \mbox{\hyperlink{class_connection_a54541b4b10c40290e6c7a450eb57f40b}{create}} (asio\+::io\+\_\+context \&io\+\_\+context)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_connection_ac5939396ca02aec5528ba781bca70fc5}\label{class_connection_ac5939396ca02aec5528ba781bca70fc5}} 
+\index{Connection@{Connection}!command@{command}}
+\index{command@{command}!Connection@{Connection}}
+\doxysubsubsection{\texorpdfstring{command()}{command()}}
+{\footnotesize\ttfamily char $\ast$ Connection\+::command (\begin{DoxyParamCaption}\item[{char $\ast$}]{input }\end{DoxyParamCaption})}
+
+Recives command from client and stores it for future use. 
+\begin{DoxyParams}{Parameters}
+{\em input} & Input from client. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Command to be carried out by server (Phenobottle).
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_connection_a54541b4b10c40290e6c7a450eb57f40b}\label{class_connection_a54541b4b10c40290e6c7a450eb57f40b}} 
+\index{Connection@{Connection}!create@{create}}
+\index{create@{create}!Connection@{Connection}}
+\doxysubsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily pointer Connection\+::create (\begin{DoxyParamCaption}\item[{asio\+::io\+\_\+context \&}]{io\+\_\+context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Create new connection using a unique io\+\_\+context.
+
+
+\begin{DoxyParams}{Parameters}
+{\em io\+\_\+context} & Context for input output connections. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to a new connection with a unique io context.
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_connection_ad1e07d2a90f7c073c0ff6e4ad77d13d1}\label{class_connection_ad1e07d2a90f7c073c0ff6e4ad77d13d1}} 
+\index{Connection@{Connection}!socket@{socket}}
+\index{socket@{socket}!Connection@{Connection}}
+\doxysubsubsection{\texorpdfstring{socket()}{socket()}}
+{\footnotesize\ttfamily asio\+::ip\+::tcp\+::socket \& Connection\+::socket (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Creates a socket for a given io\+\_\+context. \begin{DoxyReturn}{Returns}
+Socket.
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_connection_a47c25a31352a71e2a6902d37fc5fa2ba}\label{class_connection_a47c25a31352a71e2a6902d37fc5fa2ba}} 
+\index{Connection@{Connection}!start@{start}}
+\index{start@{start}!Connection@{Connection}}
+\doxysubsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily void Connection\+::start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Start async function with a read() command that bounces between write function.
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/connection.\+h\item 
+src/connection.\+cpp\end{DoxyCompactItemize}

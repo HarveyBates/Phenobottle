@@ -13,7 +13,8 @@ int main(){
 		while(true){
 			if(wsCommand){
 				Serial serial;
-				serial.list_ports();
+				std::vector<std::string> ports = serial.list_ports();
+				serial.send(ports[0].c_str(), "T");
 				wsCommand = false;
 			}
 			using namespace std::chrono_literals;
