@@ -1,0 +1,54 @@
+\hypertarget{class_parser}{}\doxysection{Parser Class Reference}
+\label{class_parser}\index{Parser@{Parser}}
+
+
+{\ttfamily \#include $<$parser.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_parser_a3e61def6f4b279afdd93d1509c1e45ef}{lights}} (\mbox{\hyperlink{class_lights}{Lights}} lights, char $\ast$input)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Functions that parse incoming charater arrays into usable values.
+
+
+\begin{DoxyParams}{Parameters}
+{\em MAX\+\_\+\+INPUT\+\_\+\+SIZE} & Maximum size of char$\ast$ that can be processed by the serial port. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_parser_a3e61def6f4b279afdd93d1509c1e45ef}\label{class_parser_a3e61def6f4b279afdd93d1509c1e45ef}} 
+\index{Parser@{Parser}!lights@{lights}}
+\index{lights@{lights}!Parser@{Parser}}
+\doxysubsubsection{\texorpdfstring{lights()}{lights()}}
+{\footnotesize\ttfamily void Parser\+::lights (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_lights}{Lights}}}]{lights,  }\item[{char $\ast$}]{input }\end{DoxyParamCaption})}
+
+Takes a serial request to adjust the devices lights and preforms that request.
+
+This involes adjusting LED intensity and frequency of a defined color. For example\+:
+\begin{DoxyItemize}
+\item \char`\"{}\+LR\&\+I\+:50\char`\"{} converts to Light Red Intenisty\+: 50 bits
+\item \char`\"{}\+LR\&\+F\+:20000\char`\"{} converts to Light Red Frequency\+: 20000 Hz
+\item \char`\"{}\+LR\&\+I\+:50\&\+F\+:20000\char`\"{} converts to Light Red Intensity\+: 50 bits Frequency\+: 20000 Hz
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em lights} & lights to be adjusted \\
+\hline
+{\em input} & input character array \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000002}{Todo}}]convert intensity to percentage \end{DoxyRefDesc}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+parser.\+h\item 
+parser.\+cpp\end{DoxyCompactItemize}

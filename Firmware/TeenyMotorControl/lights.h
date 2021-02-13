@@ -15,6 +15,9 @@
 #define blueIN1 4
 #define blueIN2 5
 
+/**
+ * Functions that control the intensity and frequency of growth LED's.
+ */
 class Lights{
   int redIntensity = 0, greenIntensity = 0, blueIntensity = 0;
   int redFrequency = 20000, greenFrequency = 20000, blueFrequency = 20000;

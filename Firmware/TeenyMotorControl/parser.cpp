@@ -1,11 +1,20 @@
 #include "parser.h"
 
 void Parser::lights(Lights lights, char* input){
-  // Takes an input char* and converts it into values for turning on and off LED's
-  // Example input LR&I:50&F:20000 (Light Red Intensity:50 bits Frequency: 20000Hz
-  // TODO convert intensity to a percentage instead of bits
+  /**
+   * Takes a serial request to adjust the devices lights and preforms that request.
+   * 
+   * This involes adjusting LED intensity and frequency of a defined color.
+   * For example:
+   * - "LR&I:50" converts to Light Red Intenisty: 50 bits
+   * - "LR&F:20000" converts to Light Red Frequency: 20000 Hz
+   * - "LR&I:50&F:20000" converts to Light Red Intensity: 50 bits Frequency: 20000 Hz
+   * 
+   * @param lights lights to be adjusted
+   * @param input input character array
+   * @todo convert intensity to percentage
+   */
 
-  // Checks what color we want to control
   bool red = false, green = false, blue = false;
   switch(input[1]){
     case 'R':
