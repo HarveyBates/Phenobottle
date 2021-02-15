@@ -1,8 +1,17 @@
-cmake_minimum_required(VERSION "3.19.2")
+if(UNIX AND NOT APPLE)
+	cmake_minimum_required(VERSION "3.3.1")
+elseif(APPLE)
+	cmake_minimum_required(VERSION "3.19.2")
+endif()
 
-project("sockettest")
 
-find_package(nlohmann_json 3.2.0 REQUIRED)
+project("phenobottleserver")
+
+#find_package(nlohmann_json 3.2.0 REQUIRED)
+
+if(UNIX AND NOT APPLE)
+	find_package(Threads REQUIRED)
+endif()
 
 set(NAME_SRC
 	src/main.cpp
@@ -36,7 +45,13 @@ add_executable(${PROJECT_NAME} ${NAME_SRC} ${NAME_HEADERS})
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json ${OPENSSL_LIBRARIES})
+if(APPLE)
+	# Not sure but I think I can use the UNIX version here too
+	target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
+elseif(UNIX AND NOT APPLE)
+	target_link_libraries(${PROJECT_NAME} PRIVATE ${CMAKE_THREAD_LIBS_INIT} OpenSSL::SSL OpenSSL::Crypto)
+endif()	
+#target_link_libraries(${PROJECT_NAME} PRIVATE nlohmann_json::nlohmann_json ${OPENSSL_LIBRARIES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include /usr/local/Cellar/asio/1.18.1/include ${OPENSSL_INCLUDE_DIR})
 
