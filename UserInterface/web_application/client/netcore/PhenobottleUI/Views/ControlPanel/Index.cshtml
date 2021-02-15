@@ -144,7 +144,7 @@
 
         document.getElementById("refresh").onclick = function () {
             console.log("Attempting to connect...")
-            socket = new WebSocket("ws://localhost:443");
+            socket = new WebSocket("wss://192.168.0.102:443");
 
             socket.onopen = function (event) {
                 console.log("Connected")

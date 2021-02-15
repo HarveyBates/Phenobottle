@@ -1,8 +1,9 @@
 #include "serial.h"
 
+
 Serial::Serial(){
 	/**
-	 * Set attributes for serial device if a device is available. 
+	 * Set attributes for serial device if a single device is available. 
 	 * 
 	 * @todo Add serial constructor error handling for __WINDOWS__ machines.
 	 **/
@@ -10,16 +11,16 @@ Serial::Serial(){
 #if __linux__
 		configure(PORT);
 
-#elif __APPLE__
-		std::vector<std::string> ports = list_ports();
-		if(ports.size() == 1){
-			PORT = ports[0].c_str();
-			configure(PORT);
-		}
-		else{
-			std::cout << "[NOTE] More that one serial device found.\n"
-				"User must select a serial device before sending commands." << std::endl;
-		}
+//#elif __APPLE__
+//		std::vector<std::string> ports = list_ports();
+//		if(ports.size() == 1){
+//			PORT = ports[0].c_str();
+//			configure(PORT);
+//		}
+//		else{
+//			std::cout << "[NOTE] More that one serial device found.\n"
+//				"User must select a serial device before sending commands." << std::endl;
+//		}
 #endif
 	}
 	catch(...) {
@@ -28,13 +29,19 @@ Serial::Serial(){
 	}
 }
 
-void Serial::configure(const char * PORT){
+
+void Serial::configure(const char * port){
 	/**
 	 * Set attibutes for input ouput communications between serial device and machine.
 	 *
 	 * @param PORT Serial port to configure.
 	 **/
-	open_port(PORT); //Open port first
+	if(serial_port != 0){
+		close(serial_port);
+	}
+	
+	serial_port = open_port(port); //Open port first
+
 	/* 
 	 * The termios structure in the termios.h file contains the 
 	 * following fields:
@@ -72,7 +79,7 @@ void Serial::configure(const char * PORT){
 
 	// c_oflag - Ouput control modes
 	tty.c_oflag = 0; // Disable newline carrgage return 
-	tty.c_oflag &= ~OPOST; // Disable processing of output bytes
+	tty.c_oflag &= ~(OPOST | ONLCR | OCRNL); // Disable processing of output bytes
 
 	// c_cc - Special control characters
 	/*An important point to note is that VTIME means slightly different 
@@ -90,15 +97,16 @@ void Serial::configure(const char * PORT){
 	 * baud rates depending on the Teensy model used
 	 * Use B9600 if unsure
 	 */
-	 cfsetispeed(&tty, baudRate); // Set input baud rate
-	 cfsetospeed(&tty, baudRate); // Set output baud rate
+	 cfsetispeed(&tty, B115200); // Set input baud rate
+	 cfsetospeed(&tty, B115200); // Set output baud rate
 	 
 	 // Set tty attributes that we just specified
 	if(tcsetattr(serial_port, TCSANOW, &tty) != 0){
-		std::cout << "Error setting port attributes." << std::endl;
+		std::cout << "[ERROR]: Unable to set serial port attributes." << std::endl;
 	}
 	close_port();
 }
+
 
 int Serial::open_port(const char* port){
 	/**
@@ -107,17 +115,23 @@ int Serial::open_port(const char* port){
 	 * @param PORT Serial port to open.
 	 * @returns A const char* to a serial port or 0 if unable to open device.
 	 **/
-	PORT = port;
-	serial_port = open(PORT, O_RDWR);
-	if (serial_port){
-		std::cout << "[OPEN] Port:" << PORT << std::endl;
-		return serial_port;
+	if(serial_port == 0){
+		serial_port = open(port, (O_RDWR | O_NOCTTY | O_NDELAY));
+		if (serial_port){
+			std::cout << "[OPEN] Port: " << port << std::endl;
+			return serial_port;
+		}
+		else{
+			std::cout << "[ERROR] Unable to open serial port: " << PORT << std::endl;
+			return 0;
+		}	
 	}
-	else{
-		std::cout << "[ERROR] Unable to open serial port: " << PORT << std::endl;
-		return 0;
+	else { 
+		std::cout << "[OPEN]: Serial port already open" << std::endl;
+		return serial_port; 
 	}
 }
+
 
 const char* Serial::get_port(){
 	/**
@@ -128,6 +142,7 @@ const char* Serial::get_port(){
 	return PORT;
 }
 
+
 int Serial::get_baudrate(){
 	/**
 	 * Get the current baudrate of serial communications.
@@ -136,12 +151,14 @@ int Serial::get_baudrate(){
 	return baudRate;
 }
 
+
 void Serial::set_baudrate(int rate){
 	/**
 	 * Set the baudrate of serial communications.
-	 **/ 
+	 **/
 	baudRate = rate;
 }
+
 
 void Serial::send(const char* msg){
 	/**
@@ -150,10 +167,16 @@ void Serial::send(const char* msg){
 	 * @param msg Message to be sent.
 	 **/ 
 	serial_port = open_port(PORT);
-	write(serial_port, msg, strlen(msg));
-	std::cout << "[SEND]: " << msg << std::endl;
-	close_port();
+	if(serial_port){	
+		write(serial_port, msg, strlen(msg));
+		std::cout << "[SEND]: " << msg << std::endl;
+		close_port();
+	}
+	else{
+		std::cout << "[ERROR]: Unable to send command to serial device" << std::endl;
+	}
 }
+
 
 void Serial::send(const char * port, const char* msg){
 	/**
@@ -162,10 +185,40 @@ void Serial::send(const char * port, const char* msg){
 	 * @param PORT Serial port to send the message to.
 	 * @param msg Message to send to the device. 
 	 **/
-	serial_port = open_port(port);
-	write(serial_port, msg, strlen(msg));
-	std::cout << "[SEND]: " << msg << std::endl;
-	close_port();
+	serial_port = open_port(PORT);
+	if(serial_port){
+		const char* testMsg = "LR&I:50";
+		ssize_t numBytesSent = write(serial_port, testMsg, sizeof(testMsg));
+		std::cout << "[ID]: " << serial_port << std::endl;
+		std::cout << "[MESSAGE]: " << testMsg << std::endl;
+		std::cout << "Message size: " << sizeof(testMsg) << std::endl;
+		if(numBytesSent > 0){	
+			std::cout << "[SEND]: " << testMsg << " Number of Bytes: " << numBytesSent << std::endl;
+		}
+		else{
+			std::cout << "[ERROR]: Device found, but there was an error "
+				"sending command to serial device." << std::endl;
+		}
+		close_port();
+	}
+	else{
+		std::cout << "[ERROR]: Unable to send command to serial device" << std::endl;
+	}
+}
+
+void Serial::recieve(){
+	if(serial_port != 0){
+		int pos = 0;
+		char buffer[MAX_READ_SIZE];
+		while(pos < MAX_READ_SIZE){
+			read(serial_port, &buffer + pos, 1);
+			if(buffer[pos] == '\n'){
+				break;
+			}
+			pos++;
+		}
+		std::cout << "[RECIEVED]: " << buffer << std::endl;
+	}
 }
 
 void Serial::close_port(){
@@ -177,6 +230,7 @@ void Serial::close_port(){
 		std::cout << "[ERROR] Failed to close serial port." << std::endl;
 	}
 	else{
+		serial_port = 0;
 		std::cout << "[CLOSED] Serial Port." << std::endl;
 	}
 }
@@ -200,11 +254,10 @@ std::vector<std::string> Serial::list_ports(){
 		std::string tty = "/dev/tty.";
 		std::string cu = "/dev/cu.";
 		if(std::string(entry.path()).std::string::find(tty) != std::string::npos && 
-			std::string(entry.path()).std::string::find("Bluetooth") == std::string::npos){
-			
-			std::cout << "[FOUND] Port: " << entry.path() << std::endl;
+			std::string(entry.path()).std::string::find("Bluetooth") == std::string::npos){	
 			auto prt = open(entry.path().c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 			if(prt){
+				std::cout << "[FOUND] Port: " << entry.path() << std::endl;
 				ports.push_back(entry.path());
 				auto retVal = close(prt);
 				if(retVal != 0){
@@ -249,12 +302,4 @@ std::vector<std::string> Serial::list_ports(){
 
 	return ports;
 }
-
-
-
-
-
-
-
-
 

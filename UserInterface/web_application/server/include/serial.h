@@ -15,11 +15,12 @@
  * Serial functions for communicating between microcontroller and machine.
  **/ 
 class Serial{
-	const char* PORT = "tty/ACM0";
-	int serial_port;
+	const char* PORT = "/dev/tty.usbmodem81500001";
+	int serial_port = 0;
+	int MAX_READ_SIZE = 20;
 	int baudRate = 115200;
-	int vTime = 10;
-	int vMin = 1;
+	int vTime = 1;
+	int vMin = 0;
 public:
 	Serial();
 	void configure(const char * port);
@@ -29,6 +30,7 @@ public:
 	
 	void send(const char* msg);
 	void send(const char * port, const char* msg);
+	void recieve();
 	
 	void set_baudrate(int rate);
 	int get_baudrate();
