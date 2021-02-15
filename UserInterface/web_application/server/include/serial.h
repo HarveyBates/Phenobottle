@@ -15,7 +15,11 @@
  * Serial functions for communicating between microcontroller and machine.
  **/ 
 class Serial{
+#if __APPLE__
 	const char* PORT = "/dev/tty.usbmodem81500001";
+#elif __linux__
+	const char* PORT = "/tty/ACM0";
+#endif
 	int serial_port = 0;
 	int MAX_READ_SIZE = 20;
 	int baudRate = 115200;
