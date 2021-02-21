@@ -8,19 +8,14 @@ Serial::Serial(){
 	 * @todo Add serial constructor error handling for __WINDOWS__ machines.
 	 **/
 	try{
-#if __linux__
+#if __linux__		
 		configure(PORT);
 
-//#elif __APPLE__
-//		std::vector<std::string> ports = list_ports();
-//		if(ports.size() == 1){
-//			PORT = ports[0].c_str();
-//			configure(PORT);
-//		}
-//		else{
-//			std::cout << "[NOTE] More that one serial device found.\n"
-//				"User must select a serial device before sending commands." << std::endl;
-//		}
+#elif __APPLE__
+		configure(PORT);
+#elif __WINDOWS__
+		configure(PORT);
+	}
 #endif
 	}
 	catch(...) {
@@ -33,6 +28,14 @@ Serial::Serial(){
 void Serial::configure(const char * port){
 	/**
 	 * Set attibutes for input ouput communications between serial device and machine.
+	 * 
+	 * The termios structure in the termios.h file contains the 
+	 * following fields:
+	 * 	c_iflag - Terminal input control
+	 * 	c_oflag - System output control
+	 * 	c_cflag - Hardware control of terminal (Control modes)
+	 * 	c_lflag - Terminal functions
+	 * 	c_cc    - Special control characters
 	 *
 	 * @param PORT Serial port to configure.
 	 **/
@@ -42,15 +45,6 @@ void Serial::configure(const char * port){
 	
 	serial_port = open_port(port); //Open port first
 
-	/* 
-	 * The termios structure in the termios.h file contains the 
-	 * following fields:
-	 * 	c_iflag - Terminal input control
-	 * 	c_oflag - System output control
-	 * 	c_cflag - Hardware control of terminal (Control modes)
-	 * 	c_lflag - Terminal functions
-	 * 	c_cc    - Special control characters
-	 * */
 	struct termios tty;
 
 	// Get tty attributes
@@ -169,11 +163,11 @@ void Serial::send(const char* msg){
 	serial_port = open_port(PORT);
 	if(serial_port){	
 		write(serial_port, msg, strlen(msg));
-		std::cout << "[SEND]: " << msg << std::endl;
+		std::cout << "[SEND]: " << msg << " [BYTES]: " << strlen(msg) << std::endl;
 		close_port();
 	}
 	else{
-		std::cout << "[ERROR]: Unable to send command to serial device" << std::endl;
+		std::cout << "[ERROR]: Unable to send command to serial devicei." << std::endl;
 	}
 }
 
@@ -187,24 +181,15 @@ void Serial::send(const char * port, const char* msg){
 	 **/
 	serial_port = open_port(PORT);
 	if(serial_port){
-		const char* testMsg = "LR&I:50";
-		ssize_t numBytesSent = write(serial_port, testMsg, sizeof(testMsg));
-		std::cout << "[ID]: " << serial_port << std::endl;
-		std::cout << "[MESSAGE]: " << testMsg << std::endl;
-		std::cout << "Message size: " << sizeof(testMsg) << std::endl;
-		if(numBytesSent > 0){	
-			std::cout << "[SEND]: " << testMsg << " Number of Bytes: " << numBytesSent << std::endl;
-		}
-		else{
-			std::cout << "[ERROR]: Device found, but there was an error "
-				"sending command to serial device." << std::endl;
-		}
+		write(serial_port, msg, strlen(msg));
+		std::cout << "[SEND]: " << msg << "[BYTES]: " << strlen(msg) << std::endl;
 		close_port();
 	}
 	else{
-		std::cout << "[ERROR]: Unable to send command to serial device" << std::endl;
+		std::cout << "[ERROR]: Unable to send command to serial device." << std::endl;
 	}
 }
+
 
 void Serial::recieve(){
 	if(serial_port != 0){
@@ -220,6 +205,7 @@ void Serial::recieve(){
 		std::cout << "[RECIEVED]: " << buffer << std::endl;
 	}
 }
+
 
 void Serial::close_port(){
 	/**

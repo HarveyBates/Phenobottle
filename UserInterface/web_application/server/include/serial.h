@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <vector>
+#include <cstring>
 #include <string>
 #include <filesystem>
 
@@ -18,7 +19,9 @@ class Serial{
 #if __APPLE__
 	const char* PORT = "/dev/tty.usbmodem81500001";
 #elif __linux__
-	const char* PORT = "/tty/ACM0";
+	const char* PORT = "/dev/ttyACM0";
+#elif __WINDOWS__
+	const char* PORT = "COM1";
 #endif
 	int serial_port = 0;
 	int MAX_READ_SIZE = 20;

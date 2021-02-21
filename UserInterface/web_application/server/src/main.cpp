@@ -3,12 +3,10 @@
 bool wsCommand = false;
 
 Serial serial;
+Communications comms;
 
 int main(){ 
-//	std::vector<std::string> ports = serial.list_ports();
-	serial.configure("/dev/tty.usbmodem81500001");
-//	serial.open_port("/dev/tty.usbmodem81500001");
-	serial.send("/dev/tty.usbmodem81500001", "LB&I:50&F:20000");
+	serial.send("LG&I:100&F:20000");
 	try{
 		asio::io_context io_context;
 		Server server(io_context);
@@ -17,7 +15,9 @@ int main(){
 				});
 		while(true){
 			if(wsCommand){
-			wsCommand = false;
+				std::cout << "Getting command: " << comms.get_command() << std::endl;
+				serial.send(comms.get_command());
+				wsCommand = false;
 			}
 			using namespace std::chrono_literals;
 			std::this_thread::sleep_for(1ms);

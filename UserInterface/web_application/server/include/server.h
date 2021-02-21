@@ -22,7 +22,6 @@ public:
 
 private:
 	void start_accept();
-
 	void handle_accept(Connection::pointer new_connection, 
 			const asio::error_code& error);
 

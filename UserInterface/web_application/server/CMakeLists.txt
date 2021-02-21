@@ -14,6 +14,7 @@ set(NAME_SRC
 	src/main.cpp
     src/server.cpp
     src/connection.cpp
+	src/communications.cpp
 	src/serial.cpp)
 
 set(NAME_HEADERS
@@ -22,6 +23,7 @@ set(NAME_HEADERS
     include/server.h
     include/connection.h
 	include/crypto.hpp
+	include/communications.h
 	include/serial.h)
 
 set(EXECUTABLE_OUTPUT_PATH

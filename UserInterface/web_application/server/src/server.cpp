@@ -7,7 +7,6 @@
  */
 Server::Server(asio::io_context& io_context) : io_context_(io_context), 
 	acceptor_(io_context, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), PORT)){
-	
 	start_accept();
 }
 

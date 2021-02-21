@@ -4,17 +4,25 @@ extern bool wsCommand;
 
 /** Shared pointer to keep connection between client and server while
  * async functions are running **/
-typedef std::shared_ptr<Connection> pointer;
+typedef std::shared_ptr<Connection> client;
 
-pointer Connection::create(asio::io_context& io_context){
+Connection::~Connection(){
+	std::cout << "[SHUTDOWN]: Server has been shutdown." << std::endl;
+	socket_.shutdown(asio::ip::tcp::socket::shutdown_both);
+	socket_.close();
+}
+
+
+client Connection::create(asio::io_context& io_context){
 	/** 
 	 * Create new connection using a unique io_context.
 	 *
 	 * @param io_context Context for input output connections.
 	 * @returns A pointer to a new connection with a unique io context.
 	 **/
-	return pointer(new Connection(io_context));
+	return client(new Connection(io_context));
 }
+
 
 asio::ip::tcp::socket& Connection::socket(){
 	/**
@@ -23,7 +31,8 @@ asio::ip::tcp::socket& Connection::socket(){
 	 **/
 	return socket_;
 }
-	
+
+
 void Connection::start(){
 	/**
 	 * Start async function with a read() command that bounces between 
@@ -31,25 +40,18 @@ void Connection::start(){
 	do_read();
 }
 
+
 /* Connection constructor with a socket */
 Connection::Connection(asio::io_context& io_context) : socket_(io_context){
 
 }
+
 
 /* [Reminder] I'm pretty sure I dont need this funciton */
 void Connection::handle_write(const asio::error_code& /*error*/,
 		size_t /*bytes_transferred*/){
 }
 
-char* Connection::command(char* input){
-	/**
-	 * Recives command from client and stores it for future use.
-	 * @param input Input from client.
-	 * @returns Command to be carried out by server (Phenobottle).
-	 **/
-	char* command = input;
-	return command;
-}
 
 void Connection::xor_decrypt(char* inBuffer){
 	/**
@@ -127,7 +129,7 @@ void Connection::xor_decrypt(char* inBuffer){
 			}
 		}
 		std::cout << "Output buffer: " << outBuffer << std::endl;
-		command(outBuffer);
+		Communications::set_command(std::string(outBuffer));
 		wsCommand = true;
 	}
 }
@@ -143,7 +145,13 @@ void Connection::do_read(){
 	/* Read incoming data */
 	socket_.async_read_some(asio::buffer(_data, max_length), 
 			[this, self](std::error_code err, std::size_t length){
-		if(!err){
+		
+		if((asio::error::eof == err) || (asio::error::connection_reset == err)){
+			std::cout << "[DISCONNECTED]: Client has disconnected." << std::endl;
+			handshake = false;
+		}
+
+		else{
 			// Store data as a char for deryption
 			char* inBuffer = _data;
 
@@ -169,7 +177,7 @@ void Connection::do_write(){
 	std::string tmp(_data); // Convert to string to do std functions.
 	std::string response;
 		
-	// Debug: std::cout << SimpleWeb::Crypto::Base64::decode(response) << std::endl;
+//	std::cout << SimpleWeb::Crypto::Base64::decode(response) << std::endl;
 	
 	/* Check to see if the message from the client is a connection request
 	 * containing a websocket key */
