@@ -14,4 +14,3 @@
 #include "server.h"
 #include "serial.h"
 #include "constants.h"
-#include "communications.h"

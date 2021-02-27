@@ -1,12 +1,11 @@
 #include "main.h"
 
 bool wsCommand = false;
+const char* serialCommand;
 
 Serial serial;
-Communications comms;
 
 int main(){ 
-	serial.send("LG&I:100&F:20000");
 	try{
 		asio::io_context io_context;
 		Server server(io_context);
@@ -15,8 +14,7 @@ int main(){
 				});
 		while(true){
 			if(wsCommand){
-				std::cout << "Getting command: " << comms.get_command() << std::endl;
-				serial.send(comms.get_command());
+				serial.send(serialCommand);
 				wsCommand = false;
 			}
 			using namespace std::chrono_literals;

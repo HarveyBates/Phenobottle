@@ -1,6 +1,5 @@
 #include "connection.h"
 
-extern bool wsCommand;
 
 /** Shared pointer to keep connection between client and server while
  * async functions are running **/
@@ -128,8 +127,8 @@ void Connection::xor_decrypt(char* inBuffer){
 				outBuffer[i] = inBuffer[arrPos] ^ mask[i % 4];
 			}
 		}
-		std::cout << "Output buffer: " << outBuffer << std::endl;
-		Communications::set_command(std::string(outBuffer));
+		std::cout << "[COMMAND]: " << outBuffer << std::endl;
+		set_serial_command(outBuffer);
 		wsCommand = true;
 	}
 }
@@ -214,3 +213,8 @@ void Connection::do_write(){
 		}
 	});
 }
+
+void Connection::set_serial_command(char* cmd){
+	serialCommand = cmd;
+}
+
