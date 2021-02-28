@@ -1,7 +1,7 @@
 #include "main.h"
 
 bool wsCommand = false;
-const char* serialCommand;
+char* serialCommand;
 
 Serial serial;
 

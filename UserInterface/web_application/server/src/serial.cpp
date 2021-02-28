@@ -42,39 +42,31 @@ void Serial::configure(const char * port){
 	if(serial_port != 0){
 		close(serial_port);
 	}
-	
 	serial_port = open_port(port); //Open port first
-
 	struct termios tty;
-
 	// Get tty attributes
 	if(tcgetattr(serial_port, &tty) != 0){
 		std::cout << "Error" << std::endl;
 	}
-
 	// c_cflag - Hardware control modes
 	tty.c_cflag &= ~PARENB; // Clear parity bit (disable)
 	tty.c_cflag &= ~CSTOPB; // Clear stop field (one bit to stop comms)
 	tty.c_cflag |= CS8; // Bits per byte (8-bits)
 	tty.c_cflag &= ~CRTSCTS; // Disable hardare flow
 	tty.c_cflag |= CREAD | CLOCAL; // Enable READ and ignore ctrl lines
-
 	// c_lflag - Terminal functions
 	tty.c_lflag &= ~ICANON; // Disable new line proccessing
 	tty.c_lflag &= ~ECHO; // Disable echo
 	tty.c_lflag &= ~ECHOE; // Disable erasure
 	tty.c_lflag &= ~ECHONL; // Disable new-line echo
 	tty.c_lflag &= ~ISIG; // Disable signal interpretation
-
 	// c_iflag - Disable software control
 	tty.c_iflag &= ~(IXON | IXOFF | IXANY); // Disable flow control
 	tty.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL); 
 	// Disable any automatic processing of received bytes
-
 	// c_oflag - Ouput control modes
 	tty.c_oflag = 0; // Disable newline carrgage return 
 	tty.c_oflag &= ~(OPOST | ONLCR | OCRNL); // Disable processing of output bytes
-
 	// c_cc - Special control characters
 	/*An important point to note is that VTIME means slightly different 
 	 * things depending on what VMIN is. When VMIN is 0, VTIME 
@@ -85,7 +77,6 @@ void Serial::configure(const char * port){
 	 // May need to change VTIME up if bytes are clipped
 	 tty.c_cc[VTIME] = vTime; // Wait for 10*100ms 
 	 tty.c_cc[VMIN] = vMin;
-	 
 	/*
 	 * See https://www.pjrc.com/teensy/td_uart.html for suitable 
 	 * baud rates depending on the Teensy model used
@@ -93,7 +84,6 @@ void Serial::configure(const char * port){
 	 */
 	 cfsetispeed(&tty, B115200); // Set input baud rate
 	 cfsetospeed(&tty, B115200); // Set output baud rate
-	 
 	 // Set tty attributes that we just specified
 	if(tcsetattr(serial_port, TCSANOW, &tty) != 0){
 		std::cout << "[ERROR]: Unable to set serial port attributes." << std::endl;
@@ -154,25 +144,35 @@ void Serial::set_baudrate(int rate){
 }
 
 
-void Serial::send(const char* msg){
+void Serial::send(char* msg){
 	/**
 	 * Send message to microcontroller using preset PORT.
 	 *
 	 * @param msg Message to be sent.
 	 **/ 
 	serial_port = open_port(PORT);
-	if(serial_port){	
-		write(serial_port, msg, strlen(msg));
-		std::cout << "[SEND]: " << msg << " [BYTES]: " << strlen(msg) << std::endl;
-		close_port();
+	if(serial_port){
+		if(msg[0] == 'R'){
+			// Read request in message (ie. R>... = Response > Command)
+			char* modMsg = std::strtok(msg, ">");
+			modMsg = std::strtok(NULL, ">"); // Get second part of input msg
+			std::cout << "[SEND]: " << modMsg << std::endl;
+			write(serial_port, modMsg, sizeof(modMsg));
+			recieve();
+		}
+		else{
+			write(serial_port, msg, strlen(msg));
+			std::cout << "[SEND]: " << msg << "[BYTES]: " << strlen(msg) << std::endl;
+		}	
+		close_port();	
 	}
 	else{
-		std::cout << "[ERROR]: Unable to send command to serial devicei." << std::endl;
+		std::cout << "[ERROR]: Unable to send command to serial device." << std::endl;
 	}
 }
 
 
-void Serial::send(const char * port, const char* msg){
+void Serial::send(const char * port, char* msg){
 	/**
 	 * Send a message to the microcontroller. 
 	 *
@@ -181,8 +181,19 @@ void Serial::send(const char * port, const char* msg){
 	 **/
 	serial_port = open_port(PORT);
 	if(serial_port){
-		write(serial_port, msg, strlen(msg));
-		std::cout << "[SEND]: " << msg << "[BYTES]: " << strlen(msg) << std::endl;
+		if(msg[0] == 'R'){
+			// Read request in message
+			char buffer[256];
+			char* modMsg = std::strtok(msg, ">");
+			modMsg = std::strtok(NULL, ">");
+			write(serial_port, modMsg, sizeof(modMsg));
+			double response = read(serial_port, &buffer, sizeof(buffer));
+			std::cout << response << std::endl;
+		}
+		else{
+			write(serial_port, msg, strlen(msg));
+			std::cout << "[SEND]: " << msg << "[BYTES]: " << strlen(msg) << std::endl;
+		}
 		close_port();
 	}
 	else{
@@ -191,18 +202,24 @@ void Serial::send(const char * port, const char* msg){
 }
 
 
-void Serial::recieve(){
-	if(serial_port != 0){
+std::string Serial::recieve(){
+	if(serial_port){
+		std::this_thread::sleep_for(std::chrono::seconds(2)); // Wait for microcontroller to read
+		int n = 0;
 		int pos = 0;
-		char buffer[MAX_READ_SIZE];
-		while(pos < MAX_READ_SIZE){
-			read(serial_port, &buffer + pos, 1);
-			if(buffer[pos] == '\n'){
-				break;
-			}
-			pos++;
-		}
-		std::cout << "[RECIEVED]: " << buffer << std::endl;
+		char buf = '\0';
+		char response[MAX_READ_SIZE];
+		do{
+			n = read(serial_port, &buf, 1);
+			sprintf(&response[pos], "%c", buf);
+			pos += n;
+		} while(buf != '\r' && n > 0);
+		std::cout << "[RECIEVED]: " << response << std::endl;
+		return std::string(response);
+	}
+	else{
+		std::cout << "[ERROR]: No serial device avaliable." << std::endl;
+		return NULL;
 	}
 }
 

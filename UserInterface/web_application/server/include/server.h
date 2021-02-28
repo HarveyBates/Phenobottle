@@ -19,7 +19,7 @@ const unsigned short PORT = 443;
 class Server{
 public:
 	Server(asio::io_context& io_context);
-
+	~Server();
 private:
 	void start_accept();
 	void handle_accept(Connection::pointer new_connection, 

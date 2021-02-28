@@ -10,6 +10,12 @@ Server::Server(asio::io_context& io_context) : io_context_(io_context),
 	start_accept();
 }
 
+Server::~Server(){
+	// todo at the moment this is never called
+	std::cout << "[STOP]: Server" << std::endl;
+	io_context_.stop();
+}
+
 
 /* Async connection request function with a shared pointer for each unique connection.
  * std::placeholders::_1 represents the non-boost version of asio's

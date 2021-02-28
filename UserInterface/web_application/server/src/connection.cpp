@@ -6,8 +6,11 @@
 typedef std::shared_ptr<Connection> client;
 
 Connection::~Connection(){
-	std::cout << "[SHUTDOWN]: Server has been shutdown." << std::endl;
-	socket_.shutdown(asio::ip::tcp::socket::shutdown_both);
+	/**
+	 * Disconnects open socket.
+	 **/
+	std::error_code ec;
+	socket_.shutdown(asio::ip::tcp::socket::shutdown_both, ec);
 	socket_.close();
 }
 

@@ -10,7 +10,8 @@
 #include <cstring>
 #include <string>
 #include <filesystem>
-
+#include <chrono>
+#include <thread>
 
 /**
  * Serial functions for communicating between microcontroller and machine.
@@ -24,10 +25,10 @@ class Serial{
 	const char* PORT = "COM1";
 #endif
 	int serial_port = 0;
-	int MAX_READ_SIZE = 20;
+	int MAX_READ_SIZE = 1024;
 	int baudRate = 115200;
-	int vTime = 1;
-	int vMin = 0;
+	int vTime = 10;
+	int vMin = 1;
 public:
 	Serial();
 	void configure(const char * port);
@@ -35,9 +36,9 @@ public:
 	int open_port(const char* port);
 	void close_port();
 	
-	void send(const char* msg);
-	void send(const char * port, const char* msg);
-	void recieve();
+	void send(char* msg);
+	void send(const char * port, char* msg);
+	std::string recieve();
 	
 	void set_baudrate(int rate);
 	int get_baudrate();

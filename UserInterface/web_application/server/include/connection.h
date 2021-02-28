@@ -15,7 +15,7 @@
 extern bool wsCommand;
 
 /* Serial command for microcontroller */
-extern const char* serialCommand;
+extern char* serialCommand;
 
 /* Max payload size in bytes */
 const std::size_t max_length = 4096;
