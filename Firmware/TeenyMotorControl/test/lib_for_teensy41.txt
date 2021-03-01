@@ -1,0 +1,1 @@
+https://github.com/ARM-software/CMSIS/raw/master/CMSIS/Lib/GCC/libarm_cortexM7lfsp_math.a

@@ -13,6 +13,7 @@ void setup() {
   
   lights.on("Green", 100);
   lights.on("Red", 100);
+  lights.on("Blue", 100);
 
   pinMode(13, OUTPUT);
 }
