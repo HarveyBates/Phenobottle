@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP MBR120VLSFT1G
+D Diode Schottky 20V 1A SOD123FL ON Semi MBR120VLSFT1G, SMT Schottky Diode, 20V 1A, 2-Pin SOD-123FL
+K
+F http://www.onsemi.com/pub/Collateral/MBR120VLSFT1-D.PDF
+$ENDCMP
+#
+#End Doc Library

@@ -1,0 +1,289 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr USLetter 11000 8500
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L LED-Array-rescue:B2B-XH-A(LF)(SN)-B2B-XH-A_LF__SN_(JST) J1
+U 1 1 5F7BAAC4
+P 1850 900
+F 0 "J1" H 2080 896 50  0000 L CNN
+F 1 "B2B-XH-A(LF)(SN)" H 2080 805 50  0000 L CNN
+F 2 "Additional-parts:JST_B2B-PH-K-S(LF)(SN)" H 1850 900 50  0001 L BNN
+F 3 "Manufacturer Recommendations" H 1850 900 50  0001 L BNN
+F 4 "JST" H 1850 900 50  0001 L BNN "Field4"
+F 5 "N/A" H 1850 900 50  0001 L BNN "Field5"
+	1    1850 900 
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED-Array-rescue:B2B-XH-A(LF)(SN)-B2B-XH-A_LF__SN_(JST) J2
+U 1 1 5F7BB129
+P 1850 1350
+F 0 "J2" H 2080 1346 50  0000 L CNN
+F 1 "B2B-XH-A(LF)(SN)" H 2080 1255 50  0000 L CNN
+F 2 "Additional-parts:JST_B2B-PH-K-S(LF)(SN)" H 1850 1350 50  0001 L BNN
+F 3 "Manufacturer Recommendations" H 1850 1350 50  0001 L BNN
+F 4 "JST" H 1850 1350 50  0001 L BNN "Field4"
+F 5 "N/A" H 1850 1350 50  0001 L BNN "Field5"
+	1    1850 1350
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED-Array-rescue:B2B-XH-A(LF)(SN)-B2B-XH-A_LF__SN_(JST) J3
+U 1 1 5F7BB512
+P 1850 1800
+F 0 "J3" H 2080 1796 50  0000 L CNN
+F 1 "B2B-XH-A(LF)(SN)" H 2080 1705 50  0000 L CNN
+F 2 "Additional-parts:JST_B2B-PH-K-S(LF)(SN)" H 1850 1800 50  0001 L BNN
+F 3 "Manufacturer Recommendations" H 1850 1800 50  0001 L BNN
+F 4 "JST" H 1850 1800 50  0001 L BNN "Field4"
+F 5 "N/A" H 1850 1800 50  0001 L BNN "Field5"
+	1    1850 1800
+	1    0    0    -1  
+$EndComp
+Text Label 1450 1800 2    50   ~ 0
+Blue12VPWM
+Text Label 1450 1350 2    50   ~ 0
+Green12VPWM
+Text Label 1450 900  2    50   ~ 0
+Red12VPWM
+$Comp
+L LED-Array-rescue:GND-power #PWR0104
+U 1 1 5F7CAD99
+P 1450 1900
+F 0 "#PWR0104" H 1450 1650 50  0001 C CNN
+F 1 "GND" H 1455 1727 50  0000 C CNN
+F 2 "" H 1450 1900 50  0001 C CNN
+F 3 "" H 1450 1900 50  0001 C CNN
+	1    1450 1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED-Array-rescue:GND-power #PWR0105
+U 1 1 5F7CB2D6
+P 1450 1450
+F 0 "#PWR0105" H 1450 1200 50  0001 C CNN
+F 1 "GND" H 1455 1277 50  0000 C CNN
+F 2 "" H 1450 1450 50  0001 C CNN
+F 3 "" H 1450 1450 50  0001 C CNN
+	1    1450 1450
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED-Array-rescue:GND-power #PWR0106
+U 1 1 5F7CB5DF
+P 1450 1000
+F 0 "#PWR0106" H 1450 750 50  0001 C CNN
+F 1 "GND" H 1455 827 50  0000 C CNN
+F 2 "" H 1450 1000 50  0001 C CNN
+F 3 "" H 1450 1000 50  0001 C CNN
+	1    1450 1000
+	1    0    0    -1  
+$EndComp
+Text Notes 1550 700  0    50   ~ 0
+LED PWM Inputs
+$Comp
+L LED-Array-rescue:LED_RGB-Device D3
+U 1 1 5F7FBB17
+P 2650 2950
+F 0 "D3" H 2650 2483 50  0000 C CNN
+F 1 "LED_RGB" H 2650 2574 50  0000 C CNN
+F 2 "AdditionalPartLibraries:RGB-5050-LED" H 2650 2900 50  0001 C CNN
+F 3 "~" H 2650 2900 50  0001 C CNN
+	1    2650 2950
+	-1   0    0    1   
+$EndComp
+$Comp
+L LED-Array-rescue:GND-power #PWR0107
+U 1 1 5F7FCB05
+P 4600 3000
+F 0 "#PWR0107" H 4600 2750 50  0001 C CNN
+F 1 "GND" H 4605 2827 50  0000 C CNN
+F 2 "" H 4600 3000 50  0001 C CNN
+F 3 "" H 4600 3000 50  0001 C CNN
+	1    4600 3000
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED-Array-rescue:LED_RGB-Device D2
+U 1 1 5F7FDB11
+P 1800 2950
+F 0 "D2" H 1800 2483 50  0000 C CNN
+F 1 "LED_RGB" H 1800 2574 50  0000 C CNN
+F 2 "AdditionalPartLibraries:RGB-5050-LED" H 1800 2900 50  0001 C CNN
+F 3 "~" H 1800 2900 50  0001 C CNN
+	1    1800 2950
+	-1   0    0    1   
+$EndComp
+Text Label 1600 2750 2    50   ~ 0
+Blue12VPWM
+Text Label 1600 2950 2    50   ~ 0
+Green12VPWM
+Text Label 1600 3150 2    50   ~ 0
+Red12VPWM
+Wire Wire Line
+	2000 2750 2450 2750
+Wire Wire Line
+	2850 2750 3250 2750
+Wire Wire Line
+	2850 2950 3250 2950
+Wire Wire Line
+	2450 2950 2000 2950
+Wire Wire Line
+	2000 3150 2450 3150
+Wire Wire Line
+	2850 3150 3250 3150
+$Comp
+L LED-Array-rescue:LED_RGB-Device D4
+U 1 1 5F7FCAFF
+P 3450 2950
+F 0 "D4" H 3450 2483 50  0000 C CNN
+F 1 "LED_RGB" H 3450 2574 50  0000 C CNN
+F 2 "AdditionalPartLibraries:RGB-5050-LED" H 3450 2900 50  0001 C CNN
+F 3 "~" H 3450 2900 50  0001 C CNN
+	1    3450 2950
+	-1   0    0    1   
+$EndComp
+$Comp
+L LED-Array-rescue:R-Device R4
+U 1 1 5F80269B
+P 3950 2750
+F 0 "R4" H 4020 2796 50  0000 L CNN
+F 1 "150" H 4020 2705 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" V 3880 2750 50  0001 C CNN
+F 3 "~" H 3950 2750 50  0001 C CNN
+	1    3950 2750
+	0    1    1    0   
+$EndComp
+$Comp
+L LED-Array-rescue:R-Device R5
+U 1 1 5F802C64
+P 3950 2950
+F 0 "R5" H 4020 2996 50  0000 L CNN
+F 1 "150" H 4020 2905 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 3880 2950 50  0001 C CNN
+F 3 "~" H 3950 2950 50  0001 C CNN
+	1    3950 2950
+	0    1    1    0   
+$EndComp
+$Comp
+L LED-Array-rescue:R-Device R6
+U 1 1 5F802F01
+P 3950 3150
+F 0 "R6" H 4020 3196 50  0000 L CNN
+F 1 "300" H 4020 3105 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.15x1.40mm_HandSolder" V 3880 3150 50  0001 C CNN
+F 3 "~" H 3950 3150 50  0001 C CNN
+	1    3950 3150
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4100 2750 4100 2950
+Connection ~ 4100 2950
+Wire Wire Line
+	4100 2950 4100 3150
+Wire Wire Line
+	4100 2950 4600 2950
+Wire Wire Line
+	4600 2950 4600 3000
+Wire Wire Line
+	3650 2750 3800 2750
+Wire Wire Line
+	3650 2950 3800 2950
+Wire Wire Line
+	3650 3150 3800 3150
+$Comp
+L LED-Array-rescue:B2B-XH-A(LF)(SN)-B2B-XH-A_LF__SN_(JST) J4
+U 1 1 604466E5
+P 3750 900
+F 0 "J4" H 3980 896 50  0000 L CNN
+F 1 "B2B-XH-A(LF)(SN)" H 3980 805 50  0000 L CNN
+F 2 "Additional-parts:JST_B2B-PH-K-S(LF)(SN)" H 3750 900 50  0001 L BNN
+F 3 "Manufacturer Recommendations" H 3750 900 50  0001 L BNN
+F 4 "JST" H 3750 900 50  0001 L BNN "Field4"
+F 5 "N/A" H 3750 900 50  0001 L BNN "Field5"
+	1    3750 900 
+	1    0    0    -1  
+$EndComp
+Text Label 3350 900  2    50   ~ 0
+IR12VPWM
+$Comp
+L LED-Array-rescue:GND-power #PWR0101
+U 1 1 604466EC
+P 3350 1000
+F 0 "#PWR0101" H 3350 750 50  0001 C CNN
+F 1 "GND" H 3355 827 50  0000 C CNN
+F 2 "" H 3350 1000 50  0001 C CNN
+F 3 "" H 3350 1000 50  0001 C CNN
+	1    3350 1000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:LED D1
+U 1 1 6044B0FB
+P 1750 3850
+F 0 "D1" H 1743 3595 50  0000 C CNN
+F 1 "LED" H 1743 3686 50  0000 C CNN
+F 2 "LED_SMD:LED_1206_3216Metric_Pad1.42x1.75mm_HandSolder" H 1750 3850 50  0001 C CNN
+F 3 "~" H 1750 3850 50  0001 C CNN
+	1    1750 3850
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:LED D5
+U 1 1 6044B762
+P 2050 3850
+F 0 "D5" H 2043 3595 50  0000 C CNN
+F 1 "LED" H 2043 3686 50  0000 C CNN
+F 2 "LED_SMD:LED_1206_3216Metric_Pad1.42x1.75mm_HandSolder" H 2050 3850 50  0001 C CNN
+F 3 "~" H 2050 3850 50  0001 C CNN
+	1    2050 3850
+	-1   0    0    1   
+$EndComp
+$Comp
+L Device:LED D6
+U 1 1 6044BE0E
+P 2350 3850
+F 0 "D6" H 2343 3595 50  0000 C CNN
+F 1 "LED" H 2343 3686 50  0000 C CNN
+F 2 "LED_SMD:LED_1206_3216Metric_Pad1.42x1.75mm_HandSolder" H 2350 3850 50  0001 C CNN
+F 3 "~" H 2350 3850 50  0001 C CNN
+	1    2350 3850
+	-1   0    0    1   
+$EndComp
+$Comp
+L LED-Array-rescue:R-Device R1
+U 1 1 6044C318
+P 2650 3850
+F 0 "R1" H 2720 3896 50  0000 L CNN
+F 1 "430" H 2720 3805 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 2580 3850 50  0001 C CNN
+F 3 "~" H 2650 3850 50  0001 C CNN
+	1    2650 3850
+	0    1    1    0   
+$EndComp
+$Comp
+L LED-Array-rescue:GND-power #PWR0102
+U 1 1 6044C840
+P 2800 3850
+F 0 "#PWR0102" H 2800 3600 50  0001 C CNN
+F 1 "GND" H 2805 3677 50  0000 C CNN
+F 2 "" H 2800 3850 50  0001 C CNN
+F 3 "" H 2800 3850 50  0001 C CNN
+	1    2800 3850
+	1    0    0    -1  
+$EndComp
+Text Label 1600 3850 2    50   ~ 0
+IR12VPWM
+$EndSCHEMATC
