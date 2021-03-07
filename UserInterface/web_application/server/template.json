@@ -1,6 +1,6 @@
 {
 	"System": {
-		"ID": 0, 
+		"ID": "^sD#RqSU6OVzspEzRtj%", 
 		"Time": {
 			"Current": "Datetime"
 		},
@@ -12,6 +12,11 @@
 				"Description": "Description"
 			},
 			"Replicate": 0
+	},
+
+	"Client": {
+		"Response Expected": false,
+		"Request": "LR&I:50&F:20000"
 	},
 
 	"Sensors": {
