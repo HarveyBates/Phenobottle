@@ -1,4 +1,4 @@
-19256215650601805
+19262676739140805
 Additional-parts
 BD681
 
@@ -56,6 +56,20 @@ JST_B3B-PH-SM4-TB(LF)(SN)
 5
 5
 Additional-parts
+Logo(Small)
+
+
+0
+0
+0
+Additional-parts
+RGB-5050-LED
+
+
+0
+6
+6
+Additional-parts
 SFH_213_FA
 
 
@@ -105,6 +119,13 @@ SW_FSM8JH
 4
 4
 Additional-parts
+TE_282841-5
+
+
+0
+5
+5
+Additional-parts
 TO253P1067X470X2040-3
 
 
@@ -118,6 +139,13 @@ TO254P1524X483-4N
 0
 4
 4
+Additional-parts
+Untitled
+
+
+0
+0
+0
 Additional-parts
 VREG_L7805ACD2T
 

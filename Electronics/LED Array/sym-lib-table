@@ -203,4 +203,5 @@
   (lib (name Triac_Thyristor)(type Legacy)(uri /Users/harveybates/Documents/GithubProjects/Phenobottle/Phenobottle/Electronics/Symbols-Footprints-3DModels/Kicad-symbols/Triac_Thyristor.lib)(options "")(descr ""))
   (lib (name Valve)(type Legacy)(uri /Users/harveybates/Documents/GithubProjects/Phenobottle/Phenobottle/Electronics/Symbols-Footprints-3DModels/Kicad-symbols/Valve.lib)(options "")(descr ""))
   (lib (name Video)(type Legacy)(uri /Users/harveybates/Documents/GithubProjects/Phenobottle/Phenobottle/Electronics/Symbols-Footprints-3DModels/Kicad-symbols/Video.lib)(options "")(descr ""))
+  (lib (name 282841-5)(type Legacy)(uri /Users/harveybates/Documents/GithubProjects/Phenobottle/Phenobottle/Electronics/Symbols-Footprints-3DModels/Additional-parts/282841-5.lib)(options "")(descr ""))
 )
