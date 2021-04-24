@@ -27,8 +27,8 @@ class Serial{
 	int serial_port = 0;
 	int MAX_READ_SIZE = 1024;
 	int baudRate = 115200;
-	int vTime = 10;
-	int vMin = 1;
+	int vTime = 30;
+	int vMin = 0;
 public:
 	Serial();
 	void configure(const char * port);

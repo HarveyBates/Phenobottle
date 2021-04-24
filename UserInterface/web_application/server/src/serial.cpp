@@ -19,7 +19,7 @@ Serial::Serial(){
 #endif
 	}
 	catch(...) {
-		std::cout << "[ERROR] Default serial port not opened.\n"
+		std::cout << "[ERROR] Default serial port not found or opened.\n"
 			"User must configure serial port manually." << std::endl;
 	}
 }
@@ -42,52 +42,52 @@ void Serial::configure(const char * port){
 	if(serial_port != 0){
 		close(serial_port);
 	}
+
 	serial_port = open_port(port); //Open port first
+
 	struct termios tty;
 	// Get tty attributes
 	if(tcgetattr(serial_port, &tty) != 0){
-		std::cout << "Error" << std::endl;
+		std::cout << "[ERROR]: Unable to set serial port attributes." << std::endl;
 	}
-	// c_cflag - Hardware control modes
-	tty.c_cflag &= ~PARENB; // Clear parity bit (disable)
-	tty.c_cflag &= ~CSTOPB; // Clear stop field (one bit to stop comms)
-	tty.c_cflag |= CS8; // Bits per byte (8-bits)
-	tty.c_cflag &= ~CRTSCTS; // Disable hardare flow
-	tty.c_cflag |= CREAD | CLOCAL; // Enable READ and ignore ctrl lines
-	// c_lflag - Terminal functions
-	tty.c_lflag &= ~ICANON; // Disable new line proccessing
+
+	tty.c_cflag &= ~PARENB; // Clear parity bit, disabling parity (most common)
+	tty.c_cflag &= ~CSTOPB; // Clear stop field, only one stop bit used in communication (most common)
+	tty.c_cflag &= ~CSIZE; // Clear all bits that set the data size 
+	tty.c_cflag |= CS8; // 8 bits per byte (most common)
+	tty.c_cflag &= ~CRTSCTS; // Disable RTS/CTS hardware flow control (most common)
+	tty.c_cflag |= CREAD | CLOCAL; // Turn on READ & ignore ctrl lines (CLOCAL = 1)
+
+	tty.c_lflag &= ~ICANON;
 	tty.c_lflag &= ~ECHO; // Disable echo
 	tty.c_lflag &= ~ECHOE; // Disable erasure
 	tty.c_lflag &= ~ECHONL; // Disable new-line echo
-	tty.c_lflag &= ~ISIG; // Disable signal interpretation
-	// c_iflag - Disable software control
-	tty.c_iflag &= ~(IXON | IXOFF | IXANY); // Disable flow control
-	tty.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL); 
-	// Disable any automatic processing of received bytes
-	// c_oflag - Ouput control modes
-	tty.c_oflag = 0; // Disable newline carrgage return 
-	tty.c_oflag &= ~(OPOST | ONLCR | OCRNL); // Disable processing of output bytes
-	// c_cc - Special control characters
-	/*An important point to note is that VTIME means slightly different 
-	 * things depending on what VMIN is. When VMIN is 0, VTIME 
-	 * specifies a time-out from the start of the read() call. 
-	 * But when VMIN is > 0, VTIME specifies the time-out from the 
-	 * start of the first received character.
-	 */
-	 // May need to change VTIME up if bytes are clipped
-	 tty.c_cc[VTIME] = vTime; // Wait for 10*100ms 
-	 tty.c_cc[VMIN] = vMin;
+	tty.c_lflag &= ~ISIG; // Disable interpretation of INTR, QUIT and SUSP
+	tty.c_iflag &= ~(IXON | IXOFF | IXANY); // Turn off s/w flow ctrl
+	tty.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL); // Disable any special handling of received bytes
+
+	tty.c_oflag &= ~OPOST; // Prevent special interpretation of output bytes (e.g. newline chars)
+	tty.c_oflag &= ~ONLCR; // Prevent conversion of newline to carriage return/line feed
+	
+		
+	// May need to change VTIME up if bytes are clipped
+	tty.c_cc[VTIME] = vTime; // Wait for vTime * 100ms 
+	tty.c_cc[VMIN] = vMin;
+	
 	/*
-	 * See https://www.pjrc.com/teensy/td_uart.html for suitable 
-	 * baud rates depending on the Teensy model used
-	 * Use B9600 if unsure
-	 */
-	 cfsetispeed(&tty, B115200); // Set input baud rate
-	 cfsetospeed(&tty, B115200); // Set output baud rate
-	 // Set tty attributes that we just specified
+	* See https://www.pjrc.com/teensy/td_uart.html for suitable 
+	* baud rates depending on the Teensy model used
+	* Use B9600 if unsure
+	*/
+	cfsetispeed(&tty, B115200); // Set input baud rate
+	cfsetospeed(&tty, B115200); // Set output baud rate
+	
+	// Set tty attributes that we just specified
 	if(tcsetattr(serial_port, TCSANOW, &tty) != 0){
 		std::cout << "[ERROR]: Unable to set serial port attributes." << std::endl;
 	}
+
+	std::cout << "[SET]: Serial port attributes" << std::endl;
 	close_port();
 }
 
@@ -100,7 +100,7 @@ int Serial::open_port(const char* port){
 	 * @returns A const char* to a serial port or 0 if unable to open device.
 	 **/
 	if(serial_port == 0){
-		serial_port = open(port, (O_RDWR | O_NOCTTY | O_NDELAY));
+		serial_port = open(port, O_RDWR);
 		if (serial_port){
 			std::cout << "[OPEN] Port: " << port << std::endl;
 			return serial_port;
@@ -192,7 +192,7 @@ void Serial::send(const char * port, char* msg){
 		}
 		else{
 			write(serial_port, msg, strlen(msg));
-			std::cout << "[SEND]: " << msg << "[BYTES]: " << strlen(msg) << std::endl;
+			std::cout << "[SEND]: " << msg << " [BYTES]: " << strlen(msg) << std::endl;
 		}
 		close_port();
 	}
@@ -203,17 +203,18 @@ void Serial::send(const char * port, char* msg){
 
 
 std::string Serial::recieve(){
+	// Blocks for up to (vTIME * 0.1 ms)
+	// Required for slow sensors ~ 3 s 
 	if(serial_port){
-		std::this_thread::sleep_for(std::chrono::seconds(2)); // Wait for microcontroller to read
 		int n = 0;
 		int pos = 0;
 		char buf = '\0';
 		char response[MAX_READ_SIZE];
 		do{
 			n = read(serial_port, &buf, 1);
-			sprintf(&response[pos], "%c", buf);
+			sprintf(&response[pos], "%c", buf); // Compose string of response
 			pos += n;
-		} while(buf != '\r' && n > 0);
+		} while(buf != '\r' && n > 0); // End read on return character
 		std::cout << "[RECIEVED]: " << response << std::endl;
 		return std::string(response);
 	}
@@ -230,11 +231,11 @@ void Serial::close_port(){
 	 **/ 
 	auto retVal = close(serial_port);
 	if(retVal != 0){
-		std::cout << "[ERROR] Failed to close serial port." << std::endl;
+		std::cout << "[ERROR]: Failed to close serial port." << std::endl;
 	}
 	else{
 		serial_port = 0;
-		std::cout << "[CLOSED] Serial Port." << std::endl;
+		std::cout << "[CLOSED]: Serial Port." << std::endl;
 	}
 }
 

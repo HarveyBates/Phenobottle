@@ -1,5 +1,7 @@
 #include "main.h"
 
+using namespace std::chrono_literals; 
+
 bool wsCommand = false;
 char* serialCommand;
 
@@ -17,8 +19,7 @@ int main(){
 				serial.send(serialCommand);
 				wsCommand = false;
 			}
-			using namespace std::chrono_literals;
-			std::this_thread::sleep_for(1ms);
+			std::this_thread::sleep_for(1ms); // Slight delay to prevent 100% CPU usage
 		}
 		run_thread.join();
 	}
