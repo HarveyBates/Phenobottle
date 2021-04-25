@@ -131,7 +131,10 @@ void Connection::xor_decrypt(char* inBuffer){
 			}
 		}
 		std::cout << "[COMMAND]: " << outBuffer << std::endl;
-		set_serial_command(outBuffer);
+		// This is where the JSON request comes in 
+		// TODO send JSON to jsonparser
+		ParseJSON::set_input(outBuffer);
+		//set_serial_command(outBuffer);
 		wsCommand = true;
 	}
 }

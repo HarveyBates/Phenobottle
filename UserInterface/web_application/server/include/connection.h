@@ -10,6 +10,7 @@
 #include "constants.h"
 #include "crypto.hpp"
 #include "serial.h"
+#include "parsejson.h"
 
 /* Tests if a new cmd has been recieved */
 extern bool wsCommand;

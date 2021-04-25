@@ -16,7 +16,8 @@ int main(){
 				});
 		while(true){
 			if(wsCommand){
-				serial.send(serialCommand);
+				// This is where we parse the JSON
+				//ParseJSON::parse();
 				wsCommand = false;
 			}
 			std::this_thread::sleep_for(1ms); // Slight delay to prevent 100% CPU usage
