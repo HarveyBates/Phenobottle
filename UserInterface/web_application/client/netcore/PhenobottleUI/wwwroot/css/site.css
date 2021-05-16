@@ -62,7 +62,7 @@ for details on configuring this project to bundle and minify static web assets. 
 
     .nav-link:hover {
         color: #e9c46a;
-        transform: scale(1.1);
+        transform: scale(1.02);
     }
 
 .link-text {
@@ -71,7 +71,7 @@ for details on configuring this project to bundle and minify static web assets. 
 }
 
 .nav-link i {
-    margin: 3rem;
+    margin: 4rem;
     min-width: 2rem;
     margin: 0 1rem;
 }
@@ -124,7 +124,7 @@ for details on configuring this project to bundle and minify static web assets. 
 
             .navbar:hover .link-text {
                 display: inline;
-                transition: scale(1.1);
+                transition: scale(1);
             }
     .nav-item:last-child {
         margin-top: auto;

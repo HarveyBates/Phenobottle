@@ -14,11 +14,9 @@
     </div>
 
     <div class="card">
-
         <div class="top-bar">
             <h2 class="cardhead">Connect</h2>
             <button class="button2" id="refresh">Refresh <i class="fa fa-refresh" aria-hidden="true"></i></button>
-
         </div>
         <div class="card">
             <h3>Devices Found</h3>
@@ -71,9 +69,7 @@
                     </table>
                 }
             </div>
-
         </div>
-
     </div>
 
     <div class="cardhalf">
@@ -120,21 +116,18 @@
             </div>
 
         </div>
-
-
-
-
     </div>
 
-
-
     <div class="card">
+        <button id="disconnect">Disconnect WS</button>
         <button id="message">Send Message</button>
         <button id="message2">Send Short Msg</button>
         <button id="longMessage">Send long message</button>
     </div>
 
-    <script type="text/javascript">function addNums(length) {
+    <script type="text/javascript">
+
+        function addNums(length) {
             var output = "";
             for (var i = 0; i < length; i++) {
                 output += i.toString();
@@ -142,13 +135,21 @@
             return output;
         }
 
+        let socket;
+
         document.getElementById("refresh").onclick = function () {
-            console.log("Attempting to connect...")
-            socket = new WebSocket("wss://192.168.0.102:443");
+            console.log("Attempting to connect...");
+            socket = new WebSocket("ws://192.168.1.107:443");
 
             socket.onopen = function (event) {
-                console.log("Connected")
+                console.log("Connected");
             }
+        }
+
+        document.getElementById("disconnect").onclick = function () {
+            console.log("Disconnected");
+            socket.onclose = function () { };
+            socket.close();
         }
 
         document.getElementById("message").onclick = function () {
@@ -162,8 +163,9 @@
 
         longMessage.onclick = function () {
             socket.send(addNums(1000));
-        }</script>
+        }
 
+    </script>
 
 </body>
 
