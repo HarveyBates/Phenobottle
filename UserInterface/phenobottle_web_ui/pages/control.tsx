@@ -30,10 +30,13 @@ export default function Control() {
 			<p>Ensure device is powered on and operating as a server.</p>
 			<table className={styles.table}>
 			  <tr>
-				  <th>Device ID</th>
 				  <th>Device Name</th>
+				  <th>Device ID</th>
+				  <th>Device Version</th>
 				  <th>Treatment</th>
 				  <th>Replicate</th>
+				  <th>Status</th>
+				  <th>Selected</th>
 			  </tr>
 			</table>
 		</div>
