@@ -1,0 +1,5 @@
+broker:
+  address: "phenobottle.xyz"
+  port: 8883
+  certs: "certs/isrgrootx1.cer"
+
