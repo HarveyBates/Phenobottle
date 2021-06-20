@@ -6,12 +6,12 @@ import mqtt from 'mqtt';
 const options = {
 	protocol: 'mqtts',
 	keepalive: 60, 
-	username: '******',
+	username: '*****',
 	password: '*****'
 
 };
 
-const client = mqtt.connect("mqtt://phenobottle.xyz:8083", options);
+const client = mqtt.connect("mqtt://mqtt.phenobottle.xyz:8083", options);
 
 client.subscribe("test");
 

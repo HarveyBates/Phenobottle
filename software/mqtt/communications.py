@@ -23,7 +23,6 @@ def new_client(clean_session=False, keepalive=60):
 
     @returns client 
     """
-    connected = False
 
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
@@ -64,6 +63,15 @@ def new_client(clean_session=False, keepalive=60):
     client.loop_start()
     return client
         
+
+def subscribe(client):
+    """
+    TODO: Think more about how I want messages to be formatted.
+        Current idea: "config["user"]["id"]/sensor/temperature"
+    This ensures users cant read from other users devices and visa versa.
+    User ID is a randomly generated (a-Z 1-9) string that is created on first startup and stored in
+    the config.yaml file.
+    """
 
 if __name__ == "__main__":
     new_client()

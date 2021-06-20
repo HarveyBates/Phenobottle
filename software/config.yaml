@@ -1,5 +1,14 @@
+user:
+  name: "Harvey"
+  id: "B8ZEuzqbpIH47rwo"
+
+phenobottle:
+  version: "0.2"
+  id: "WUCLGgcXmPBfGxdo"
+  treatment: "control"
+
 broker:
-  address: "phenobottle.xyz"
+  address: "mqtt.phenobottle.xyz"
   port: 8883
   certs: "certs/isrgrootx1.cer"
 
