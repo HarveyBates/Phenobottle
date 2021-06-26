@@ -81,7 +81,7 @@ def subscribe(client, topic):
         print("-----")
 
     
-def publish(client, topic, payload, single=True):
+def publish(client, topic, payload):
     """
     Open config and append to topic.
     Check if using a single topic or and array (single=False)

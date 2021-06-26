@@ -1,46 +1,53 @@
 import React, { useState, Fragment } from 'react';
-import logo from './logo.svg';
-import './App.css';
 import mqtt from 'mqtt';
+import './App.css';
+import Header from './components/header.js';
+require('dotenv').config();
 
 const options = {
 	protocol: 'mqtts',
 	keepalive: 60, 
-	username: '*****',
-	password: '*****'
-
+	username: process.env.BROKER_UN, 
+	password: process.env.BROKER_PSWD
 };
 
-const client = mqtt.connect("mqtt://mqtt.phenobottle.xyz:8083", options);
 
-client.subscribe("test");
-
-function App() {
+function Message() {
 	const [mesg, setMesg] = useState(<Fragment><em>nothing heard</em></Fragment>);
 	var note;
+
+	const [stat, setStat] = useState(<Fragment><em>Not connected</em></Fragment>);
+	const client = mqtt.connect("mqtt://mqtt.phenobottle.xyz:8083", options);
+
+	client.on('connect', function () {
+		setStat("Connected");
+	});
+	
+	client.on('subscribe', function () {
+		console.log("Subscribed");
+	});
+
+	client.subscribe("test");
+
 	client.on('message', function (topic, message) {
 		note = message.toString();
 		setMesg(note);
-		console.log(note);
 		client.end();
 	});
 	return (
+		<header className="App-header">
+			<p>You are: {stat}</p>
+			<p>The message is: {mesg}</p>
+		</header>
+	);
+}
+
+
+function App() {
+	return (
 		<div className="App">
-			<header className="App-header">
-				<img src={logo} className="App-logo" alt="logo" />
-				<p>
-					Edit <code>src/App.js</code> and save to reload.
-				</p>
-				<p>The message is: {mesg}</p>
-				<a
-					className="App-link"
-					href="https://reactjs.org"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Learn React
-				</a>
-			</header>
+			<Header />
+			<Message />
 		</div>
 	);
 }

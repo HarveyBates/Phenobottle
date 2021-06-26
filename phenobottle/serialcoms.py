@@ -1,6 +1,7 @@
 import serial
 import glob
 import sys
+import time
 from phenobottle.config import get_configuration
 
 
@@ -36,7 +37,7 @@ def list_serial_ports():
         return portsList 
 
 
-def connect(portsList):
+def connect(portsList=None):
     """
     Connects to a serial port using the DEFAULT serial port (found in config.yaml) then tries the ports list.
 
@@ -80,7 +81,25 @@ def disconnect(device):
         return True
 
 
+def send_command(device, command, waitResponse=False, timeout=5):
+    # Open connection if not already open
+    if not device.is_open:
+        device = connect()
+    # Clear serial port
+    device.flush() 
+    command = command.encode('utf-8')
+    device.write(command)
+    if waitResponse:
+        for _ in range(timeout):
+            response = str(device.readline()[:-2], 'utf-8') # Remove \r\n and decode
+            if response != None:
+                return response
+            time.sleep(1) 
+
+
+
 if __name__ == "__main__":
     portsList = list_serial_ports()
     mc = connect(portsList)
+    print(send_command(mc, "T", True))
     disconnect(mc)
