@@ -12,3 +12,4 @@ def get_configuration(path="config.yaml"):
     with open(path, 'r') as conf:
         config = yaml.load(conf, Loader=Loader)
     return config
+

@@ -23,6 +23,7 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 .swp
+*.egg-info
 
 # Kicad files
 ----- KiCad Files -----
