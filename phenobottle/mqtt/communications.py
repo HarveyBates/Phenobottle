@@ -98,6 +98,7 @@ def publish(client, topic, payload, single=True):
         print("Failed to publish to topic: {} ErrorCode: {}".format(topic, pub[0]))
         print("-----")
 
+
 if __name__ == "__main__":
     client = new_client()
     subscribe(client, "test")

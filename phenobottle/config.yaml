@@ -1,6 +1,6 @@
 user:
   name: "Harvey"
-id: "B8ZEuzqbpIH47rwo"
+  id: "B8ZEuzqbpIH47rwo"
 
 phenobottle:
   version: "0.2"
@@ -12,3 +12,5 @@ broker:
   port: 8883
   certs: "certs/isrgrootx1.cer"
 
+serial:
+  port: "/dev/tty.usbmodem81500001"
