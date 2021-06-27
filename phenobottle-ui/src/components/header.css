@@ -1,6 +1,4 @@
 .navbar{
-	width: 8rem;
-	height: 100vh;
 	position: fixed;
 	background-color: var(--bg-primary);
 }
@@ -17,25 +15,63 @@
 
 .navitem {
 	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	align-content: flex-start;
+	padding: 1rem 0 1rem 0;
+	color: var(--text-primary);
+	filter: grayscale(100%) opacity(0.7);
+	transition: var(--transition-speed);
 }
 .navitem:last-child{
 	margin-top: auto;
 }
-
-.navlink {
-	display: flex;
-	align-items: center;
-	height: 5rem;
-	color: var(--text-primary);
-	text-decoration: none;
-	filter: grayscale(100%) opacity(0.7);
-	transition: var(--transition-speed);
-	padding-left: 1rem;
-}
-.navlink:hover{
+.navitem:hover{
 	filter: greyscale(0%) opacity(1);
 	background: var(--bg-secondary);
+	color: #fff;
 }
 
+.navimg{
+	margin: 0.5rem;
+	height: 1.2rem;
+}
+
+.navlink {
+	text-decoration: none;
+	color: var(--text-primary);
+	margin: 0.5rem;
+}
+
+
+/* Small Screens */
+@media only screen and (max-width: 600px){
+	.navbar{
+		bottom: 0;
+		width: 100vw;
+		height: 4rem;
+	}
+	.navlink{
+		display: none;
+	}
+
+	.navlist{
+		flex-direction: row;
+	}
+
+	.navitem{
+		justify-content: center;
+	}
+}
+
+/* Large Screens */
+@media only screen and (min-width: 600px){
+	.navbar{
+		width: 9rem;
+		top: 0;
+		height: 100vh;
+	}
+}
 
 
