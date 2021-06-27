@@ -1,6 +1,6 @@
 .navbar{
 	position: fixed;
-	background-color: var(--bg-primary);
+	background-color: var(--bg-nav-primary);
 }
 
 .navlist{
@@ -16,12 +16,13 @@
 .navitem {
 	width: 100%;
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
 	align-content: flex-start;
-	padding: 1rem 0 1rem 0;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
 	color: var(--text-primary);
-	filter: grayscale(100%) opacity(0.7);
+	text-decoration: none;
+	color: var(--text-primary);
 	transition: var(--transition-speed);
 }
 .navitem:last-child{
@@ -29,19 +30,21 @@
 }
 .navitem:hover{
 	filter: greyscale(0%) opacity(1);
-	background: var(--bg-secondary);
+	background: var(--bg-nav-secondary);
 	color: #fff;
 }
 
 .navimg{
 	margin: 0.5rem;
+	margin-left: 1rem;
 	height: 1.2rem;
 }
 
 .navlink {
+	display: flex;
 	text-decoration: none;
 	color: var(--text-primary);
-	margin: 0.5rem;
+	margin-left: 1rem;
 }
 
 
@@ -68,7 +71,7 @@
 /* Large Screens */
 @media only screen and (min-width: 600px){
 	.navbar{
-		width: 9rem;
+		width: 10rem;
 		top: 0;
 		height: 100vh;
 	}

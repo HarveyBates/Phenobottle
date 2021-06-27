@@ -1,25 +1,21 @@
 :root {
 	font-size: 16px;
 	font-family: 'Open Sans';
-	--text-primary: #b6b6b6;
+	--text-primary: #fff;
 	--text-secondary: #ececec;
-	--bg-primary: #23232e;
-	--bg-secondary: #141418;
-	--transition-speed: 0.6;
+	--bg-primary: #25274D;
+	--bg-nav-primary: #29648A;
+	--bg-nav-secondary: #298A80;
+	--transition-speed: 0.25s;
 }
 
-.App {
-  text-align: center;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.mainpage{
+	background-color: var(--bg-primary);
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	color: white;
 }
 

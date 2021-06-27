@@ -1,14 +1,15 @@
 import React, { useState, Fragment } from 'react';
 import mqtt from 'mqtt';
 import './App.css';
-import Header from './components/header.js';
+import { Navbar } from './components/navbar/navbar.js';
+import { DeviceHandler } from "./containers/devices/devices.js";
 require('dotenv').config();
 
 const options = {
 	protocol: 'mqtts',
 	keepalive: 60, 
-	username: process.env.BROKER_UN, 
-	password: process.env.BROKER_PSWD
+	username: "",
+	password: ""
 };
 
 
@@ -35,19 +36,17 @@ function Message() {
 		client.end();
 	});
 	return (
-		<header className="App-header">
+		<header className="mainpage">
 			<p>You are: {stat}</p>
 			<p>The message is: {mesg}</p>
 		</header>
 	);
 }
 
-
 function App() {
 	return (
 		<div className="App">
-			<Header />
-			<Message />
+			<DeviceHandler />
 		</div>
 	);
 }
