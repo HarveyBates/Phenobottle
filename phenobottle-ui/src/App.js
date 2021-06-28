@@ -1,8 +1,9 @@
 import React, { useState, Fragment } from 'react';
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import mqtt from 'mqtt';
 import './App.css';
 import { Navbar } from './components/navbar/navbar.js';
-import { DeviceHandler } from "./containers/devices/devices.js";
+import { Login } from "./containers/pages/home.js";
 require('dotenv').config();
 
 const options = {
@@ -45,9 +46,11 @@ function Message() {
 
 function App() {
 	return (
-		<div className="App">
-			<DeviceHandler />
-		</div>
+		<Router>
+			<div className="App">
+				<Route path="/Login" exact component={Login} />
+			</div>
+		</Router>
 	);
 }
 

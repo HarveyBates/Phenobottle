@@ -1,5 +1,5 @@
 import React from 'react';
-import './devices.css';
+import '../styles/devices.css';
 
 export class DeviceHandler extends React.Component{
 	render () {
