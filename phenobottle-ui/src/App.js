@@ -46,11 +46,9 @@ function Message() {
 
 function App() {
 	return (
-		<Router>
-			<div className="App">
-				<Route path="/Login" exact component={Login} />
-			</div>
-		</Router>
+		<div className="App">
+			<Navbar />
+		</div>
 	);
 }
 

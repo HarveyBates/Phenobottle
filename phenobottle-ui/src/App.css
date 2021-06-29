@@ -1,11 +1,18 @@
 :root {
 	font-size: 16px;
 	font-family: 'Open Sans';
-	--text-primary: #fff;
+	--text-primary: #FCDAB7;
 	--text-secondary: #ececec;
-	--bg-primary: #25274D;
-	--bg-nav-primary: #29648A;
+
+	--bg-primary: #133B5C;
+	background: var(--bg-primary);
+
+	--bg-nav-primary: #1E5F74;
 	--bg-nav-secondary: #298A80;
+	--nav-size: 10rem;
+
+	--bg-card-primary: #FCDAB7;
+
 	--transition-speed: 0.25s;
 }
 

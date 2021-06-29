@@ -4,19 +4,20 @@
 	align-items: center;
 	justify-content: center;
 	margin: 2rem;
+	margin-left: calc(var(--nav-size) + 2rem);
 	padding: 1rem;
-	background-color: #fff;
+	background-color: white;
 	border-radius: 10px;
 	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
 	0 10px 10px rgba(0,0,0,0.22);
-	background: white;
 	border-radius: 1rem;
 	min-height: 50vh;
 }
 
 .logo{
-	width: 100%;
-	align-items: center;
+	max-width: 95%;
+	max-heigh: 95%;
+	display: block;
 }
 
 .connection {
@@ -54,10 +55,6 @@ input {
 	.card{
 		margin-left: 2rem;
 	}
-	.logo{
-		width: 220px;
-	}
-
 }
 
 /* Large Screens */
@@ -65,16 +62,13 @@ input {
 	.card{
 		marign-left: 12rem;
 	}
-	.logo{
-		width: 500px;
-	}
 }
 
 button {
 	border-radius: 20px;
 	margin: 0.5rem;
-	border: 1px solid #FFB52B;
-	background-color: #FF4B2B;
+	border: 1px solid var(--bg-nav-secondary);
+	background-color: var(--bg-nav-primary);
 	color: #FFFFFF;
 	font-size: 12px;
 	font-weight: bold;

@@ -2,7 +2,7 @@ import React from 'react';
 import "../styles/home.css";
 import logo from "../../images/logo.png";
 
-export class Login extends React.Component{
+export class Home extends React.Component{
 	render () {
 		return (
 			<div className="card">

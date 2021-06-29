@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/devices.css';
 
-export class DeviceHandler extends React.Component{
+export class Devices extends React.Component{
 	render () {
 		return (
 			<div className="card">
