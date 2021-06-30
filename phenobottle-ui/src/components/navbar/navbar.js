@@ -1,7 +1,13 @@
+// React imports 
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Link, withRouter } from "react-router-dom";
+
+// User imports 
 import { Home } from "../../containers/pages/home.js";
+import { UserContext } from "../../containers/usercontext.js";
 import "./navbar.css";
+
+// Logo / icon imports
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -49,7 +55,9 @@ export class Navbar extends React.Component {
 						</li>
 					</ul>
 				</nav>
-				<Route path="/" exact component={ Home }/>
+				<UserContext.Provider value="Hello">
+					<Route path="/" exact component={ Home }/>
+				</UserContext.Provider>
 			</Router>
 		);
 	}
