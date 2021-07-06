@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { UserContext } from "../usercontext.js";
-import "../styles/home.css";
+import "../styles/login.css";
 import logo from "../../images/logo.png";
 
-export function Home(){
+export function Login(){
 	const msg = useContext(UserContext);
 	return (
 		<div className="card">

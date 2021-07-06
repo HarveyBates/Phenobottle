@@ -4,13 +4,10 @@
 	align-items: center;
 	justify-content: center;
 	margin: 2rem;
-	margin-left: calc(var(--nav-size) + 2rem);
 	padding: 1rem;
 	background-color: white;
-	border-radius: 10px;
 	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
 	0 10px 10px rgba(0,0,0,0.22);
-	border-radius: 1rem;
 	min-height: 50vh;
 }
 

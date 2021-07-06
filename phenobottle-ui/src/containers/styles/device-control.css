@@ -1,0 +1,38 @@
+.device-card{
+	margin: 1rem;
+	margin-left: 11rem;
+	font-size: 16px;
+	font-weight: normal;
+	background: white;
+	padding: 1rem;
+	box-shadow: 5px 5px 5px lightgrey;
+}
+
+h3 {
+	color: #0C6477;
+}
+
+.device-heading{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 0.5rem;
+}
+
+table{
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0 15px;
+}
+
+tr {
+	box-shadow: 0px 1px 6px lightgrey;
+}	
+
+th, td {
+	padding: 1rem;
+	font-weight: normal;
+	text-align: center;
+}

@@ -1,7 +1,6 @@
 .navbar{
 	position: fixed;
-	background-color: var(--bg-nav-primary);
-	box-shadow: 2px 0 10px #1E5F74;
+	background: linear-gradient(#19415E 50%, #0C6477 100%);
 }
 
 .navlist{
@@ -19,9 +18,9 @@
 	display: flex;
 	align-items: center;
 	align-content: flex-start;
-	color: var(--text-primary);
 	text-decoration: none;
-	color: var(--text-primary);
+	text-transform: uppercase;
+	color: #fff; 
 	transition: var(--transition-speed);
 }
 .navitem:hover{
