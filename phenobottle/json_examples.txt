@@ -1,0 +1,57 @@
+---- Temperature ----
+{
+	"metadata": {
+		"time": 1626508388,
+			"type": "request",
+			"device": "temperature",
+			"response": true
+	},
+		"content": {
+			"message": "T"
+		}
+}
+
+---- Lights SET ----
+{
+	"metadata": {
+		"time": 1626508388,
+			"type": "request",
+			"device": "lights",
+			"response": false
+	},
+		"content": {
+			"switch": "on",
+			"frequency": {
+				"red": 20000, 
+				"green": 20000,
+				"blue": 20000
+			},
+			"intensity": {
+				"red": 100,
+				"green": 100, 
+				"blue": 100
+			}
+		}
+}
+
+{
+	"metadata": {
+		"time": 1626508388,
+			"type": "request",
+			"device": "lights",
+			"response": false
+	},
+		"content": {
+			"switch": "off"
+		}
+}
+
+---- Lights GET ----
+{
+	"metadata": {
+		"time": 1626508388,
+			"type": "get",
+			"device": "lights",
+			"response": true
+	}
+}

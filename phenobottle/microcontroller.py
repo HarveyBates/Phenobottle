@@ -2,7 +2,7 @@ import serial
 import glob
 import sys
 import time
-from phenobottle.config import get_configuration
+from phenobottle import config
 
 
 def list_serial_ports():
@@ -44,24 +44,20 @@ def connect(portsList=None):
     TODO: Need to handle multiple ports cleanly.
     @returns a serial device or False if a connection cannot be made
     """
-    config = get_configuration()
-    device = serial.Serial(config["serial"]["port"])
+    settings = config.get_configuration()
+    device = serial.Serial(settings["serial"]["port"])
     if(device.is_open):
-        print("Connected to the default serial device: {} and configured sucessfully.".format(config["serial"]["port"]))
-        print("-----")
+        print("Connected to the default serial device: {} and configured sucessfully.".format(settings["serial"]["port"]))
         return device
     elif(len(portsList) == 1):
         device = serial.Serial(portsList[0])
         if(device.is_open):
             print("Connected to serial device: {} and configured sucessfully.".format(portsList[0]))
-            print("-----")
             return device
         else:
             print("Single serial device found: {} however a connection request was unsuccessful.".format(portsList[0]))
-            print("-----")
     else:
         print("Multiple serial devices found. Configure the port you wish to connect to in the config.yaml file.")
-        print("-----")
     return False 
 
 
@@ -73,29 +69,30 @@ def disconnect(device):
     device.close()
     if(device.is_open):
         print("Unable to close serial device: {}".format(device))
-        print("-----")
         return False
     else:
         print("Disconnected from serial device cleanly.")
-        print("-----")
         return True
 
 
-def send_command(device, command, waitResponse=False, timeout=5):
+def send_command(command, device=None, waitResponse=False, timeout=5):
     # Open connection if not already open
-    if not device.is_open:
+    if not device:
         device = connect()
     # Clear serial port
     device.flush() 
-    command = command.encode('utf-8')
+    try:
+        print("Sending command: " + command.decode("utf-8"))
+    except AttributeError as err:
+        print("Sending command: " + command)
     device.write(command)
     if waitResponse:
         for _ in range(timeout):
             response = str(device.readline()[:-2], 'utf-8') # Remove \r\n and decode
             if response != None:
+                print("Recieved response: " + response)
                 return response
             time.sleep(1) 
-
 
 
 if __name__ == "__main__":
