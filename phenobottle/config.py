@@ -3,6 +3,7 @@ import yaml
 from dotenv import load_dotenv
 load_dotenv()
 
+
 def get_configuration(path="config/config.yaml"):
     """
     Open yaml configuration file.

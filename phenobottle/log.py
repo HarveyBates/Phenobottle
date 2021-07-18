@@ -6,6 +6,7 @@ import time
 def start_log():
     time.sleep(2) # Slight startup delay
     while True:
+        time.sleep(0.1) # Small delay to prevent 99% cpu
         with open("log/log.txt", "r") as file:
             lines = file.readlines()
         with open("log/log.txt", "w") as output:
@@ -18,7 +19,11 @@ readLog.start()
 
 def write_to_log(input):
     with open("log/log.txt", "a") as file:
-        file.write(input + "\n")
+        if isinstance(input, list):
+            for item in input:
+                file.write(item + "\n")
+        else:
+            file.write(input + "\n")
     file.close()
 
 

@@ -88,7 +88,7 @@ if __name__ == "__main__":
     client = new_client()
     subscribe(client, "test")
     #publish(client, "test", '{ "metadata": { "time": 1626508388, "type": "request", "device": "lights", "response": false }, "content": { "switch": "off" } }')
-    publish(client, "test",  '{ "metadata": { "time": 1626508388, "type": "request", "device": "lights", "response": false }, "content": { "switch": "on", "frequency": { "red": 20000, "green": 20000, "blue": 20000 }, "intensity": { "red": 10, "green": 10, "blue": 10 } } }')
+    publish(client, "test",  '{ "metadata": { "time": 1626508388, "type": "request", "device": "lights", "response": false }, "content": { "switch": "on", "frequency": { "red": 20000, "green": 20000, "blue": 20000 }, "intensity": { "red": 50, "green": 50, "blue": 10 } } }')
     
     while True:
         pass
