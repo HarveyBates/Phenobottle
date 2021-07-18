@@ -28,10 +28,12 @@ void loop() {
     }
     else if(input[0] == 'L'){
       parser.lights(lights, input);
+      Serial.println("1");
     }
     // Global off
     else if(input[0] == 'O'){
       lights.off();
+      Serial.println("1");
     }
   }
   digitalWrite(13, LOW);

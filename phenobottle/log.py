@@ -4,13 +4,13 @@ import time
 
 
 def start_log():
-    with open("log/log.txt", "r") as file:
-        while True:
-            requests = file.readlines()
-            for request in requests:
-                microcontroller.send_command(request.rstrip().encode("utf-8"))
-                # TODO get a response so we know the command was recieved and done
-            clear_log() # Fix this
+    time.sleep(2) # Slight startup delay
+    while True:
+        with open("log/log.txt", "r") as file:
+            lines = file.readlines()
+        with open("log/log.txt", "w") as output:
+            for line in lines:
+                microcontroller.send_command(line.rstrip().encode("utf-8"), response=True)
 
 readLog = threading.Thread(target=start_log)
 readLog.start()

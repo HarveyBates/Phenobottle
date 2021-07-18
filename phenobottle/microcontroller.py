@@ -75,7 +75,7 @@ def disconnect(device):
         return True
 
 
-def send_command(command, device=None, waitResponse=False, timeout=5):
+def send_command(command, device=None, response=False, timeout=5):
     # Open connection if not already open
     if not device:
         device = connect()
@@ -86,12 +86,12 @@ def send_command(command, device=None, waitResponse=False, timeout=5):
     except AttributeError as err:
         print("Sending command: " + command)
     device.write(command)
-    if waitResponse:
+    if response:
         for _ in range(timeout):
-            response = str(device.readline()[:-2], 'utf-8') # Remove \r\n and decode
-            if response != None:
-                print("Recieved response: " + response)
-                return response
+            res = str(device.readline()[:-2], 'utf-8') # Remove \r\n and decode
+            if res != None:
+                print("Recieved response: " + res)
+                return res
             time.sleep(1) 
 
 
