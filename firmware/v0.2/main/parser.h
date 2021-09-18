@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include "lights.h"
+#include "motors.h"
 
 #define MAX_INPUT_SIZE 20 
 
@@ -15,7 +16,7 @@ class Parser{
 
   public:
     void lights(Lights lights, char* input);
-    
+    void motors(Motors motors, char* input);
 };
 
 

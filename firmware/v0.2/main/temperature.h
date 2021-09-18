@@ -19,7 +19,7 @@ class Temperature : public DallasTemperature{
   double tempC = 0.00;
 public:
   Temperature(OneWire* oneWire);
-  void measure();
+  double measure();
   double get();
 };
 
