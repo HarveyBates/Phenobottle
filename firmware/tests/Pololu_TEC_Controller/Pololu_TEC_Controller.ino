@@ -20,8 +20,8 @@ void setup() {
 //  digitalWrite(INA1, LOW);
   digitalWrite(INA2, LOW);
   
-//  analogWrite(INA2, 1000); // 1023
-  analogWrite(INA1, 1000);
+//  analogWrite(INA2, 1023); // 1023
+  analogWrite(INA1, 1023);
 }
 
 void loop() {

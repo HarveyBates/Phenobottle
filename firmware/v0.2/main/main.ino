@@ -15,7 +15,7 @@ void setup() {
   analogWriteResolution(10);
   
   lights.on("Green", 50);
-  lights.on("Red", 50);
+  lights.on("Red", 20);
 //  lights.on("Blue", 100);
 
   pinMode(13, OUTPUT);
