@@ -53,8 +53,8 @@ fp-info-cache
 *.ses
 
 # Kicad folders
-fp-lib-table
-sym-lib-table
+tmp
+phenobottle-backups
 
 # Prerequisites
 *.d

@@ -1,0 +1,13 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "connectors")(type "KiCad")(uri "${KIPRJMOD}/components/extern/symbols/connectors.kicad_sym")(options "")(descr ""))
+  (lib (name "crystals")(type "KiCad")(uri "${KIPRJMOD}/components/extern/symbols/crystals.kicad_sym")(options "")(descr ""))
+  (lib (name "fuses")(type "KiCad")(uri "${KIPRJMOD}/components/extern/symbols/fuses.kicad_sym")(options "")(descr ""))
+  (lib (name "inductors")(type "KiCad")(uri "${KIPRJMOD}/components/extern/symbols/inductors.kicad_sym")(options "")(descr ""))
+  (lib (name "ldo")(type "KiCad")(uri "${KIPRJMOD}/components/extern/symbols/ldo.kicad_sym")(options "")(descr ""))
+  (lib (name "mosfets")(type "KiCad")(uri "${KIPRJMOD}/components/extern/symbols/mosfets.kicad_sym")(options "")(descr ""))
+  (lib (name "piezo")(type "KiCad")(uri "${KIPRJMOD}/components/extern/symbols/piezo.kicad_sym")(options "")(descr ""))
+  (lib (name "switch_tactile")(type "KiCad")(uri "${KIPRJMOD}/components/extern/symbols/switch_tactile.kicad_sym")(options "")(descr ""))
+  (lib (name "op_amps")(type "KiCad")(uri "${KIPRJMOD}/components/extern/symbols/op_amps.kicad_sym")(options "")(descr ""))
+  (lib (name "transistors")(type "KiCad")(uri "${KIPRJMOD}/components/extern/symbols/transistors.kicad_sym")(options "")(descr ""))
+)
