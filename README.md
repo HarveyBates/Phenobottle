@@ -1,6 +1,6 @@
-![Phenobottle](Imgs/Logo.png)
+![Phenobottle](media/Logo.png)
 
-![Phenobottle](Imgs/PhenobottleRender.png)
+![Phenobottle](media/PhenobottleRender.png)
 
 ---
 
@@ -274,12 +274,6 @@ void measure_optical_density(){
   digitalWrite(odEmitPin, LOW); // Turn off emitting LED
 }
 ```
-
-## Data Visualizer
-
-I am currently working on a SQL based data visualizer. Hopefully this should be a convenient method of assessing data which is streaming from Phenobottles in real-time.
-
-![Datavisualizer](Imgs/DataVisualiser.png)
 
 # Open-Source Licensing
 
