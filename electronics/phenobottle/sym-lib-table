@@ -10,4 +10,5 @@
   (lib (name "switch_tactile")(type "KiCad")(uri "${KIPRJMOD}/components/extern/symbols/switch_tactile.kicad_sym")(options "")(descr ""))
   (lib (name "op_amps")(type "KiCad")(uri "${KIPRJMOD}/components/extern/symbols/op_amps.kicad_sym")(options "")(descr ""))
   (lib (name "transistors")(type "KiCad")(uri "${KIPRJMOD}/components/extern/symbols/transistors.kicad_sym")(options "")(descr ""))
+  (lib (name "compute")(type "KiCad")(uri "${KIPRJMOD}/components/extern/symbols/compute.kicad_sym")(options "")(descr ""))
 )

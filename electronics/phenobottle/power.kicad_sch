@@ -2202,9 +2202,9 @@
     )
     (pin "1" (uuid 0c894dda-a192-4b52-8332-c892d1d3ed48))
     (pin "2" (uuid 685cf28f-fd11-43ec-8ade-6643bf85f588))
-    (pin "3" (uuid bd7426c6-3d41-4dda-b06c-2a8f2dda0cc4))
-    (pin "3" (uuid bd7426c6-3d41-4dda-b06c-2a8f2dda0cc4))
-    (pin "3" (uuid bd7426c6-3d41-4dda-b06c-2a8f2dda0cc4))
+    (pin "3" (uuid bd7426c6-3d41-4dda-b06c-2a8f2dda0cc6))
+    (pin "3" (uuid bd7426c6-3d41-4dda-b06c-2a8f2dda0cc6))
+    (pin "3" (uuid bd7426c6-3d41-4dda-b06c-2a8f2dda0cc6))
     (pin "4" (uuid c475d667-2111-44b6-9738-505953f2101d))
     (instances
       (project "phenobottle"

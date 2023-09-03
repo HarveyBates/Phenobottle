@@ -503,6 +503,14 @@
     [
       "1999fa67-6c2f-4811-91a1-1f5fbf2923d0",
       "FLU_EXCITE"
+    ],
+    [
+      "c5ee0955-c744-4611-a20a-37cb7201b906",
+      "LED_DRIVER"
+    ],
+    [
+      "f493590f-1c96-46fd-940e-55d814efe8e6",
+      "COMPUTE"
     ]
   ],
   "text_variables": {}
